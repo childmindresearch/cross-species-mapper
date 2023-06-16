@@ -7,7 +7,7 @@ from nibabel import nifti1
 from nibabel.gifti import gifti
 from templateflow import api as templateflow_api
 
-from src.routers.surface import schemas
+from src.routers.surfaces import schemas
 
 
 def get_hemispheres() -> schemas.AllSurfaces:
@@ -30,6 +30,11 @@ def get_hemispheres() -> schemas.AllSurfaces:
     surface_schemas = []
     for surface in surfaces:
         gifti_data = nibabel.load(surface)
+        if not isinstance(gifti_data, gifti.GiftiImage):
+            raise fastapi.HTTPException(
+                status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
+                detail="Detected surface is not a GIFTI file.",
+            )
         vertices = _extract_vertices(gifti_data)
         faces = _extract_faces(gifti_data)
 
@@ -63,7 +68,7 @@ def _extract_vertices(surface: gifti.GiftiImage) -> np.ndarray:
         if darray.intent == nifti1.intent_codes["NIFTI_INTENT_POINTSET"]:
             vertices = darray.data
             break
-    else:
+    else:  # no break
         raise fastapi.HTTPException(
             status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
             detail="Surface does not contain vertices.",
@@ -84,7 +89,7 @@ def _extract_faces(surface: gifti.GiftiImage) -> np.ndarray:
         if darray.intent == nifti1.intent_codes["NIFTI_INTENT_TRIANGLE"]:
             faces = darray.data
             break
-    else:
+    else:  # no break
         raise fastapi.HTTPException(
             status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
             detail="Surface does not contain faces.",
