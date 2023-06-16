@@ -30,6 +30,11 @@ def get_hemispheres() -> schemas.AllSurfaces:
     surface_schemas = []
     for surface in surfaces:
         gifti_data = nibabel.load(surface)
+        if not isinstance(gifti_data, gifti.GiftiImage):
+            raise fastapi.HTTPException(
+                status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
+                detail="Detected surface is not a GIFTI file.",
+            )
         vertices = _extract_vertices(gifti_data)
         faces = _extract_faces(gifti_data)
 

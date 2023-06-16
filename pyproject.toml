@@ -2,3 +2,6 @@
 
 [tool.isort]
 src_paths = ["api"]
+
+[tool.mypy]
+ignore_missing_imports = true

@@ -13,7 +13,7 @@ def test_extract_vertices() -> None:
     )[0]
     gifti = nibabel.load(surface)
 
-    vertices = controller._extract_vertices(gifti)
+    vertices = controller._extract_vertices(gifti)  # type: ignore[arg-type]
 
     assert vertices.shape == (32492, 3)
     assert vertices.dtype == np.dtype("float32")
@@ -26,7 +26,7 @@ def test_extract_faces() -> None:
     )[0]
     gifti = nibabel.load(surface)
 
-    faces = controller._extract_faces(gifti)
+    faces = controller._extract_faces(gifti)  # type: ignore[arg-type]
 
     assert faces.shape == (64980, 3)
     assert faces.dtype == np.dtype("int32")
