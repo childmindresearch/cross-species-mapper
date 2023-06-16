@@ -1,7 +1,8 @@
+import React from "react";
 import "./App.css";
 import SurfacePlotter from "./components/SurfacePlotter";
 
-function App() {
+function App(): JSX.Element {
   return (
     <>
       <h1>Surface Plotter</h1>
