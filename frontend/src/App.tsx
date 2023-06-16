@@ -1,7 +1,7 @@
+// @ts-expect-error because React is a necessary unused import
+import React from 'react'
 import './App.css'
 import SurfacePlotter from './components/SurfacePlotter'
-// @ts-ignore
-import React from 'react'
 
 function App (): JSX.Element {
   return (

@@ -1,4 +1,4 @@
-// @ts-ignore
+// @ts-expect-error because React is a necessary unused import
 import React, { useEffect, useState } from 'react'
 import Plot from 'react-plotly.js'
 import { type ApiSurface, type PlotlySurface } from '../types/surfaces'

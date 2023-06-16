@@ -1,4 +1,4 @@
-// @ts-ignore
+// @ts-expect-error because React is a necessary unused import
 import React from 'react'
 import { render, screen } from '@testing-library/react'
 import SurfacePlotter, {
