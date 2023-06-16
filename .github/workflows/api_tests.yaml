@@ -50,8 +50,7 @@ jobs:
         # Using a mypy pydantic plugin, so pydantic must be installed.
       - run: |
           pip install mypy pydantic 
-          cd api
-          mypy src
+          mypy api
 
   isort:
     runs-on: ubuntu-latest
