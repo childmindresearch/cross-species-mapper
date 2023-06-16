@@ -1,5 +1,5 @@
-import { API_URL } from "./environment";
+import { API_URL } from './environment'
 
 export const Endpoints = {
-  getHemispheres: `${API_URL}/hemispheres`,
-};
+  getHemispheres: `${API_URL}/hemispheres`
+}
