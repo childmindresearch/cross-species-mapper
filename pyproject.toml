@@ -1,0 +1,4 @@
+# Necessary here instead of in api/pyproject.toml because pre-commit works from the root directory.
+
+[tool.isort]
+src_paths = ["api"]

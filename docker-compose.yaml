@@ -1,0 +1,15 @@
+services:
+  frontend:
+    build: frontend
+    ports:
+      - "3000:3000"
+    environment:
+      - VITE_PORT=3000
+      - API_URL=http://localhost:8000
+    depends_on:
+      - api
+
+  api:
+    build: api
+    ports:
+      - "8000:8000"
