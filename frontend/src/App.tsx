@@ -1,6 +1,7 @@
-import React from 'react'
 import './App.css'
 import SurfacePlotter from './components/SurfacePlotter'
+// @ts-ignore
+import React from 'react'
 
 function App (): JSX.Element {
   return (

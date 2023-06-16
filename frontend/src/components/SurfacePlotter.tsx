@@ -1,3 +1,4 @@
+// @ts-ignore
 import React, { useEffect, useState } from 'react'
 import Plot from 'react-plotly.js'
 import { type ApiSurface, type PlotlySurface } from '../types/surfaces'
@@ -44,10 +45,10 @@ export default function SurfacePlotter (): JSX.Element {
   const [surface, setSurface] = useState<ApiSurface | undefined>(undefined)
   useEffect(() => {
     getSurfaces()
-      .then((surf) => {
+      .then(surf => {
         setSurface(surf.fslr_32k_left)
       })
-      .catch((err) => {
+      .catch(err => {
         console.log(err)
       })
   }, [])
