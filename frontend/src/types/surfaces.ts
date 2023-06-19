@@ -1,4 +1,4 @@
-export default interface ApiSurface {
+export interface ApiSurface {
   name: string
   xCoordinate: number[]
   yCoordinate: number[]
@@ -6,6 +6,11 @@ export default interface ApiSurface {
   iFaces: number[]
   jFaces: number[]
   kFaces: number[]
+}
+
+export interface ApiSurfaceResponse {
+  fslr_32k_left: ApiSurface
+  fslr_32k_right: ApiSurface
 }
 
 export interface PlotlySurface {

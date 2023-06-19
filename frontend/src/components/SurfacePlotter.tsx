@@ -1,10 +1,14 @@
 // @ts-expect-error because React is a necessary unused import
 import React, { useEffect, useState } from 'react'
 import Plot from 'react-plotly.js'
-import { type ApiSurface, type PlotlySurface } from '../types/surfaces'
+import {
+  type ApiSurfaceResponse,
+  type ApiSurface,
+  type PlotlySurface
+} from '../types/surfaces'
 import { Endpoints } from '../constants/api'
 
-export async function getSurfaces (): Promise<ApiSurface> {
+export async function getSurfaces (): Promise<ApiSurfaceResponse> {
   const response = await fetch(Endpoints.getHemispheres)
   const data = await response.json()
   return data
@@ -13,15 +17,18 @@ export async function getSurfaces (): Promise<ApiSurface> {
 export function apiSurfaceToPlotlySurface (
   apiSurface: ApiSurface | undefined,
   intensity: number[]
-): PlotlySurface {
+): PlotlySurface | undefined {
+  if (apiSurface == null) {
+    return undefined
+  }
   return {
     type: 'mesh3d',
-    x: apiSurface?.xCoordinate,
-    y: apiSurface?.yCoordinate,
-    z: apiSurface?.zCoordinate,
-    i: apiSurface?.iFaces,
-    j: apiSurface?.jFaces,
-    k: apiSurface?.kFaces,
+    x: apiSurface.xCoordinate,
+    y: apiSurface.yCoordinate,
+    z: apiSurface.zCoordinate,
+    i: apiSurface.iFaces,
+    j: apiSurface.jFaces,
+    k: apiSurface.kFaces,
     intensity
   }
 }
@@ -59,5 +66,5 @@ export default function SurfacePlotter (): JSX.Element {
 
   const intensity = Array.from({ length: 32492 }, (_, i) => i + 1)
   const data = apiSurfaceToPlotlySurface(surface, intensity)
-  return createPlot(data, handleClick)
+  return <>{(data != null) ? createPlot(data, handleClick) : <div>Loading...</div>}</>
 }

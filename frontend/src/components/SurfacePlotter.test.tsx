@@ -46,6 +46,7 @@ describe('Tests for the SurfacePlotter component', () => {
 
   test('Convert API surface to Plotly', async () => {
     const apiSurface = {
+      name: 'mockSurface',
       xCoordinate: mockSurface.x,
       yCoordinate: mockSurface.y,
       zCoordinate: mockSurface.z,
