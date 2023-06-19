@@ -1,6 +1,6 @@
 // @ts-expect-error because React is a necessary unused import
 import React from 'react'
-import { render, screen } from '@testing-library/react'
+import { act, render, screen } from '@testing-library/react'
 import SurfacePlotter, {
   createPlot,
   apiSurfaceToPlotlySurface,
@@ -15,6 +15,10 @@ jest.mock('react-plotly.js', () => {
     default: () => <div data-testid='mock-plot'></div>
   }
 })
+
+declare const global: {
+  fetch: typeof fetch
+}
 
 const mockSurface = {
   type: 'mesh3d',
@@ -74,7 +78,9 @@ describe('Tests for the SurfacePlotter component', () => {
       json: jest.fn().mockResolvedValue({ fslr_32k_left: mockSurface })
     } as unknown as Response)
 
-    render(<SurfacePlotter />)
+    await act(async () => {
+      render(<SurfacePlotter />)
+    })
 
     const plotly = screen.getAllByTestId('mock-plot')
     expect(plotly).toHaveLength(1)

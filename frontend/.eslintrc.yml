@@ -11,3 +11,6 @@ parserOptions:
 plugins:
   - react
 rules: { "@typescript-eslint/dot-notation": "error" }
+settings:
+  react:
+    version: detect
