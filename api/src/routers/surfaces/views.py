@@ -2,7 +2,7 @@ import fastapi
 
 from src.routers.surfaces import controller, schemas
 
-router = fastapi.APIRouter(prefix="/surface")
+router = fastapi.APIRouter(prefix="/surfaces")
 
 
 @router.get("/hemispheres")
