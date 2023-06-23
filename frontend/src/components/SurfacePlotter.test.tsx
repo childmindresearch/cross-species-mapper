@@ -2,7 +2,6 @@
 import React from 'react'
 import { act, render, screen } from '@testing-library/react'
 import SurfacePlotter, {
-  createPlot,
   apiSurfaceToPlotlySurface,
   getSurfaces
 } from './SurfacePlotter'
@@ -34,14 +33,6 @@ const mockSurface = {
 describe('Tests for the SurfacePlotter component', () => {
   beforeEach(() => {
     jest.resetAllMocks()
-  })
-
-  test('create plot renders a surface plot', async () => {
-    const plot = createPlot(mockSurface, () => {})
-    render(plot)
-
-    const plotly = screen.getAllByTestId('mock-plot')
-    expect(plotly).toHaveLength(1)
   })
 
   test('Convert API surface to Plotly', async () => {

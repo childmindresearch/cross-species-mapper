@@ -6,13 +6,14 @@ authors = ["Reinder Vos de Wael <reinder.vosdewael@childmind.org>"]
 readme = "README.md"
 
 [tool.poetry.dependencies]
-python = "^3.11"
+python = ">=3.11, <3.12"
 fastapi = "^0.97.0"
 uvicorn = "^0.22.0"
 pydantic = "^1.10.9"
-templateflow = "^23.0.0"
 nibabel = "^5.1.0"
 numpy = "^1.24.3"
+scipy = "^1.10.1"
+scikit-learn = "^1.2.2"
 
 [tool.poetry.group.dev.dependencies]
 black = "^23.3.0"
@@ -34,3 +35,6 @@ src_paths = ["api"]
 pythonpath = [
   "."
 ]
+
+[tool.mypy]
+ignore_missing_imports = true

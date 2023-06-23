@@ -10,7 +10,8 @@ parserOptions:
   project: ./tsconfig.json # Add this line
 plugins:
   - react
-rules: { "@typescript-eslint/dot-notation": "error" }
+rules: { "@typescript-eslint/dot-notation": "error", 
+         "multiline-tenary": "off"}
 settings:
   react:
     version: detect
