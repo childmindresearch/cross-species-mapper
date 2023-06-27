@@ -5,3 +5,6 @@ src_paths = ["api"]
 
 [tool.mypy]
 ignore_missing_imports = true
+
+[tool.pylint.'MESSAGES CONTROL']
+extension-pkg-whitelist = "pydantic"

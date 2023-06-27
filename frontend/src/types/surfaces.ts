@@ -1,4 +1,13 @@
-export interface SimilarityResponse {
+export interface NiMareFeature {
+  name: string
+  correlation: number
+}
+
+export interface NiMareResponse {
+  features: NiMareFeature[]
+}
+
+export interface CrossSpeciesSimilarityResponse {
   human_left: number[]
   human_right: number[]
   macaque_left: number[]
@@ -32,4 +41,5 @@ export interface PlotlySurface {
   j: number[]
   k: number[]
   intensity: number[]
+  showscale?: boolean
 }
