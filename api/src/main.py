@@ -1,17 +1,24 @@
+"""Main module for the API."""
 import logging
 
 import fastapi
 from fastapi.middleware import cors
-
+from src import settings
 from src.routers.surfaces import views
 
-logger = logging.getLogger("Cross Species Mapper")
+config = settings.get_settings()
+LOGGER_NAME = config.LOGGER_NAME
 
-logger.setLevel(logging.INFO)
+settings.initialize_logger()
+logger = logging.getLogger(LOGGER_NAME)
 
+logger.info("Starting API.")
 app = fastapi.FastAPI()
+
+logger.info("Adding routers.")
 app.include_router(views.router)
 
+logger.info("Adding CORS middleware.")
 app.add_middleware(
     cors.CORSMiddleware,
     allow_origins="*",

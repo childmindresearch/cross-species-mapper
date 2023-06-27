@@ -14,8 +14,10 @@ class Surface(pydantic.BaseModel):  # type: ignore[misc]
     kFaces: list[int] = pydantic.Field(..., example=[1, 2, 3])
 
 
-class AllSurfaces(pydantic.BaseModel):  # type: ignore[misc]
-    """A dictionary containing the human and macaque hemisphere surfaces."""
+class FeatureSimilarity(pydantic.BaseModel):  # type: ignore[misc]
+    """A schema for feature similarity vectors."""
 
-    fslr_32k_left: Surface
-    fslr_32k_right: Surface
+    human_left: list[float] = pydantic.Field(..., example=[1, 2, 3])
+    human_right: list[float] = pydantic.Field(..., example=[1, 2, 3])
+    macaque_left: list[float] = pydantic.Field(..., example=[1, 2, 3])
+    macaque_right: list[float] = pydantic.Field(..., example=[1, 2, 3])

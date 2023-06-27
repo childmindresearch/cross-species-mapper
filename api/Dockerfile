@@ -5,8 +5,7 @@ WORKDIR /app
 COPY poetry.lock pyproject.toml ./
 
 RUN pip install poetry && \
-    poetry install
-
+    poetry install --no-dev
 COPY . .
 
 EXPOSE 8000

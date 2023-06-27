@@ -2,7 +2,6 @@
 import React from 'react'
 import { act, render, screen } from '@testing-library/react'
 import SurfacePlotter, {
-  createPlot,
   apiSurfaceToPlotlySurface,
   getSurfaces
 } from './SurfacePlotter'
@@ -21,6 +20,7 @@ declare const global: {
 }
 
 const mockSurface = {
+  name: 'mockSurface',
   type: 'mesh3d',
   x: [1, 2, 3],
   y: [4, 5, 6],
@@ -34,14 +34,6 @@ const mockSurface = {
 describe('Tests for the SurfacePlotter component', () => {
   beforeEach(() => {
     jest.resetAllMocks()
-  })
-
-  test('create plot renders a surface plot', async () => {
-    const plot = createPlot(mockSurface, () => {})
-    render(plot)
-
-    const plotly = screen.getAllByTestId('mock-plot')
-    expect(plotly).toHaveLength(1)
   })
 
   test('Convert API surface to Plotly', async () => {
@@ -64,6 +56,7 @@ describe('Tests for the SurfacePlotter component', () => {
       { x: [1, 2, 3], y: [4, 5, 6], z: [7, 8, 9] },
       { x: [10, 11, 12], y: [13, 14, 15], z: [16, 17, 18] }
     ]
+    const dataFields = ['human_left', 'human_right', 'macaque_left', 'macaque_right']
 
     jest.spyOn(global, 'fetch').mockResolvedValue({
       json: jest.fn().mockResolvedValue(mockData)
@@ -71,7 +64,11 @@ describe('Tests for the SurfacePlotter component', () => {
 
     const data = await getSurfaces()
 
-    expect(data).toEqual(mockData)
+    for (const field of dataFields) {
+      expect(data).toHaveProperty(field)
+      // @ts-expect-error because we know that field is in data.
+      expect(data[field]).toEqual(mockData)
+    }
   })
 
   test('surfacePlotter renders a plot with the correct data', async () => {
@@ -84,6 +81,6 @@ describe('Tests for the SurfacePlotter component', () => {
     })
 
     const plotly = screen.getAllByTestId('mock-plot')
-    expect(plotly).toHaveLength(1)
+    expect(plotly).toHaveLength(4)
   })
 })

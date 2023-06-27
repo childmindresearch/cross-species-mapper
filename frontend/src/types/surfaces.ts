@@ -1,3 +1,10 @@
+export interface SimilarityResponse {
+  human_left: number[]
+  human_right: number[]
+  macaque_left: number[]
+  macaque_right: number[]
+}
+
 export interface ApiSurface {
   name: string
   xCoordinate: number[]
@@ -9,11 +16,14 @@ export interface ApiSurface {
 }
 
 export interface ApiSurfaceResponse {
-  fslr_32k_left: ApiSurface
-  fslr_32k_right: ApiSurface
+  human_left: ApiSurface
+  human_right: ApiSurface
+  macaque_left: ApiSurface
+  macaque_right: ApiSurface
 }
 
 export interface PlotlySurface {
+  name: string
   type: string
   x: number[]
   y: number[]
