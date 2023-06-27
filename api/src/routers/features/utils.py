@@ -97,7 +97,8 @@ def compute_similarity(
     cosine_similarity = pairwise.cosine_similarity(
         np.array(seed_features)[roi_vertices, :], target_features
     )
-    # fisher_z = np.arctanh(cosine_similarity)
+    cosine_similarity[cosine_similarity > 0.9999] = 0.9999
+    fisher_z = np.arctanh(cosine_similarity)
 
     if weighting == "uniform":
         weights = None
@@ -111,10 +112,8 @@ def compute_similarity(
         )
 
     logger.info("Computing weighted average with method: %s.", weighting)
-    weighted_average = np.average(cosine_similarity, axis=0, weights=weights)
-    # weighted_average = np.average(fisher_z, axis=0, weights=weights)
-    # weighted_average[np.isnan(weighted_average)] = 0
-    # weighted_average[np.isinf(weighted_average)] = 99999
+    weighted_average = np.average(fisher_z, axis=0, weights=weights)
+
     return weighted_average
 
 
