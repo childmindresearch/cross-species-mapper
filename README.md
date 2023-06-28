@@ -46,4 +46,4 @@ Before contributing, please see our contribution guidelines in CONTRIBUTING.md i
 
 ## License
 
-This project is licensed under the MIT License. See the LICENSE file for details.
+This project is licensed under the L-GPL V2.1 license. See the LICENSE file for details.

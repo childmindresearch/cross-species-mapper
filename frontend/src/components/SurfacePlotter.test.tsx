@@ -22,6 +22,7 @@ declare const global: {
 const mockSurface = {
   name: 'mockSurface',
   type: 'mesh3d',
+  showscale: false,
   x: [1, 2, 3],
   y: [4, 5, 6],
   z: [7, 8, 9],

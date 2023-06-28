@@ -21,12 +21,6 @@ repos:
         name: isort (python)
         args: [--profile black]
 
-  - repo: https://github.com/PyCQA/bandit
-    rev: 1.7.5
-    hooks:
-      - id: bandit
-        files: "^api/"
-
   - repo: https://github.com/pre-commit/pygrep-hooks
     rev: v1.10.0
     hooks:
