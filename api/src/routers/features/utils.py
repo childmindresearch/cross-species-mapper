@@ -39,7 +39,7 @@ def load_feature_data(
 
     """
     logger.info("Loading feature data.")
-    nifti_file = FEATURE_DIR / f"{species}_{side}_gradient_10k_fs_LR.nii.gz"
+    nifti_file = FEATURE_DIR / f"{species}_{side}_gradient_10k_fs_lr.nii.gz"
     nifti = nibabel.load(nifti_file)
 
     if not isinstance(nifti, nifti1.Nifti1Image):
