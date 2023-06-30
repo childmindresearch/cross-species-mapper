@@ -1,6 +1,9 @@
 import React from 'react'
 import { Range, getTrackBackground } from 'react-range'
 
+/**
+ * Props for the Slider component.
+ */
 interface SliderProps {
   values: any
   setValues: any
@@ -14,6 +17,11 @@ interface SliderProps {
   key?: any
 }
 
+/**
+ * A slider component that allows the user to select a range of values.
+ * @param {SliderProps} props - The props for the Slider component.
+ * @returns {JSX.Element} - A JSX Element representing the Slider component.
+ */
 function Slider (props: SliderProps): JSX.Element {
   const [localValues, setLocalValues] = React.useState(props.values)
 
@@ -73,7 +81,7 @@ function Slider (props: SliderProps): JSX.Element {
             <div
               {...props}
               id='.slider-thumb'
-              key={'slider-thumb' + String(props.key)}
+              key={'slider-thumb-' + String(props.key)}
               style={{
                 ...props.style,
                 height: '40px',
