@@ -8,7 +8,7 @@ import pydantic
 CURRENT_DIR = pathlib.Path(__file__).parent
 
 
-class Settings(pydantic.BaseSettings):  # mypy: ignore
+class Settings(pydantic.BaseSettings):  # type: ignore
     """Settings for the API."""
 
     LOGGER_NAME: str = pydantic.Field("Cross Species Mapper API", env="LOGGER_NAME")
@@ -25,7 +25,7 @@ def get_settings() -> Settings:
         The settings for the API.
     """
 
-    return Settings()
+    return Settings()  # type: ignore
 
 
 def initialize_logger() -> None:
