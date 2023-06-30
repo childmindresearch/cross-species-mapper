@@ -1,30 +1,46 @@
-// @ts-expect-error because React is a necessary unused import
+// @ts-expect-error because react not used.
 import React, { useEffect, useState } from 'react'
 import Plot from 'react-plotly.js'
-import { type ApiSurface, type PlotlySurface, type ApiSurfaceResponse, type CrossSpeciesSimilarityResponse, type NiMareResponse } from '../types/surfaces'
+import {
+  type ApiSurface,
+  type PlotlySurface,
+  type ApiSurfaceResponse,
+  type CrossSpeciesSimilarityResponse,
+  type NiMareResponse
+} from '../types/surfaces'
 import { Endpoints } from '../constants/api'
+import Slider from './Slider'
 
 /**
  * A component that plots the surfaces and allows the user to select a vertex to seed the similarity search.
  * @returns A JSX element.
  */
 export default function SurfacePlotter (): JSX.Element {
-  const [surfaces, setSurfaces] = useState<ApiSurfaceResponse | undefined>(undefined)
+  const [surfaces, setSurfaces] = useState<ApiSurfaceResponse | undefined>(
+    undefined
+  )
   const [seedVertex, setSeedVertex] = useState<number>(0)
   const [seedSurface, setSeedSurface] = useState<string>('human')
   const [seedSide, setSeedSide] = useState<string>('left')
-  const [nimareTerms, setNimareTerms] = useState<NiMareResponse | undefined>(undefined)
-  const [similarity, setSimilarity] = useState<CrossSpeciesSimilarityResponse | undefined>(undefined)
+  const [nimareTerms, setNimareTerms] = useState<NiMareResponse | undefined>(
+    undefined
+  )
+  const [similarity, setSimilarity] = useState<
+  CrossSpeciesSimilarityResponse | undefined
+  >(undefined)
   const [camera, setCamera] = useState(defaultCamera)
-  const [plotData, setPlotData] = useState<PlotlySurface[] | undefined>(undefined)
+  const [plotData, setPlotData] = useState<PlotlySurface[] | undefined>(
+    undefined
+  )
+  const [colorLimits, setColorLimits] = useState<[number, number]>([0, 1])
 
   // Fetch surfaces on first render.
   useEffect(() => {
     getSurfaces()
-      .then(surf => {
+      .then((surf) => {
         setSurfaces(surf)
       })
-      .catch(err => {
+      .catch((err) => {
         console.log(err)
       })
   }, [])
@@ -32,10 +48,10 @@ export default function SurfacePlotter (): JSX.Element {
   // On seed change, fetch new similarity data.
   useEffect(() => {
     getCrossSpeciesSimilarity(seedSurface, seedSide, seedVertex)
-      .then(sim => {
+      .then((sim) => {
         setSimilarity(sim)
       })
-      .catch(err => {
+      .catch((err) => {
         console.log(err)
       })
   }, [seedVertex, seedSurface, seedSide])
@@ -50,10 +66,10 @@ export default function SurfacePlotter (): JSX.Element {
       targetSurface = surfaces.human_right
     }
     getNimareTerms(targetSurface, seedVertex)
-      .then(nimare => {
+      .then((nimare) => {
         setNimareTerms(nimare)
       })
-      .catch(err => {
+      .catch((err) => {
         console.log(err)
       })
   }, [seedVertex, seedSurface, seedSide])
@@ -64,19 +80,39 @@ export default function SurfacePlotter (): JSX.Element {
       return
     }
 
-    const humanLeft = apiSurfaceToPlotlySurface(surfaces.human_left, similarity.human_left)
-    const humanRight = apiSurfaceToPlotlySurface(surfaces.human_right, similarity.human_right)
-    const macaqueLeft = apiSurfaceToPlotlySurface(surfaces.macaque_left, similarity.macaque_left)
-    const macaqueRight = apiSurfaceToPlotlySurface(surfaces.macaque_right, similarity.macaque_right)
-    if (humanLeft == null || humanRight == null || macaqueLeft == null || macaqueRight == null) {
+    const humanLeft = apiSurfaceToPlotlySurface(
+      surfaces.human_left,
+      similarity.human_left,
+      colorLimits
+    )
+    const humanRight = apiSurfaceToPlotlySurface(
+      surfaces.human_right,
+      similarity.human_right,
+      colorLimits
+    )
+    const macaqueLeft = apiSurfaceToPlotlySurface(
+      surfaces.macaque_left,
+      similarity.macaque_left,
+      colorLimits
+    )
+    const macaqueRight = apiSurfaceToPlotlySurface(
+      surfaces.macaque_right,
+      similarity.macaque_right,
+      colorLimits
+    )
+    if (
+      humanLeft == null ||
+      humanRight == null ||
+      macaqueLeft == null ||
+      macaqueRight == null
+    ) {
       return
     }
 
     setPlotData([humanLeft, humanRight, macaqueLeft, macaqueRight])
-  }, [surfaces, similarity])
+  }, [surfaces, similarity, colorLimits])
 
   const onRelayout = (event: any): void => {
-    console.log(event)
     if (event['scene.camera'] == null) {
       return
     }
@@ -94,81 +130,65 @@ export default function SurfacePlotter (): JSX.Element {
       return
     }
     const vertex = point.pointNumber
-    const surface = (point.data.name as string).includes('human') ? 'human' : 'macaque'
-    const side = (point.data.name as string).includes('left') ? 'left' : 'right'
+    const surface = (point.data.name as string).includes('human')
+      ? 'human'
+      : 'macaque'
+    const side = (point.data.name as string).includes('left')
+      ? 'left'
+      : 'right'
 
     setSeedVertex(vertex)
     setSeedSurface(surface)
     setSeedSide(side)
   }
 
-  const baseLayout = {
-    scene: {
-      camera,
-      xaxis: {
-        title: '',
-        showgrid: false,
-        zeroline: false,
-        showticklabels: false
-      },
-      yaxis: {
-        title: '',
-        showgrid: false,
-        zeroline: false,
-        showticklabels: false
-      },
-      zaxis: {
-        title: '',
-        showgrid: false,
-        zeroline: false,
-        showticklabels: false
-      }
-    },
-    width: 400,
-    height: 400,
-    margin: {
-      l: 20,
-      r: 20,
-      b: 0,
-      t: 0
-    }
-  }
+  const layout = defaultLayout
+  layout.scene.camera = camera
 
   return (
-  <div className='grid-container'>
-    {nimareTerms != null
-      ? (
-          <div className='grid-item'>
+    <>
+      <Slider values={colorLimits} setValues={setColorLimits} min={-3} max={3} step={0.2}/>
+      <div className="grid-container">
+        {nimareTerms != null
+          ? (
+          <div className="grid-item">
             <h2>Terms</h2>
             <ul>
-              {nimareTerms.features.map((term, index) => (
-                (index < 10) && <li key={index}>{term.name}: {term.correlation}</li>
-              ))}
+              {nimareTerms.features.map(
+                (term, index) =>
+                  index < 10 && (
+                    <li key={index}>
+                      {term.name}: {term.correlation}
+                    </li>
+                  )
+              )}
             </ul>
           </div>
-        )
-      : (
-        <div>Loading terms...</div>
-        )}
-    {plotData != null
-      ? (
-          plotData.map(
-            (surf, index) =>
-              (surf != null) && (
-              <Plot
-                key={index}
-                data={[surf]}
-                layout={{ name: surf.name, ...baseLayout }}
-                onRelayout={onRelayout}
-                onClick={onClick}
-              />
+            )
+          : (
+          <div>Loading terms...</div>
+            )}
+        {plotData != null
+          ? (
+              plotData.map(
+                (surf, index) =>
+                  surf != null && (
+                <Plot
+                  key={index}
+                  data={[surf]}
+                  layout={{ name: surf.name, ...layout }}
+                  config={defaultConfig}
+                  onRelayout={onRelayout}
+                  onClick={onClick}
+                />
+                  )
               )
-          )
-        )
-      : (
-        <div>Loading...</div>
-        )}
-  </div>
+            )
+          : (
+          <div>Loading...</div>
+            )}
+      </div>
+    </>
   )
 }
 
@@ -180,8 +200,14 @@ export default function SurfacePlotter (): JSX.Element {
  * @param vertex - The vertex index on the surface.
  * @returns A Promise that resolves to a SimilarityResponse object.
  */
-export async function getCrossSpeciesSimilarity (species: string, side: string, vertex: number): Promise<CrossSpeciesSimilarityResponse> {
-  const response = await fetch(`${Endpoints.getCrossSpeciesSimilarity}?seed_species=${species}&seed_side=${side}&seed_vertex=${vertex}`)
+export async function getCrossSpeciesSimilarity (
+  species: string,
+  side: string,
+  vertex: number
+): Promise<CrossSpeciesSimilarityResponse> {
+  const response = await fetch(
+    `${Endpoints.getCrossSpeciesSimilarity}?seed_species=${species}&seed_side=${side}&seed_vertex=${vertex}`
+  )
   return await response.json()
 }
 
@@ -192,9 +218,18 @@ export async function getCrossSpeciesSimilarity (species: string, side: string, 
  * @param vertex - The vertex index on the surface.
  * @returns A Promise that resolves to a SimilarityResponse object.
  */
-export async function getNimareTerms (surface: ApiSurface, vertex: number): Promise<NiMareResponse> {
-  const coordinates = { x: surface.xCoordinate[vertex], y: surface.yCoordinate[vertex], z: surface.zCoordinate[vertex] }
-  const response = await fetch(`${Endpoints.getNimareTerms}?x=${coordinates.x}&y=${coordinates.y}&z=${coordinates.z}`)
+export async function getNimareTerms (
+  surface: ApiSurface,
+  vertex: number
+): Promise<NiMareResponse> {
+  const coordinates = {
+    x: surface.xCoordinate[vertex],
+    y: surface.yCoordinate[vertex],
+    z: surface.zCoordinate[vertex]
+  }
+  const response = await fetch(
+    `${Endpoints.getNimareTerms}?x=${coordinates.x}&y=${coordinates.y}&z=${coordinates.z}`
+  )
   return await response.json()
 }
 
@@ -234,7 +269,8 @@ export async function getSurfaces (): Promise<ApiSurfaceResponse> {
  */
 export function apiSurfaceToPlotlySurface (
   apiSurface: ApiSurface | undefined,
-  intensity: number[]
+  intensity: number[],
+  colorLimits: number[]
 ): PlotlySurface | undefined {
   if (apiSurface == null) {
     return undefined
@@ -248,8 +284,10 @@ export function apiSurfaceToPlotlySurface (
     i: apiSurface.iFaces,
     j: apiSurface.jFaces,
     k: apiSurface.kFaces,
-    showscale: false,
-    intensity
+    showscale: true,
+    intensity,
+    cmin: colorLimits[0],
+    cmax: colorLimits[1]
   }
 }
 
@@ -269,4 +307,44 @@ const defaultCamera = {
     y: 0,
     z: 0
   }
+}
+
+const defaultLayout = {
+  scene: {
+    camera: {},
+    xaxis: {
+      title: '',
+      showgrid: false,
+      zeroline: false,
+      showticklabels: false
+    },
+    yaxis: {
+      title: '',
+      showgrid: false,
+      zeroline: false,
+      showticklabels: false
+    },
+    zaxis: {
+      title: '',
+      showgrid: false,
+      zeroline: false,
+      showticklabels: false
+    }
+  },
+  width: 400,
+  height: 400,
+  margin: {
+    l: 20,
+    r: 20,
+    b: 0,
+    t: 0
+  },
+  coloraxis: {
+    cmax: -5,
+    cmin: -10
+  }
+}
+
+const defaultConfig = {
+  displaylogo: false
 }

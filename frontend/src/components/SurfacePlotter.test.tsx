@@ -22,14 +22,16 @@ declare const global: {
 const mockSurface = {
   name: 'mockSurface',
   type: 'mesh3d',
-  showscale: false,
+  showscale: true,
   x: [1, 2, 3],
   y: [4, 5, 6],
   z: [7, 8, 9],
   i: [0, 1, 2],
   j: [1, 2, 0],
   k: [2, 0, 1],
-  intensity: [1, 2, 3]
+  intensity: [1, 2, 3],
+  cmin: 0,
+  cmax: 1
 }
 
 describe('Tests for the SurfacePlotter component', () => {
@@ -48,7 +50,7 @@ describe('Tests for the SurfacePlotter component', () => {
       kFaces: mockSurface.k
     }
 
-    const convertedSurface = apiSurfaceToPlotlySurface(apiSurface, [1, 2, 3])
+    const convertedSurface = apiSurfaceToPlotlySurface(apiSurface, [1, 2, 3], [0, 1])
     expect(convertedSurface).toEqual(mockSurface)
   })
 

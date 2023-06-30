@@ -42,4 +42,6 @@ export interface PlotlySurface {
   k: number[]
   intensity: number[]
   showscale?: boolean
+  cmin?: number
+  cmax?: number
 }
