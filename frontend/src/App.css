@@ -5,6 +5,16 @@
   text-align: center;
 }
 
+footer {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  background-color: white;
+  border-top: '10px solid #ffffff';
+}
+
+
 .grid-container {
   display: grid;
   grid-template-columns: repeat(2, 1fr);
