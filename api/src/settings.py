@@ -3,12 +3,13 @@ import functools
 import logging
 import pathlib
 
-import pydantic
+# Mypy complains if we import BaseSettings from pydantic.
+from pydantic import BaseSettings
 
 CURRENT_DIR = pathlib.Path(__file__).parent
 
 
-class Settings(pydantic.BaseSettings):  # mypy: ignore
+class Settings(BaseSettings):
     """Settings for the API."""
 
     LOGGER_NAME: str = "Cross Species Mapper API"
