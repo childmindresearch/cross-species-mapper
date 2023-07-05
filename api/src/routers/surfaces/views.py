@@ -3,7 +3,6 @@ import logging
 
 import fastapi
 from fastapi import status
-
 from src import settings
 from src.routers.surfaces import controller, schemas
 

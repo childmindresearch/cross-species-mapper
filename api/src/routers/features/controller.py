@@ -11,7 +11,6 @@ from nimare import dataset as nimare_dataset
 from nimare import utils as nimare_utils
 from nimare.decode import discrete
 from numpy import linalg
-
 from src import settings
 from src import utils as src_utils
 from src.routers.features import controller, schemas
