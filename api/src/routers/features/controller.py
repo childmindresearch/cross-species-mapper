@@ -11,7 +11,6 @@ from nimare import dataset as nimare_dataset
 from nimare import utils as nimare_utils
 from nimare.decode import discrete
 from numpy import linalg
-
 from src import settings
 from src import utils as src_utils
 from src.routers.features import controller, schemas
@@ -81,7 +80,7 @@ def get_cross_species_features(
         A feature matrix stored as a list of lists.
     """
     seed_features = features_utils.load_feature_data(species, side)
-    surface = src_utils.Surface(species=species, side=side)
+    surface = src_utils.get_surface(species=species, side=side)
 
     all_species = ["human", "macaque"]
     all_sides = ["left", "right"]

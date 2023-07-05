@@ -8,7 +8,6 @@ import numpy as np
 from fastapi import status
 from nibabel import nifti1
 from nibabel.gifti import gifti
-
 from src import settings
 
 config = settings.get_settings()
@@ -93,3 +92,18 @@ class Surface:
                 detail="Surface does not contain faces.",
             )
         return faces
+
+
+@functools.cache
+def get_surface(species: str, side: str) -> Surface:
+    """Cached call to surface data.
+
+    Args:
+        species: The species.
+        side: The side.
+
+    Returns:
+        The surface data.
+
+    """
+    return Surface(species, side)

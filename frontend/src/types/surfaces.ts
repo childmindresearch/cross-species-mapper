@@ -8,6 +8,7 @@ export interface NiMareResponse {
 }
 
 export interface CrossSpeciesSimilarityResponse {
+  [key: string]: number[]
   human_left: number[]
   human_right: number[]
   macaque_left: number[]
@@ -25,6 +26,7 @@ export interface ApiSurface {
 }
 
 export interface ApiSurfaceResponse {
+  [key: string]: ApiSurface
   human_left: ApiSurface
   human_right: ApiSurface
   macaque_left: ApiSurface

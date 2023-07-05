@@ -1,7 +1,7 @@
 // @ts-expect-error because React is a necessary unused import
 import React from 'react'
 import './App.css'
-import SurfacePlotter from './components/SurfacePlotter'
+import SurfacePlotter from './components/SurfacePlotter/SurfacePlotter'
 import Footer from './components/Footer'
 import Header from './components/Header'
 

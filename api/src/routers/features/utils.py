@@ -10,7 +10,6 @@ from fastapi import status
 from nibabel import nifti1
 from scipy.spatial import distance
 from sklearn.metrics import pairwise
-
 from src import settings
 from src import utils as src_utils
 
