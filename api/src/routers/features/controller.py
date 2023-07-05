@@ -81,7 +81,7 @@ def get_cross_species_features(
         A feature matrix stored as a list of lists.
     """
     seed_features = features_utils.load_feature_data(species, side)
-    surface = src_utils.Surface(species=species, side=side)
+    surface = src_utils.get_surface(species=species, side=side)
 
     all_species = ["human", "macaque"]
     all_sides = ["left", "right"]

@@ -13,6 +13,10 @@ LOGGER_NAME = config.LOGGER_NAME
 
 settings.initialize_logger()
 logger = logging.getLogger(LOGGER_NAME)
+ch = logging.StreamHandler()
+formatter = logging.Formatter("%(asctime)s - %(name)s - %(levelname)s - %(message)s")
+ch.setFormatter(formatter)
+logger.addHandler(ch)
 
 logger.info("Starting API.")
 app = fastapi.FastAPI()

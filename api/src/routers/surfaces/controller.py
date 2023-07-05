@@ -25,7 +25,7 @@ def get_hemispheres(species: str, side: str) -> schemas.Surface:
         A hemispheric surface for humans or macaques.
     """
     logger.info("Fetching %s_%s surface.", species, side)
-    surface = utils.Surface(species=species, side=side)
+    surface = utils.get_surface(species=species, side=side)
 
     return schemas.Surface(
         name=f"{species}_{side}",

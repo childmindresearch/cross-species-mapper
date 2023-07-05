@@ -93,3 +93,18 @@ class Surface:
                 detail="Surface does not contain faces.",
             )
         return faces
+
+
+@functools.cache
+def get_surface(species: str, side: str) -> Surface:
+    """Cached call to surface data.
+
+    Args:
+        species: The species.
+        side: The side.
+
+    Returns:
+        The surface data.
+
+    """
+    return Surface(species, side)

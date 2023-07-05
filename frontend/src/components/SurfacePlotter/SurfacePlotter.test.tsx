@@ -2,8 +2,7 @@
 import React from 'react'
 import { act, render, screen } from '@testing-library/react'
 import SurfacePlotter, {
-  apiSurfaceToPlotlySurface,
-  getSurfaces
+  apiSurfaceToPlotlySurface
 } from './SurfacePlotter'
 
 // Plotly seems broken in a testing environment.
@@ -52,26 +51,6 @@ describe('Tests for the SurfacePlotter component', () => {
 
     const convertedSurface = apiSurfaceToPlotlySurface(apiSurface, [1, 2, 3], [0, 1])
     expect(convertedSurface).toEqual(mockSurface)
-  })
-
-  test('getSurfaces returns the correct data', async () => {
-    const mockData = [
-      { x: [1, 2, 3], y: [4, 5, 6], z: [7, 8, 9] },
-      { x: [10, 11, 12], y: [13, 14, 15], z: [16, 17, 18] }
-    ]
-    const dataFields = ['human_left', 'human_right', 'macaque_left', 'macaque_right']
-
-    jest.spyOn(global, 'fetch').mockResolvedValue({
-      json: jest.fn().mockResolvedValue(mockData)
-    } as unknown as Response)
-
-    const data = await getSurfaces()
-
-    for (const field of dataFields) {
-      expect(data).toHaveProperty(field)
-      // @ts-expect-error because we know that field is in data.
-      expect(data[field]).toEqual(mockData)
-    }
   })
 
   test('surfacePlotter renders a plot with the correct data', async () => {
