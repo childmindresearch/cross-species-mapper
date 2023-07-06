@@ -8,6 +8,7 @@ import numpy as np
 from fastapi import status
 from nibabel import nifti1
 from nibabel.gifti import gifti
+
 from src import settings
 
 config = settings.get_settings()
@@ -37,7 +38,7 @@ class Surface:
 
         """
         logger.info("Loading surface data.")
-        surface_path = SURFACE_DIR / f"{species}_{side}_midthickness_10k_fs_lr.surf.gii"
+        surface_path = SURFACE_DIR / f"{species}_{side}_inflated_10k_fs_lr.surf.gii"
         gii = nibabel.load(surface_path)
 
         if not isinstance(gii, gifti.GiftiImage):

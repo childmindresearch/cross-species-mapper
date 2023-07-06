@@ -40,7 +40,6 @@ repos:
       - id: mixed-line-ending
         args:
           - --fix=lf
-      - id: trailing-whitespace
       - id: pretty-format-json
         args:
           - --autofix
@@ -49,3 +48,14 @@ repos:
       - id: check-merge-conflict
       - id: check-yaml
       - id: check-json
+
+  # Run a shell script because eslint hook doesn't work in mono-repo.
+  - repo: local
+    hooks:
+      - id: eslint
+        name: eslint (shell)
+        language: system
+        entry: ./scripts/eslint.sh
+        pass_filenames: false
+        always_run: true
+        stages: [commit-msg]

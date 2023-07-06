@@ -46,4 +46,7 @@ export interface PlotlySurface {
   showscale?: boolean
   cmin?: number
   cmax?: number
+  colorscale?: string
+  colorbar?: any
+  lighting?: any
 }

@@ -2,19 +2,15 @@
 import React from 'react'
 import './App.css'
 import SurfacePlotter from './components/SurfacePlotter/SurfacePlotter'
-import Footer from './components/Footer'
 import Header from './components/Header'
+import Introduction from './components/Introduction'
 
 function App (): JSX.Element {
   return (
     <div>
-      <Header title='Surface Plotter' />
-      <p>
-        This is a simple surface plotter that can read in a surface file and a
-        data file and plot them.
-      </p>
+      <Header title='Cross Species Mapper' />
+      <Introduction />
       <SurfacePlotter />
-      <Footer companyName='Child Mind Institute' />
     </div>
   )
 }
