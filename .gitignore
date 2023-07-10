@@ -1,4 +1,7 @@
-# Local temporary files 
+*.swp
+.idea
+
+# Local temporary files
 /local
 
 # Local TS dependencies

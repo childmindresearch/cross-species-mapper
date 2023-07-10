@@ -1,6 +1,6 @@
 export const defaultCamera = {
   eye: {
-    x: -3,
+    x: -2,
     y: 0,
     z: 0
   },
@@ -39,15 +39,26 @@ export const defaultLayout = {
     }
   },
   width: 400,
-  height: 400,
+  height: 300,
   margin: {
-    l: 20,
-    r: 20,
+    l: 0,
+    r: 0,
     b: 0,
     t: 0
   }
 }
 
 export const defaultConfig = {
-  displaylogo: false
+  displaymodebar: false,
+  scrollZoom: false
+}
+
+export const defaultLighting = {
+  ambient: 0.7,
+  diffuse: 0.7,
+  facenormalsepsilon: 1e-06,
+  fresnel: 0.2,
+  roughness: 0.0,
+  specular: 0.0,
+  vertexnormalsepsilon: 1e-12
 }

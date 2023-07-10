@@ -7,10 +7,10 @@ extends:
 parserOptions:
   ecmaVersion: latest
   sourceType: module
-  project: ./tsconfig.json # Add this line
+  project: ./tsconfig.json
 plugins:
   - react
-rules: { "@typescript-eslint/dot-notation": "error", 
+rules: { "@typescript-eslint/dot-notation": "error",
          "multiline-tenary": "off"}
 settings:
   react:

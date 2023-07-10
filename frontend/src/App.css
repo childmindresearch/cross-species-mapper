@@ -1,8 +1,11 @@
 #root {
   max-width: 1280px;
   margin: 0 auto;
-  padding: 2rem;
   text-align: center;
+}
+
+body {
+  padding-top: 80px;
 }
 
 footer {
@@ -12,16 +15,4 @@ footer {
   width: 100%;
   background-color: white;
   border-top: '10px solid #ffffff';
-}
-
-
-.grid-container {
-  display: grid;
-  grid-template-columns: repeat(2, 1fr);
-  grid-gap: 10px;
-}
-
-.grid-item {
-  background-color: #eaeaea;
-  padding: 10px;
 }
