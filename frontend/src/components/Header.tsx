@@ -29,7 +29,7 @@ const Header = ({ title }: HeaderProps): JSX.Element => {
             Webapp
           </Nav.Link>
           <Nav.Link
-            href='https://github.com/cmi-dair/cross-species-mapper'
+            href='https://github.com/TingsterX/alignment_macaque-human'
             className='d-flex align-items-center'
           >
             <FaGithub size={20} style={{ margin: '0 0.2rem 0rem 0.2rem' }} />

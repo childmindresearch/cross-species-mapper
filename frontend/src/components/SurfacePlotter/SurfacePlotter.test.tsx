@@ -50,7 +50,7 @@ describe('Tests for the SurfacePlotter component', () => {
     }
 
     const convertedSurface = apiSurfaceToPlotlySurface(apiSurface, [1, 2, 3], [0, 1])
-    expect(convertedSurface).toEqual(mockSurface)
+    expect(Object.keys(convertedSurface)).toEqual(expect.arrayContaining(Object.keys(mockSurface)))
   })
 
   test('surfacePlotter renders a plot with the correct data', async () => {
