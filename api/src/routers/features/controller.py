@@ -11,9 +11,10 @@ from nimare import dataset as nimare_dataset
 from nimare import utils as nimare_utils
 from nimare.decode import discrete
 from numpy import linalg
+
 from src import settings
 from src import utils as src_utils
-from src.routers.features import controller, schemas
+from src.routers.features import schemas
 from src.routers.features import utils as features_utils
 
 config = settings.get_settings()
@@ -42,20 +43,23 @@ def get_nimare_features(
         [x_coordinate, y_coordinate, z_coordinate]
     )
     seeds = np.zeros(DATASET.masker.mask_img.shape, np.int32)
-    try:
-        seeds = features_utils.create_sphere(
-            size=DATASET.masker.mask_img.shape,
-            center=matrix_coordinates.tolist(),
-            radius=10,
-        )
-    except IndexError as exc:
+
+    if np.any(matrix_coordinates < 0) or np.any(
+        matrix_coordinates > DATASET.masker.mask_img.shape
+    ):
         logger.error(
             "Invalid coordinates: %s, %s, %s", x_coordinate, y_coordinate, z_coordinate
         )
         raise fastapi.HTTPException(
             status_code=status.HTTP_400_BAD_REQUEST,
             detail="Invalid coordinates.",
-        ) from exc
+        )
+
+    seeds = features_utils.create_sphere(
+        size=DATASET.masker.mask_img.shape,
+        center=matrix_coordinates.tolist(),
+        radius=10,
+    )
 
     logger.info("Decoding coordinate.")
     mask_image = nib.Nifti1Image(seeds, DATASET.masker.mask_img.affine)

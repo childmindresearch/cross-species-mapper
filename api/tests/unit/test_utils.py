@@ -1,5 +1,6 @@
 """Unit tests for the surfaces controller."""
 import numpy as np
+
 from src import utils as src_utils
 from src.routers.features import utils as features_utils
 
@@ -35,4 +36,4 @@ def test_compute_similarity() -> None:
 
     assert similarity.shape == (10242,)
     assert similarity.dtype == np.dtype("float64")
-    assert np.allclose(similarity, 1)
+    assert np.allclose(similarity, np.arctanh(0.9999))

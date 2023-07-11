@@ -1,5 +1,6 @@
 """Endpoint tests for the surfaces router."""
 from fastapi import status, testclient
+
 from src import main
 
 client = testclient.TestClient(main.app)
@@ -21,12 +22,26 @@ def test_get_nimare_features_success() -> None:
     assert isinstance(response.json()["features"][0]["correlation"], float)
 
 
-def test_get_nimare_features_bad_coordinates() -> None:
+def test_get_nimare_features_negative_coordinates() -> None:
     """Test that the expected features are returned."""
     response = client.get(
         "/features/nimare",
         params={
             "x": -99999,
+            "y": 0,
+            "z": 0,
+        },
+    )
+
+    assert response.status_code == status.HTTP_400_BAD_REQUEST
+
+
+def test_get_nimare_features_bad_positive_coordinates() -> None:
+    """Test that the expected features are returned."""
+    response = client.get(
+        "/features/nimare",
+        params={
+            "x": 99999,
             "y": 0,
             "z": 0,
         },
