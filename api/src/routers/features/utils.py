@@ -1,5 +1,6 @@
 """ Utility functions for the features router. """
 import functools
+import itertools
 import logging
 
 import fastapi
@@ -8,8 +9,8 @@ import numpy as np
 import numpy.typing as npt
 from fastapi import status
 from nibabel import nifti1
-from scipy.spatial import distance
-from sklearn.metrics import pairwise
+from sklearn import neighbors
+
 from src import settings
 from src import utils as src_utils
 
@@ -18,6 +19,16 @@ FEATURE_DIR = config.DATA_DIR / "features"
 LOGGER_NAME = config.LOGGER_NAME
 
 logger = logging.getLogger(LOGGER_NAME)
+
+
+# Precompute surface distance cKDTree and keep in memory
+TREE = {}
+for local_species, local_side in itertools.product(
+    ["human", "macaque"], ["left", "right"]
+):
+    TREE[local_species + "_" + local_side] = neighbors.BallTree(
+        src_utils.Surface(local_species, local_side).vertices
+    )
 
 
 @functools.cache
@@ -87,22 +98,22 @@ def compute_similarity(
         99999 as these are not JSON serializable.
     """
     logger.info("Computing vertices within the ROI.")
-    seed_distances = distance.cdist(
-        seed_surface.vertices, np.atleast_2d(seed_surface.vertices[seed_vertex, :])
-    ).squeeze()
-    roi_vertices = seed_distances < roi_size
+    indices, distances = TREE[
+        seed_surface.species + "_" + seed_surface.side
+    ].query_radius(
+        [seed_surface.vertices[seed_vertex, :]], r=roi_size, return_distance=True
+    )
 
     logger.info("Computing similarity.")
-    cosine_similarity = pairwise.cosine_similarity(
-        np.array(seed_features)[roi_vertices, :], target_features
+    cosine_similarity = _cosine_similarity(
+        np.array(seed_features)[indices[0], :], target_features
     )
-    cosine_similarity[cosine_similarity > 0.9999] = 0.9999
     fisher_z = np.arctanh(cosine_similarity)
 
     if weighting == "uniform":
         weights = None
     elif weighting == "gaussian":
-        weights = np.exp(-seed_distances[roi_vertices] ** 2 / 2)
+        weights = np.exp(-(distances[0] ** 2) / 2)
     else:
         logger.error("Invalid weighting scheme: %s", weighting)
         raise fastapi.HTTPException(
@@ -139,3 +150,26 @@ def create_sphere(size: list[int], center: list[int], radius: int) -> np.ndarray
     sphere = (np.linalg.norm(grid, axis=-1) < radius).astype(np.int32)
 
     return sphere
+
+
+def _cosine_similarity(
+    seed_features: npt.ArrayLike, target_features: npt.ArrayLike
+) -> np.ndarray:
+    """Computes the cosine similarity between two sets of features.
+
+    Args:
+        seed_features: The features on the seed surface.
+        target_features: The features on the target surface.
+
+    Returns:
+        A vector of similarities per vertex.
+
+    """
+    cosine_similarity = np.dot(seed_features, target_features.T) / (
+        np.linalg.norm(seed_features, axis=1)[:, np.newaxis]
+        * np.linalg.norm(target_features, axis=1)[np.newaxis, :]
+    )
+    cosine_similarity[cosine_similarity > 0.9999] = 0.9999
+    cosine_similarity[cosine_similarity < -0.9999] = -0.9999
+    cosine_similarity[np.isnan(cosine_similarity)] = 0
+    return cosine_similarity

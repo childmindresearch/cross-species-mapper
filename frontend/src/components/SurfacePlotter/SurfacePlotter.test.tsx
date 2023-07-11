@@ -1,9 +1,8 @@
 // @ts-expect-error because React is a necessary unused import
 import React from 'react'
-import { act, render, screen } from '@testing-library/react'
-import SurfacePlotter, {
-  apiSurfaceToPlotlySurface
-} from './SurfacePlotter'
+import { render, screen } from '@testing-library/react'
+import SurfacePlotter from './SurfacePlotter'
+import '@testing-library/jest-dom/extend-expect'
 
 // Plotly seems broken in a testing environment.
 // Mock it out entirely.
@@ -14,55 +13,29 @@ jest.mock('react-plotly.js', () => {
   }
 })
 
-declare const global: {
-  fetch: typeof fetch
-}
+jest.mock('./hooks', () => ({
+  useSurfaces: jest.fn(() => []),
+  useCrossSpeciesSimilarity: jest.fn(() => []),
+  useNimareTerms: jest.fn(() => []),
+  usePlotData: jest.fn(() => []),
+}))
 
-const mockSurface = {
-  name: 'mockSurface',
-  type: 'mesh3d',
-  showscale: true,
-  x: [1, 2, 3],
-  y: [4, 5, 6],
-  z: [7, 8, 9],
-  i: [0, 1, 2],
-  j: [1, 2, 0],
-  k: [2, 0, 1],
-  intensity: [1, 2, 3],
-  cmin: 0,
-  cmax: 1
-}
-
-describe('Tests for the SurfacePlotter component', () => {
-  beforeEach(() => {
-    jest.resetAllMocks()
+describe('SurfacePlotter', () => {
+  it('renders the slider', () => {
+    render(<SurfacePlotter />)
+    const slider = screen.getByTestId('slider')
+    expect(slider).toBeInTheDocument()
   })
 
-  test('Convert API surface to Plotly', async () => {
-    const apiSurface = {
-      name: 'mockSurface',
-      xCoordinate: mockSurface.x,
-      yCoordinate: mockSurface.y,
-      zCoordinate: mockSurface.z,
-      iFaces: mockSurface.i,
-      jFaces: mockSurface.j,
-      kFaces: mockSurface.k
-    }
-
-    const convertedSurface = apiSurfaceToPlotlySurface(apiSurface, [1, 2, 3], [0, 1])
-    expect(Object.keys(convertedSurface)).toEqual(expect.arrayContaining(Object.keys(mockSurface)))
+  it('renders the plotly surface', () => {
+    render(<SurfacePlotter />)
+    const plotlySurface = screen.getByTestId('surface-plotter')
+    expect(plotlySurface).toBeInTheDocument()
   })
 
-  test('surfacePlotter renders a plot with the correct data', async () => {
-    jest.spyOn(global, 'fetch').mockResolvedValue({
-      json: jest.fn().mockResolvedValue({ fslr_32k_left: mockSurface })
-    } as unknown as Response)
-
-    await act(async () => {
-      render(<SurfacePlotter />)
-    })
-
-    const plotly = screen.getAllByTestId('mock-plot')
-    expect(plotly).toHaveLength(4)
+  it('renders the term block', () => {
+    render(<SurfacePlotter />)
+    const termBlock = screen.getByText('Loading terms...')
+    expect(termBlock).toBeInTheDocument()
   })
 })
