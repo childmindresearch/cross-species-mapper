@@ -17,7 +17,7 @@ jest.mock('./hooks', () => ({
   useSurfaces: jest.fn(() => []),
   useCrossSpeciesSimilarity: jest.fn(() => []),
   useNimareTerms: jest.fn(() => []),
-  usePlotData: jest.fn(() => []),
+  usePlotData: jest.fn(() => [])
 }))
 
 describe('SurfacePlotter', () => {

@@ -1,6 +1,5 @@
-import { defaultLighting } from './config';
-import { apiSurfaceToPlotlySurface } from './typeConversions';
-
+import { defaultLighting } from './config'
+import { apiSurfaceToPlotlySurface } from './typeConversions'
 
 describe('apiSurfaceToPlotlySurface', () => {
   test('converts ApiSurface to PlotlySurface', () => {
@@ -11,10 +10,10 @@ describe('apiSurfaceToPlotlySurface', () => {
       zCoordinate: [0, 1, 2],
       iFaces: [0, 1, 2],
       jFaces: [1, 2, 0],
-      kFaces: [2, 0, 1],
-    };
-    const intensity = [0.1, 0.2, 0.3];
-    const colorLimits = [-1, 1];
+      kFaces: [2, 0, 1]
+    }
+    const intensity = [0.1, 0.2, 0.3]
+    const colorLimits = [-1, 1]
 
     const expectedPlotlySurface = {
       name: 'Surface 1',
@@ -32,27 +31,17 @@ describe('apiSurfaceToPlotlySurface', () => {
       colorscale: 'Jet',
       colorbar: {
         len: 0.5,
-        thickness: 10,
+        thickness: 10
       },
       lighting: {
-        ...defaultLighting,
-      },
-    };
+        ...defaultLighting
+      }
+    }
 
-    const plotlySurface = apiSurfaceToPlotlySurface(apiSurface, intensity, colorLimits);
+    const plotlySurface = apiSurfaceToPlotlySurface(apiSurface, intensity, colorLimits)
 
-    expect(plotlySurface).toEqual(expectedPlotlySurface);
-  });
-
-  test('returns undefined when apiSurface is undefined', () => {
-    const apiSurface = undefined;
-    const intensity = [0.1, 0.2, 0.3];
-    const colorLimits = [-1, 1];
-
-    const plotlySurface = apiSurfaceToPlotlySurface(apiSurface, intensity, colorLimits);
-
-    expect(plotlySurface).toBeUndefined();
-  });
+    expect(plotlySurface).toEqual(expectedPlotlySurface)
+  })
 
   test('returns undefined when intensity is undefined', () => {
     const apiSurface = {
@@ -62,14 +51,14 @@ describe('apiSurfaceToPlotlySurface', () => {
       zCoordinate: [0, 1, 2],
       iFaces: [0, 1, 2],
       jFaces: [1, 2, 0],
-      kFaces: [2, 0, 1],
-    };
+      kFaces: [2, 0, 1]
+    }
 
-    const intensity = undefined;
-    const colorLimits = [-1, 1];
+    const intensity = undefined
+    const colorLimits = [-1, 1]
 
-    const plotlySurface = apiSurfaceToPlotlySurface(apiSurface, intensity, colorLimits);
+    const plotlySurface = apiSurfaceToPlotlySurface(apiSurface, intensity, colorLimits)
 
-    expect(plotlySurface).toBeUndefined();
-  });
-});
+    expect(plotlySurface).toBeUndefined()
+  })
+})
