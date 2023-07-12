@@ -144,7 +144,7 @@ def create_sphere(size: list[int], center: list[int], radius: int) -> np.ndarray
 
     center_array = np.array(center).reshape(*[1] * len(size), len(size))
 
-    mesh = np.meshgrid(*[np.arange(dimension) for dimension in size])
+    mesh = np.meshgrid(*[np.arange(dimension) for dimension in size], indexing="ij")
     grid = np.stack(mesh, axis=-1) - center_array
 
     sphere = (np.linalg.norm(grid, axis=-1) < radius).astype(np.int32)
