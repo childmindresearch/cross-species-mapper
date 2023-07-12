@@ -8,7 +8,7 @@ import Introduction from './components/Introduction'
 function App (): JSX.Element {
   return (
     <div>
-      <Header title='Cross Species Mapper' />
+      <Header />
       <Introduction />
       <SurfacePlotter />
     </div>

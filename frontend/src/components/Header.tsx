@@ -3,14 +3,10 @@ import React from 'react'
 import { Navbar, Nav } from 'react-bootstrap'
 import { FaBookOpen, FaGithub } from 'react-icons/fa6'
 
-interface HeaderProps {
-  title: string
-}
-
-const Header = ({ title }: HeaderProps): JSX.Element => {
+const Header = (): JSX.Element => {
   return (
     <Navbar bg='light' expand='lg' fixed='top'>
-      <Navbar.Brand style={{ marginLeft: '2rem' }}>{title}</Navbar.Brand>
+      <Navbar.Brand style={{ marginLeft: '1rem' }}>Cross Species Mapper</Navbar.Brand>
       <Navbar.Toggle aria-controls='basic-navbar-nav' />
       <Navbar.Collapse id='basic-navbar-nav' className='justify-content-end'>
         <Nav className='mr-auto'>

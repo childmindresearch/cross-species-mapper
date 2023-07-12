@@ -18,7 +18,7 @@ export const defaultCamera = {
 
 export const defaultLayout = {
   scene: {
-    camera: {},
+    camera: defaultCamera,
     xaxis: {
       title: '',
       showgrid: false,
@@ -38,7 +38,8 @@ export const defaultLayout = {
       showticklabels: false
     }
   },
-  width: 400,
+  hovermode: false,
+  width: 360,
   height: 300,
   margin: {
     l: 0,
@@ -49,13 +50,16 @@ export const defaultLayout = {
 }
 
 export const defaultConfig = {
-  displaymodebar: false,
-  scrollZoom: false
+  displayModeBar: true,
+  scrollZoom: false,
+  toImageButtonOptions: {
+    format: 'svg'
+  }
 }
 
 export const defaultLighting = {
-  ambient: 0.7,
-  diffuse: 0.7,
+  ambient: 0.65,
+  diffuse: 0.5,
   facenormalsepsilon: 1e-06,
   fresnel: 0.2,
   roughness: 0.0,
