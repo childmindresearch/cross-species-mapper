@@ -5,10 +5,9 @@ import Header from './Header'
 
 describe('Header', () => {
   it('renders the header component correctly', () => {
-    const title = 'Example Title'
-    render(<Header title={title} />)
+    render(<Header />)
 
-    const headerTitle = screen.getByText(title)
+    const headerTitle = screen.getByText('Cross Species Mapper')
     const githubLink = screen.getByText('Webapp')
     const dataLink = screen.getByText('Data')
     const publicationLink = screen.getByText('Publication')

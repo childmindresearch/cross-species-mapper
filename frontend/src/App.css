@@ -1,5 +1,5 @@
 #root {
-  max-width: 1280px;
+  max-width: min(800px, 80%);
   margin: 0 auto;
   text-align: center;
 }
@@ -15,4 +15,8 @@ footer {
   width: 100%;
   background-color: white;
   border-top: '10px solid #ffffff';
+}
+
+.container {
+  max-width: min(800px, 80%);
 }

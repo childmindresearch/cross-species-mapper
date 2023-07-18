@@ -1,7 +1,14 @@
 // @ts-expect-error because React is a necessary unused import
-import React from 'react'
+import React, { useEffect, useState } from 'react'
 
 export default function Introduction (): JSX.Element {
+  const [isMobile, setIsMobile] = useState(false)
+
+  useEffect(() => {
+    const userAgent = navigator.userAgent.toLowerCase()
+    setIsMobile(/android|webos|iphone|ipad|ipod|blackberry|iemobile|opera mini/i.test(userAgent))
+  }, [])
+
   return (
     <div>
       <p>
@@ -13,6 +20,12 @@ export default function Introduction (): JSX.Element {
         detailed in-depth explanation of this project? Take a look at the links
         at the top to learn more!
       </p>
+      {isMobile && (
+        <p style={{ color: 'red' }}>
+            Warning: Camera locking does not work on mobile devices due to issues
+            with plotlyjs&apos; drag detection. We recommend keeping it unlocked.
+        </p>
+      )}
     </div>
   )
 }

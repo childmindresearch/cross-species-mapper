@@ -49,4 +49,6 @@ export interface PlotlySurface {
   colorscale?: string
   colorbar?: any
   lighting?: any
+  flatshading?: boolean
+  vertexnormals?: any
 }
