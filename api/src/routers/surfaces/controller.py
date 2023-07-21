@@ -29,10 +29,6 @@ def get_hemispheres(species: str, side: str) -> schemas.Surface:
 
     return schemas.Surface(
         name=f"{species}_{side}",
-        xCoordinate=surface.vertices[:, 0].tolist(),
-        yCoordinate=surface.vertices[:, 1].tolist(),
-        zCoordinate=surface.vertices[:, 2].tolist(),
-        iFaces=surface.faces[:, 0].tolist(),
-        jFaces=surface.faces[:, 1].tolist(),
-        kFaces=surface.faces[:, 2].tolist(),
+        vertices=surface.vertices.tolist(),
+        faces=surface.faces.tolist(),
     )
