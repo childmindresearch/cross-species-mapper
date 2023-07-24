@@ -6,3 +6,8 @@
   cross-species brain similarity. Want a more detailed in-depth explanation of
   this project? Take a look at the links at the top to learn more!
 </p>
+
+<p>
+  To rotate the brain, click and drag on the brain. To see data for a particular
+  region, double click on the region.
+</p>

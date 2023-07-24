@@ -1,7 +1,7 @@
 import { MeshColors } from "brainviewer/src/brainViewer";
 import { getCrossSpeciesSimilarity } from "../../api/fetcher";
 import type { LocalClient } from "./client";
- 
+import * as THREE from "three";
 
 export async function onDoubleClick(
       event: any,
@@ -27,3 +27,17 @@ export async function onDoubleClick(
         client.setModel(undefined, mesh);
       }
     }
+
+export async function onUpdate(
+    event: any,
+    triggeringClient: LocalClient,
+    clients: LocalClient[],
+) {
+  const newPosition = triggeringClient.controls.getPosition(new THREE.Vector3)
+  for (const client of clients) {
+    if (client.controls.getPosition(new THREE.Vector3) !== newPosition) {
+      client.controls.setPosition(newPosition.x, newPosition.y, newPosition.z);
+    }
+  }
+  
+}

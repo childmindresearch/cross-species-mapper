@@ -14,15 +14,18 @@
         "@sveltejs/adapter-auto": "^2.0.0",
         "@sveltejs/kit": "^1.20.4",
         "@types/cookie": "^0.5.1",
+        "camera-controls": "^2.7.0",
         "svelte": "^4.0.5",
         "svelte-check": "^3.4.3",
         "svelte-loading-spinners": "^0.3.4",
+        "svelte-toggle": "^4.0.0",
         "tslib": "^2.4.1",
         "typescript": "^5.0.0",
         "vite": "^4.4.2"
     },
     "type": "module",
     "dependencies": {
-        "three": "^0.154.0"
+        "brainviewer": "file:../../brainviewer",
+        "three": "^0.150.0"
     }
 }

@@ -1,6 +1,7 @@
 import type { Surface } from "brainviewer/src/brainViewer";
 import { ViewerClient } from "brainviewer/src/viewer";
 import * as THREE from "three";
+import CameraControls from "camera-controls";
 
 export interface LocalClient extends ViewerClient {
     species: string
@@ -23,10 +24,15 @@ export function createClient(div: HTMLElement, surface: Surface, species: string
     localClient.setTarget('center');
     const target = localClient.controls.getTarget(new THREE.Vector3())
 
+    localClient.controls.mouseButtons = {
+        left: CameraControls.ACTION.ROTATE,
+        middle: CameraControls.ACTION.NONE,
+        right: CameraControls.ACTION.NONE,
+        wheel: CameraControls.ACTION.NONE,
+    };
+
     const distance = species == "human" ? 170 : 80;
     const multiplier = side == "left" ? -1 : 1;
     localClient.controls.setPosition(target.x + distance * multiplier, target.y ,target.z);
-    console.log(target.x + distance * multiplier, target.y ,target.z)
-
     return localClient;
 }

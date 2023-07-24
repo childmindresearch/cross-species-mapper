@@ -4,8 +4,10 @@
   import { Jumper } from "svelte-loading-spinners";
   import { getData } from "./fetch";
   import { createClient } from "./client";
-  import { onDoubleClick } from "./events";
+  import { onDoubleClick, onUpdate } from "./events";
+  import Toggle from "svelte-toggle";
 
+  let cameraLock = true;
   let surfaces: {
     human_left: Surface;
     human_right: Surface;
@@ -18,6 +20,8 @@
   let div3: HTMLElement;
   let div4: HTMLElement;
 
+  let resetCamera: () => void;
+
   onMount(async () => {
     surfaces = await getData();
     const clients = [
@@ -26,11 +30,17 @@
       createClient(div3, surfaces["macaque_left"], "macaque", "left"),
       createClient(div4, surfaces["macaque_right"], "macaque", "right"),
     ];
-    clients.map((client) =>
+
+    clients.map((client) => {
       client.addListener("dblclick", (event: any) => {
         onDoubleClick(event, clients, client.species, client.side);
-      })
-    );
+      });
+      client.controls.addEventListener("control", (event: any) => {
+        if (cameraLock) {
+          onUpdate(event, client, clients);
+        }
+      });
+    });
   });
 </script>
 
@@ -39,6 +49,17 @@
     <Jumper size="60" color="#FF3E00" unit="px" duration="1s" />
   </div>
 {/if}
+<div class="camera-controls">
+  <Toggle
+    bind:cameraLock
+    on="Locked"
+    off="Unlocked"
+    label="Camera Lock"
+    on:toggle={() => {
+      cameraLock = !cameraLock;
+    }}
+  />
+</div>
 <div class="viewer-set">
   <div class="viewer-row">
     <div id="div-viewer" bind:this={div1} />
