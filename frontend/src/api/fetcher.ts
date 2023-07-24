@@ -1,6 +1,6 @@
-import { type ApiSurface, type CrossSpeciesSimilarityResponse, type NiMareResponse } from '../types/surfaces'
+import type { ApiSurface, CrossSpeciesSimilarityResponse, NiMareResponse } from '../types/api'
 
-const API_URL: string = process.env.REACT_APP_API_URL ?? 'http://localhost:8000'
+const API_URL: string = 'http://localhost:8000'
 
 const Endpoints = {
   getHemispheres: `${API_URL}/surfaces/hemispheres`,

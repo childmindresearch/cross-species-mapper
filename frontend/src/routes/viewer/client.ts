@@ -1,5 +1,6 @@
 import type { Surface } from "brainviewer/src/brainViewer";
 import { ViewerClient } from "brainviewer/src/viewer";
+import * as THREE from "three";
 
 export interface LocalClient extends ViewerClient {
     species: string
@@ -19,10 +20,13 @@ export function createClient(div: HTMLElement, surface: Surface, species: string
     localClient.species = species;
     localClient.side = side;
 
+    localClient.setTarget('center');
+    const target = localClient.controls.getTarget(new THREE.Vector3())
+
     const distance = species == "human" ? 170 : 80;
     const multiplier = side == "left" ? -1 : 1;
-    localClient.controls.setPosition(distance * multiplier, 0 ,0);
-    localClient.onWindowResize();
+    localClient.controls.setPosition(target.x + distance * multiplier, target.y ,target.z);
+    console.log(target.x + distance * multiplier, target.y ,target.z)
 
     return localClient;
 }
