@@ -1,6 +1,5 @@
 <script>
   import Introduction from "./Introduction.svelte";
-  import Viewer from "./viewer/Viewer.svelte";
   import ViewerSet from "./viewer/ViewerSet.svelte";
 </script>
 
