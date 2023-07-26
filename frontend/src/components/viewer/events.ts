@@ -55,6 +55,5 @@ export async function onUpdate(
       newPosition.y * scale, 
       newPosition.z * scale
     );
-  }
-  
+  }  
 }
