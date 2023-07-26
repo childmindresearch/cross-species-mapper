@@ -113,9 +113,15 @@
     grid-template-columns: repeat(2, 1fr);
   }
 
-  @media (max-width: 650px) {
+  @media (max-width: 768px) {
     .viewer-set {
       grid-template-columns: repeat(1, 1fr);
+    }
+  }
+
+  @media (min-width: 1400px) {
+    .viewer-set {
+      grid-template-columns: repeat(4, 1fr);
     }
   }
 

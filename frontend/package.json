@@ -18,6 +18,7 @@
         "camera-controls": "^2.7.0",
         "svelte": "^4.0.5",
         "svelte-check": "^3.4.3",
+        "svelte-french-toast": "^1.2.0",
         "svelte-loading-spinners": "^0.3.4",
         "svelte-toggle": "^4.0.0",
         "tslib": "^2.4.1",

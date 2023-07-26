@@ -1,6 +1,7 @@
 <script>
   import Introduction from "./Introduction.svelte";
   import ViewerSet from "../components/viewer/ViewerSet.svelte";
+  import { Toaster } from "svelte-french-toast";
 </script>
 
 <svelte:head>
@@ -12,6 +13,7 @@
 </svelte:head>
 
 <main>
+  <Toaster position="bottom-right" />
   <Introduction />
   <ViewerSet />
 </main>

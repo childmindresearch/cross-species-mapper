@@ -3,6 +3,7 @@ import { getCrossSpeciesSimilarity } from "../../api/fetcher";
 import type { Viewer } from "./client";
 import * as THREE from "three";
 import { speciesScale } from "./constants";
+import toast from "svelte-french-toast";
 
 export async function onDoubleClick(
       event: any,
@@ -21,6 +22,15 @@ export async function onDoubleClick(
       ).then((data) => {
         return data;
       });
+
+      const allDataIsZero = Object.values(similarities).every(
+        (similarity) => similarity.every((value) => value === 0)
+      );
+      
+      if (allDataIsZero) {
+        toast.error("No data available for midline vertices.");
+        return;
+      }
 
       for (const viewer of viewers) {
         const similarity = similarities[viewer.species + "_" + viewer.side];
