@@ -2,6 +2,7 @@ import type { Surface } from "brainviewer/src/brainViewer";
 import { ViewerClient } from "brainviewer/src/viewer";
 import * as THREE from "three";
 import CameraControls from "camera-controls";
+import { speciesScale } from "./constants";
 
 export interface LocalClient extends ViewerClient {
     species: string
@@ -31,7 +32,7 @@ export function createClient(div: HTMLElement, surface: Surface, species: string
         wheel: CameraControls.ACTION.NONE,
     };
 
-    const distance = species == "human" ? 170 : 80;
+    const distance = speciesScale[species] * 180;
     const multiplier = side == "left" ? -1 : 1;
     localClient.controls.setPosition(target.x + distance * multiplier, target.y ,target.z);
     return localClient;

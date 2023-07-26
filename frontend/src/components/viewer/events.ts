@@ -2,6 +2,7 @@ import { MeshColors } from "brainviewer/src/brainViewer";
 import { getCrossSpeciesSimilarity } from "../../api/fetcher";
 import type { LocalClient } from "./client";
 import * as THREE from "three";
+import { speciesScale } from "./constants";
 
 export async function onDoubleClick(
       event: any,
@@ -35,8 +36,13 @@ export async function onUpdate(
 ) {
   const newPosition = triggeringClient.controls.getPosition(new THREE.Vector3)
   for (const client of clients) {
+    const same_side = client.side === triggeringClient.side;
+    const same_species = client.species === triggeringClient.species;
+    const scale = same_species ? 1 : speciesScale[client.species];
+
+    const x_flip = same_side ? 1 : -1;
     if (client.controls.getPosition(new THREE.Vector3) !== newPosition) {
-      client.controls.setPosition(newPosition.x, newPosition.y, newPosition.z);
+      client.controls.setPosition(newPosition.x * x_flip * scale, newPosition.y * scale, newPosition.z * scale);
     }
   }
   

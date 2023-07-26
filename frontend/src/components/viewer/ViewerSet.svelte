@@ -1,7 +1,7 @@
 <script lang="ts">
   import { onMount } from "svelte";
   import type { Surface } from "brainviewer/src/brainViewer";
-  import { Jumper } from "svelte-loading-spinners";
+  import { Shadow } from "svelte-loading-spinners";
   import { getData } from "./fetch";
   import { createClient } from "./client";
   import { onDoubleClick, onUpdate } from "./events";
@@ -44,11 +44,6 @@
   });
 </script>
 
-{#if !surfaces}
-  <div class="loading">
-    <Jumper size="60" color="#FF3E00" unit="px" duration="1s" />
-  </div>
-{/if}
 <div class="camera-controls">
   <Toggle
     bind:cameraLock
@@ -60,6 +55,11 @@
     }}
   />
 </div>
+{#if !surfaces}
+  <div class="loading">
+    <Shadow size="30" color="#FF3E00" unit="px" duration="1s" />
+  </div>
+{/if}
 <div class="viewer-set">
   <div class="viewer-row">
     <div id="div-viewer" bind:this={div1} />
@@ -94,5 +94,6 @@
     display: flex;
     justify-content: center;
     align-items: center;
+    margin-top: 100px;
   }
 </style>
