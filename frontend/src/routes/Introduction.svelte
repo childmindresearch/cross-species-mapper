@@ -9,5 +9,6 @@
 
 <p>
   To rotate the brain, click and drag on the brain. To see data for a particular
-  region, double click on the region.
+  region, double click on the region. No data is available for the midline, so
+  double clicking on the midline results in all vertices being set to zero.
 </p>

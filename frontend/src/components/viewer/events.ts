@@ -1,19 +1,19 @@
 import { MeshColors } from "brainviewer/src/brainViewer";
 import { getCrossSpeciesSimilarity } from "../../api/fetcher";
-import type { LocalClient } from "./client";
+import type { Viewer } from "./client";
 import * as THREE from "three";
 import { speciesScale } from "./constants";
 
 export async function onDoubleClick(
       event: any,
-      clients: LocalClient[],
+      viewers: Viewer[],
       clickedSpecies: string,
       clickedSide: string
     ) {
       if (event.intersects === undefined) {
         return;
       }
-      const vertex = event.intersects.face.a;
+      const vertex = event.intersects[0].face.a;
       const similarities = await getCrossSpeciesSimilarity(
         clickedSpecies,
         clickedSide,
@@ -22,28 +22,29 @@ export async function onDoubleClick(
         return data;
       });
 
-      for (const client of clients) {
-        const similarity = similarities[client.species + "_" + client.side];
+      for (const viewer of viewers) {
+        const similarity = similarities[viewer.species + "_" + viewer.side];
         const mesh = new MeshColors(similarity, "Turbo", [-1, 2]);
-        client.setModel(undefined, mesh);
+        viewer.viewer.setModel(undefined, mesh);
       }
     }
 
 export async function onUpdate(
     event: any,
-    triggeringClient: LocalClient,
-    clients: LocalClient[],
+    triggeringClient: Viewer,
+    clients: Viewer[],
 ) {
-  const newPosition = triggeringClient.controls.getPosition(new THREE.Vector3)
+  const newPosition = triggeringClient.viewer.controls.getPosition(new THREE.Vector3)
   for (const client of clients) {
     const same_side = client.side === triggeringClient.side;
-    const same_species = client.species === triggeringClient.species;
-    const scale = same_species ? 1 : speciesScale[client.species];
-
+    const scale = speciesScale[client.species] / speciesScale[triggeringClient.species]
     const x_flip = same_side ? 1 : -1;
-    if (client.controls.getPosition(new THREE.Vector3) !== newPosition) {
-      client.controls.setPosition(newPosition.x * x_flip * scale, newPosition.y * scale, newPosition.z * scale);
-    }
+
+    client.viewer.controls.setPosition(
+      newPosition.x * scale * x_flip, 
+      newPosition.y * scale, 
+      newPosition.z * scale
+    );
   }
   
 }

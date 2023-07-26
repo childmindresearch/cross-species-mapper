@@ -3,9 +3,10 @@
   import type { Surface } from "brainviewer/src/brainViewer";
   import { Shadow } from "svelte-loading-spinners";
   import { getData } from "./fetch";
-  import { createClient } from "./client";
+  import { Viewer } from "./client";
   import { onDoubleClick, onUpdate } from "./events";
   import Toggle from "svelte-toggle";
+  import Button from "../Button.svelte";
 
   let cameraLock = true;
   let surfaces: {
@@ -21,39 +22,66 @@
   let div4: HTMLElement;
 
   let resetCamera: () => void;
+  let lastTouchTime = new Date().getTime();
 
   onMount(async () => {
     surfaces = await getData();
-    const clients = [
-      createClient(div1, surfaces["human_left"], "human", "left"),
-      createClient(div2, surfaces["human_right"], "human", "right"),
-      createClient(div3, surfaces["macaque_left"], "macaque", "left"),
-      createClient(div4, surfaces["macaque_right"], "macaque", "right"),
+    const viewers = [
+      new Viewer(div1, surfaces["human_left"], "human", "left"),
+      new Viewer(div2, surfaces["human_right"], "human", "right"),
+      new Viewer(div3, surfaces["macaque_left"], "macaque", "left"),
+      new Viewer(div4, surfaces["macaque_right"], "macaque", "right"),
     ];
+    viewers.map((viewer) => {
+      viewer.plot();
+    });
 
-    clients.map((client) => {
-      client.addListener("dblclick", (event: any) => {
-        onDoubleClick(event, clients, client.species, client.side);
+    viewers.map((viewer) => {
+      viewer.viewer.addListener("dblclick", (event: any) => {
+        onDoubleClick(event, viewers, viewer.getSpecies(), viewer.getSide());
       });
-      client.controls.addEventListener("control", (event: any) => {
+
+      viewer.viewer.addListener("touchstart", (event: any) => {
+        const currentTime = new Date().getTime();
+        const tapLength = currentTime - lastTouchTime;
+        if (tapLength < 500 && tapLength > 0) {
+          onDoubleClick(event, viewers, viewer.getSpecies(), viewer.getSide());
+          event.preventDefault();
+        } else {
+          lastTouchTime = currentTime;
+        }
+      });
+
+      viewer.viewer.controls.addEventListener("control", (event: any) => {
         if (cameraLock) {
-          onUpdate(event, client, clients);
+          onUpdate(event, viewer, viewers);
         }
       });
     });
+
+    resetCamera = () => {
+      viewers.map((viewer) => {
+        viewer.resetCamera();
+      });
+    };
   });
 </script>
 
 <div class="camera-controls">
-  <Toggle
-    bind:cameraLock
-    on="Locked"
-    off="Unlocked"
-    label="Camera Lock"
-    on:toggle={() => {
-      cameraLock = !cameraLock;
-    }}
-  />
+  <div class="toggle-div">
+    <Toggle
+      bind:cameraLock
+      on="Locked  "
+      off="Unlocked"
+      label="Camera Lock"
+      on:toggle={() => {
+        cameraLock = !cameraLock;
+      }}
+      switchColor="var(--color-theme-2)"
+      toggledColor="var(--color-theme-1)"
+    />
+  </div>
+  <Button text="Reset Camera" onClick={resetCamera} />
 </div>
 {#if !surfaces}
   <div class="loading">
@@ -61,27 +89,36 @@
   </div>
 {/if}
 <div class="viewer-set">
-  <div class="viewer-row">
-    <div id="div-viewer" bind:this={div1} />
-    <div id="div-viewer" bind:this={div2} />
-  </div>
-  <div class="viewer-row">
-    <div id="div-viewer" bind:this={div3} />
-    <div id="div-viewer" bind:this={div4} />
-  </div>
+  <div id="div-viewer" bind:this={div1} />
+  <div id="div-viewer" bind:this={div2} />
+  <div id="div-viewer" bind:this={div3} />
+  <div id="div-viewer" bind:this={div4} />
 </div>
 
 <style>
-  .viewer-set {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-  }
-
-  .viewer-row {
+  .camera-controls {
     display: flex;
     flex-direction: row;
+    align-items: center;
+    justify-content: left;
+    margin-bottom: 10px;
+    gap: 20px;
   }
+
+  .toggle-div {
+    width: 120px;
+  }
+  .viewer-set {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  @media (max-width: 650px) {
+    .viewer-set {
+      grid-template-columns: repeat(1, 1fr);
+    }
+  }
+
   #div-viewer {
     width: var(--width) px;
     height: var(--height) px;

@@ -4,36 +4,65 @@ import * as THREE from "three";
 import CameraControls from "camera-controls";
 import { speciesScale } from "./constants";
 
-export interface LocalClient extends ViewerClient {
-    species: string
-    side: string
-}
 
-export function createClient(div: HTMLElement, surface: Surface, species: string, side: string, width: number=450, height: number=300) {
-    const client = new ViewerClient(div, surface);
-    client.setModel(surface.mesh, surface.colors);
+export class Viewer {
+    private div: HTMLElement;
+    private surface: Surface;
+    private width: number;
+    private height: number;
 
-    client.controls.minDistance = 30;
-    client.controls.maxDistance = 300;
-    client.setAlpha(0);
-    client.renderer.setSize(width, height);
-    
-    const localClient = client as LocalClient;
-    localClient.species = species;
-    localClient.side = side;
+    readonly species: string;
+    readonly side: string;
 
-    localClient.setTarget('center');
-    const target = localClient.controls.getTarget(new THREE.Vector3())
+    public viewer: ViewerClient;
 
-    localClient.controls.mouseButtons = {
-        left: CameraControls.ACTION.ROTATE,
-        middle: CameraControls.ACTION.NONE,
-        right: CameraControls.ACTION.NONE,
-        wheel: CameraControls.ACTION.NONE,
-    };
+    constructor(div: HTMLElement, surface: Surface, species: string, side: string, width: number=450, height: number=300) {
+        this.div = div;
+        this.surface = surface;
+        this.species = species;
+        this.side = side;
+        this.width = width;
+        this.height = height;
+        this.viewer = {} as ViewerClient;
+    }
 
-    const distance = speciesScale[species] * 180;
-    const multiplier = side == "left" ? -1 : 1;
-    localClient.controls.setPosition(target.x + distance * multiplier, target.y ,target.z);
-    return localClient;
+    plot(): void {
+        this.viewer = new ViewerClient(this.div, this.surface);
+        this.viewer.setModel(this.surface.mesh, this.surface.colors);
+
+        this.viewer.controls.minDistance = 30;
+        this.viewer.controls.maxDistance = 300;
+        this.viewer.setAlpha(0);
+        this.viewer.renderer.setSize(this.width, this.height);
+        
+        this.resetCamera();
+        this.viewer.onWindowResize(); // Prevents faulty aspect ratio on first load.
+        
+        this.viewer.controls.mouseButtons = {
+            left: CameraControls.ACTION.ROTATE,
+            middle: CameraControls.ACTION.NONE,
+            right: CameraControls.ACTION.NONE,
+            wheel: CameraControls.ACTION.NONE,
+        };
+
+    }
+
+    resetCamera(): void {
+        this.viewer.setTarget('center');
+        const target = this.viewer.controls.getTarget(new THREE.Vector3())
+        
+        const distance = speciesScale[this.species] * 180;
+        const multiplier = this.side == "left" ? -1 : 1;
+        
+        this.viewer.controls.setPosition(target.x + distance * multiplier, target.y ,target.z);
+    }
+
+    getSpecies(): string {
+        return this.species;
+    }
+
+    getSide(): string {
+        return this.side;
+    }
+
 }
