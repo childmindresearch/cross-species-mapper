@@ -6,7 +6,8 @@
         "build": "vite build",
         "preview": "vite preview",
         "check": "svelte-kit sync && svelte-check --tsconfig ./tsconfig.json",
-        "check:watch": "svelte-kit sync && svelte-check --tsconfig ./tsconfig.json --watch"
+        "check:watch": "svelte-kit sync && svelte-check --tsconfig ./tsconfig.json --watch",
+        "lint": "eslint src --ext ts,tsx --report-unused-disable-directives --max-warnings 0 --fix"
     },
     "devDependencies": {
         "@fontsource/fira-mono": "^4.5.10",
@@ -16,6 +17,7 @@
         "@types/cookie": "^0.5.1",
         "@types/lodash": "^4.14.196",
         "camera-controls": "^2.7.0",
+        "eslint-config-standard-with-typescript": "^37.0.0",
         "svelte": "^4.0.5",
         "svelte-check": "^3.4.3",
         "svelte-french-toast": "^1.2.0",
@@ -28,6 +30,7 @@
     "type": "module",
     "dependencies": {
         "brainviewer": "file:../../brainviewer",
+        "eslint": "^8.46.0",
         "three": "^0.150.0"
     }
 }

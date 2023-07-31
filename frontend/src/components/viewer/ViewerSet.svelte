@@ -7,6 +7,8 @@
   import { onDoubleClick, onUpdate } from "./events";
   import Toggle from "svelte-toggle";
   import Button from "../Button.svelte";
+  // @ts-ignore
+  import type * as THREE from "three";
 
   let cameraLock = true;
   let surfaces: {
@@ -37,20 +39,44 @@
     });
 
     viewers.map((viewer) => {
-      viewer.viewer.addListener("dblclick", (event: any) => {
-        onDoubleClick(event, viewers, viewer.getSpecies(), viewer.getSide());
-      });
-
-      viewer.viewer.addListener("touchstart", (event: any) => {
-        const currentTime = new Date().getTime();
-        const tapLength = currentTime - lastTouchTime;
-        if (tapLength < 500 && tapLength > 0) {
-          onDoubleClick(event, viewers, viewer.getSpecies(), viewer.getSide());
-          event.preventDefault();
-        } else {
-          lastTouchTime = currentTime;
+      viewer.viewer.addListener(
+        "dblclick",
+        (event: Event, intersects: THREE.Intersection) => {
+          if (!(event instanceof MouseEvent || event instanceof TouchEvent)) {
+            return;
+          }
+          onDoubleClick(
+            event,
+            intersects,
+            viewers,
+            viewer.getSpecies(),
+            viewer.getSide()
+          );
         }
-      });
+      );
+
+      viewer.viewer.addListener(
+        "touchstart",
+        (event: Event, intersects: THREE.Intersection) => {
+          if (!(event instanceof MouseEvent || event instanceof TouchEvent)) {
+            return;
+          }
+          const currentTime = new Date().getTime();
+          const tapLength = currentTime - lastTouchTime;
+          if (tapLength < 500 && tapLength > 0) {
+            onDoubleClick(
+              event,
+              intersects,
+              viewers,
+              viewer.getSpecies(),
+              viewer.getSide()
+            );
+            event.preventDefault();
+          } else {
+            lastTouchTime = currentTime;
+          }
+        }
+      );
 
       viewer.viewer.controls.addEventListener("control", (event: any) => {
         if (cameraLock) {
