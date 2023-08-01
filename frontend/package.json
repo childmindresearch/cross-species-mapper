@@ -12,7 +12,6 @@
     "devDependencies": {
         "@fontsource/fira-mono": "^4.5.10",
         "@neoconfetti/svelte": "^1.0.0",
-        "@sveltejs/adapter-auto": "^2.0.0",
         "@sveltejs/kit": "^1.20.4",
         "@types/cookie": "^0.5.1",
         "@types/lodash": "^4.14.196",
@@ -29,7 +28,11 @@
     },
     "type": "module",
     "dependencies": {
-        "brainviewer": "file:../../brainviewer",
+        "@cmi-dair/brainviewer": "^0.0.1",
+        "@sveltejs/adapter-node": "^1.3.1",
+        "@sveltejs/adapter-static": "^2.0.3",
+        "d3": "^7.8.5",
+        "d3-scale-chromatic": "^3.0.0",
         "eslint": "^8.46.0",
         "three": "^0.150.0"
     }

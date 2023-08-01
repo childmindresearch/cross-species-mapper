@@ -1,4 +1,4 @@
-import { MeshColors } from 'brainviewer/src/brainViewer'
+import { MeshColors } from '@cmi-dair/brainviewer/src/brainViewer'
 import { getCrossSpeciesSimilarity } from '../../api/fetcher'
 import type { Viewer } from './client'
 import * as THREE from 'three'
@@ -7,7 +7,7 @@ import toast from 'svelte-french-toast'
 
 export async function onDoubleClick (
   event: MouseEvent | TouchEvent,
-  intersects: THREE.Intersection,
+  intersects: THREE.Intersection[],
   viewers: Viewer[],
   clickedSpecies: string,
   clickedSide: string
@@ -15,7 +15,7 @@ export async function onDoubleClick (
   if (intersects === undefined) {
     return
   }
-  const vertex = intersects.face.a
+  const vertex = intersects[0].face.a
   const similarities = await getCrossSpeciesSimilarity(
     clickedSpecies,
     clickedSide,

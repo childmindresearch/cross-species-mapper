@@ -1,5 +1,5 @@
-import type { Surface } from 'brainviewer/src/brainViewer'
-import { ViewerClient } from 'brainviewer/src/viewer'
+import type { Surface } from '@cmi-dair/brainviewer/src/brainViewer'
+import { ViewerClient } from '@cmi-dair/brainviewer/src/viewer'
 import * as THREE from 'three'
 import CameraControls from 'camera-controls'
 import { speciesScale } from './constants'
