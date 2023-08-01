@@ -1,17 +1,20 @@
-FROM nikolaik/python-nodejs:python3.11-nodejs16
+# Build stage
+FROM node:18-alpine AS build
 
+ARG GITHUB_TOKEN
+ARG VITE_PORT=3000
+ENV VITE_PORT=${VITE_PORT}
+ENV API_URL=http://localhost:8000
 WORKDIR /app
-EXPOSE 3000
 
-COPY package.json package.json
+COPY .npmrc package.json package-lock.json static svelte.config.js vite.config.ts ./
+COPY src ./src
+COPY static ./static
 
-RUN npm install
-
-COPY . .
-
-RUN npm install -g serve && \
+RUN npm install --save-dev && \
+    npm install -g serve && \
     npm run build && \
-    npm cache clean --force && \
-    rm -rf src node_modules public
+    rm -rf node_modules src static && \
+    npm cache clean --force
 
-CMD [ "serve", "-s", "build", "-n"]
+CMD [ "sh", "-c", "serve -s -l ${VITE_PORT} build" ]

@@ -1,16 +1,17 @@
 services:
   frontend:
     platform: linux/amd64 # Does not work on Apple Silicon without emulation.
-    build: frontend
-    ports:
-      - "3000:3000"
+    build:
+      context: frontend
+      args:
+        - GITHUB_TOKEN=${GITHUB_TOKEN}
     environment:
-      - VITE_PORT=3000
-      - API_URL=http://localhost:8000
-    depends_on:
-      - api
-
+      - API_URL=${API_HOST}:${API_PORT}
+      - VITE_PORT=${VITE_PORT}
+    ports:
+      - ${VITE_PORT}:${VITE_PORT}
+      
   api:
     build: api
     ports:
-      - "8000:8000"
+      - "${API_PORT}:${API_PORT}"

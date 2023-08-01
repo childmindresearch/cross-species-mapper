@@ -1,6 +1,6 @@
-import { type ApiSurface, type CrossSpeciesSimilarityResponse, type NiMareResponse } from '../types/surfaces'
+import type { ApiSurface, CrossSpeciesSimilarityResponse } from '../types/api'
 
-const API_URL: string = process.env.REACT_APP_API_URL ?? 'http://localhost:8000'
+const API_URL: string = 'http://localhost:8000'
 
 const Endpoints = {
   getHemispheres: `${API_URL}/surfaces/hemispheres`,
@@ -34,28 +34,6 @@ export async function getCrossSpeciesSimilarity (
 ): Promise<CrossSpeciesSimilarityResponse> {
   const response = await fetch(
     `${Endpoints.getCrossSpeciesSimilarity}?seed_species=${species}&seed_side=${side}&seed_vertex=${vertex}`
-  )
-  return await response.json()
-}
-
-/**
- * Fetches the NiMare terms for a given vertex on a surface.
- *
- * @param surface - The API surface object.
- * @param vertex - The vertex index on the surface.
- * @returns A Promise that resolves to a SimilarityResponse object.
- */
-export async function getNimareTerms (
-  surface: ApiSurface,
-  vertex: number
-): Promise<NiMareResponse> {
-  const coordinates = {
-    x: surface.xCoordinate[vertex],
-    y: surface.yCoordinate[vertex],
-    z: surface.zCoordinate[vertex]
-  }
-  const response = await fetch(
-    `${Endpoints.getNimareTerms}?x=${coordinates.x}&y=${coordinates.y}&z=${coordinates.z}`
   )
   return await response.json()
 }
