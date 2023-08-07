@@ -9,7 +9,7 @@ client = testclient.TestClient(main.app)
 def test_get_nimare_features_success() -> None:
     """Test that the expected features are returned."""
     response = client.get(
-        "/features/nimare",
+        "/api/features/nimare",
         params={
             "x": 0,
             "y": 0,
@@ -25,7 +25,7 @@ def test_get_nimare_features_success() -> None:
 def test_get_nimare_features_negative_coordinates() -> None:
     """Test that the expected features are returned."""
     response = client.get(
-        "/features/nimare",
+        "/api/features/nimare",
         params={
             "x": -99999,
             "y": 0,
@@ -39,7 +39,7 @@ def test_get_nimare_features_negative_coordinates() -> None:
 def test_get_nimare_features_bad_positive_coordinates() -> None:
     """Test that the expected features are returned."""
     response = client.get(
-        "/features/nimare",
+        "/api/features/nimare",
         params={
             "x": 99999,
             "y": 0,
@@ -55,7 +55,7 @@ def test_cross_species_similarity() -> None:
     expected_keys = ["human_left", "human_right", "macaque_left", "macaque_right"]
 
     response = client.get(
-        "/features/cross_species",
+        "/api/features/cross_species",
         params={"seed_species": "human", "seed_side": "left", "seed_vertex": 1},
     )
 

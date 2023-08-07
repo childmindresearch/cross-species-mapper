@@ -3,6 +3,7 @@ import logging
 
 import fastapi
 from fastapi.middleware import cors
+
 from src import settings
 from src.routers.features import views as feature_views
 from src.routers.surfaces import views as surface_views
@@ -17,12 +18,13 @@ formatter = logging.Formatter("%(asctime)s - %(name)s - %(levelname)s - %(messag
 ch.setFormatter(formatter)
 logger.addHandler(ch)
 
+api = fastapi.APIRouter(prefix="/api")
+api.include_router(feature_views.router)
+api.include_router(surface_views.router)
+
 logger.info("Starting API.")
 app = fastapi.FastAPI()
-
-logger.info("Adding routers.")
-app.include_router(feature_views.router)
-app.include_router(surface_views.router)
+app.include_router(api)
 
 logger.info("Adding CORS middleware.")
 app.add_middleware(
