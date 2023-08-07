@@ -33,7 +33,7 @@ for local_species, local_side in itertools.product(
     )
 
 
-@functools.cache
+@functools.lru_cache(maxsize=None)
 def load_feature_data(
     species: str, side: str, remove_singleton: bool = True
 ) -> np.ndarray:

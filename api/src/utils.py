@@ -29,7 +29,7 @@ class Surface:
         self.faces = self._extract_gifti_faces()
 
     @staticmethod
-    @functools.cache
+    @functools.lru_cache(maxsize=None)
     def _load_surface(species: str, side: str) -> gifti.GiftiImage:
         """Cached call to surface data.
 
@@ -95,7 +95,7 @@ class Surface:
         return faces
 
 
-@functools.cache
+@functools.lru_cache(maxsize=None)
 def get_surface(species: str, side: str) -> Surface:
     """Cached call to surface data.
 
