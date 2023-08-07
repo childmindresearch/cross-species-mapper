@@ -5,7 +5,7 @@ let API_URL: string
 if (process.env.NODE_ENV === 'production') {
   API_URL = '/api'
 } else {
-  API_URL = 'http://localhost:8000'
+  API_URL = 'http://localhost:8000/api'
 }
 
 const Endpoints = {
