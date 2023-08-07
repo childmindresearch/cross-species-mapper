@@ -1,4 +1,6 @@
 """Output schemas for the features router."""
+from typing import List
+
 import pydantic
 
 
@@ -20,13 +22,13 @@ class NiMareSingleFeature(pydantic.BaseModel):
 class NiMareFeatures(pydantic.BaseModel):
     """A schema for Nimare features."""
 
-    features: list[NiMareSingleFeature] = pydantic.Field(...)
+    features: List[NiMareSingleFeature] = pydantic.Field(...)
 
 
 class FeatureSimilarity(pydantic.BaseModel):
     """A schema for feature similarity vectors."""
 
-    human_left: list[float] = pydantic.Field(..., example=[1, 2, 3])
-    human_right: list[float] = pydantic.Field(..., example=[1, 2, 3])
-    macaque_left: list[float] = pydantic.Field(..., example=[1, 2, 3])
-    macaque_right: list[float] = pydantic.Field(..., example=[1, 2, 3])
+    human_left: List[float] = pydantic.Field(..., example=[1, 2, 3])
+    human_right: List[float] = pydantic.Field(..., example=[1, 2, 3])
+    macaque_left: List[float] = pydantic.Field(..., example=[1, 2, 3])
+    macaque_right: List[float] = pydantic.Field(..., example=[1, 2, 3])

@@ -1,10 +1,1 @@
-# Necessary here instead of in api/pyproject.toml because pre-commit works from the root directory.
-
-[tool.isort]
-src_paths = ["api"]
-
-[tool.mypy]
-ignore_missing_imports = true
-
-[tool.pylint.'MESSAGES CONTROL']
-extension-pkg-whitelist = "pydantic"
+api/pyproject.toml

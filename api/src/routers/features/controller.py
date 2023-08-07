@@ -1,4 +1,6 @@
 """ Controller for the features router """
+from __future__ import annotations
+
 import itertools
 import logging
 import os

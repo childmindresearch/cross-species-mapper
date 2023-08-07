@@ -1,8 +1,11 @@
 """ View definitions for the features router. """
+from __future__ import annotations
+
 import logging
 
 import fastapi
 from fastapi import status
+
 from src import settings
 from src.routers.features import controller, schemas
 
