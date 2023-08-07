@@ -167,7 +167,7 @@ def _cosine_similarity(
         A vector of similarities per vertex.
 
     """
-    cosine_similarity = np.dot(seed_features, target_features.T) / (
+    cosine_similarity = np.dot(seed_features, np.transpose(target_features)) / (
         np.linalg.norm(seed_features, axis=1)[:, np.newaxis]
         * np.linalg.norm(target_features, axis=1)[np.newaxis, :]
     )
