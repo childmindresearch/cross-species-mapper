@@ -1,6 +1,12 @@
 import type { ApiSurface, CrossSpeciesSimilarityResponse } from '../types/api'
 
-const API_URL: string = 'http://localhost:8000'
+
+let API_URL: string
+if (process.env.NODE_ENV === 'production') {
+  API_URL = '/api'
+} else {
+  API_URL = 'http://localhost:8000/api'
+}
 
 const Endpoints = {
   getHemispheres: `${API_URL}/surfaces/hemispheres`,

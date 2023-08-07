@@ -8,6 +8,10 @@ on:
     paths:
       - "api/**"
 
+env:
+  AZURE_STORAGE_BLOB_URL: ${{ secrets.AZURE_STORAGE_BLOB_URL }}
+  AZURE_ACCESS_KEY: ${{ secrets.AZURE_ACCESS_KEY }}
+
 jobs:
   unit:
     permissions:
@@ -18,7 +22,7 @@ jobs:
       - uses: actions/checkout@v3
       - uses: actions/setup-python@v4
         with:
-          python-version: "3.11"
+          python-version: "3.8"
       - name: Install dependencies
         run: |
           python -m pip install poetry
@@ -47,8 +51,9 @@ jobs:
       - uses: actions/setup-python@v4
         with:
           python-version: "3.11"
+          cache: "pip"
       - run: |
-          pip install mypy pydantic 
+          pip install mypy pydantic types-requests
           mypy api
 
   isort:

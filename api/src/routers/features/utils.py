@@ -1,21 +1,21 @@
 """ Utility functions for the features router. """
+from __future__ import annotations
+
 import functools
 import itertools
 import logging
+from typing import List
 
 import fastapi
-import nibabel
 import numpy as np
 import numpy.typing as npt
 from fastapi import status
-from nibabel import nifti1
 from sklearn import neighbors
 
-from src import settings
-from src import utils as src_utils
+from src.core import data, settings
+from src.core import utils as src_utils
 
 config = settings.get_settings()
-FEATURE_DIR = config.DATA_DIR / "features"
 LOGGER_NAME = config.LOGGER_NAME
 
 logger = logging.getLogger(LOGGER_NAME)
@@ -31,7 +31,7 @@ for local_species, local_side in itertools.product(
     )
 
 
-@functools.cache
+@functools.lru_cache(maxsize=None)
 def load_feature_data(
     species: str, side: str, remove_singleton: bool = True
 ) -> np.ndarray:
@@ -49,17 +49,7 @@ def load_feature_data(
 
     """
     logger.info("Loading feature data.")
-    nifti_file = FEATURE_DIR / f"{species}_{side}_gradient_10k_fs_lr.nii.gz"
-    nifti = nibabel.load(nifti_file)
-
-    if not isinstance(nifti, nifti1.Nifti1Image):
-        logger.error("Could not load nifti file %s", nifti_file)
-        raise fastapi.HTTPException(
-            status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
-            detail=f"Could not load nifti file {nifti_file}",
-        )
-
-    nifti_data = nifti.get_fdata()
+    nifti_data = data.get_feature_data(species, side)
     if remove_singleton:
         nifti_data = np.squeeze(nifti_data)
 
@@ -127,7 +117,7 @@ def compute_similarity(
     return weighted_average
 
 
-def create_sphere(size: list[int], center: list[int], radius: int) -> np.ndarray:
+def create_sphere(size: List[int], center: List[int], radius: int) -> np.ndarray:
     """Creates a sphere of a given size and radius inside a numpy array.
 
     Args:
@@ -165,7 +155,7 @@ def _cosine_similarity(
         A vector of similarities per vertex.
 
     """
-    cosine_similarity = np.dot(seed_features, target_features.T) / (
+    cosine_similarity = np.dot(seed_features, np.transpose(target_features)) / (
         np.linalg.norm(seed_features, axis=1)[:, np.newaxis]
         * np.linalg.norm(target_features, axis=1)[np.newaxis, :]
     )

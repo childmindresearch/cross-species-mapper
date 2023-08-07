@@ -3,16 +3,14 @@ import functools
 import logging
 
 import fastapi
-import nibabel
 import numpy as np
 from fastapi import status
 from nibabel import nifti1
 from nibabel.gifti import gifti
 
-from src import settings
+from src.core import data, settings
 
 config = settings.get_settings()
-SURFACE_DIR = config.DATA_DIR / "surfaces"
 LOGGER_NAME = config.LOGGER_NAME
 
 logger = logging.getLogger(LOGGER_NAME)
@@ -29,7 +27,7 @@ class Surface:
         self.faces = self._extract_gifti_faces()
 
     @staticmethod
-    @functools.cache
+    @functools.lru_cache(maxsize=None)
     def _load_surface(species: str, side: str) -> gifti.GiftiImage:
         """Cached call to surface data.
 
@@ -38,14 +36,13 @@ class Surface:
 
         """
         logger.info("Loading surface data.")
-        surface_path = SURFACE_DIR / f"{species}_{side}_inflated_10k_fs_lr.surf.gii"
-        gii = nibabel.load(surface_path)
+        gii = data.get_surface_file(species, side)
 
         if not isinstance(gii, gifti.GiftiImage):
-            logger.error("Could not load gifti file %s.", surface_path)
+            logger.error("Could not load gifti file.")
             raise fastapi.HTTPException(
                 status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
-                detail=f"Could not load gifti file {surface_path}",
+                detail="Could not load gifti file.",
             )
 
         return gii
@@ -95,7 +92,7 @@ class Surface:
         return faces
 
 
-@functools.cache
+@functools.lru_cache(maxsize=None)
 def get_surface(species: str, side: str) -> Surface:
     """Cached call to surface data.
 

@@ -4,20 +4,22 @@ version = "0.1.0"
 description = ""
 authors = ["Reinder Vos de Wael <reinder.vosdewael@childmind.org>"]
 readme = "README.md"
+license = "L-GPL-2.1"
 
 [tool.poetry.dependencies]
-python = ">=3.11, <3.12"
+python = ">=3.8, <3.9"
 fastapi = "^0.97.0"
 uvicorn = "^0.22.0"
 pydantic = "^1.10.9"
 nibabel = "^5.1.0"
 numpy = "^1.24.3"
 scipy = "^1.10.1"
-nimare = "^0.1.1"
-nilearn = "^0.10.1"
+azure-functions = "^1.15.0"
+scikit-learn = "^1.3.0"
+azure-storage-blob = "^12.17.0"
+pytest-dotenv = "^0.5.2"
 
 [tool.poetry.group.dev.dependencies]
-scikit-learn = "^1.2.2"
 black = "^23.3.0"
 mypy = "^1.3.0"
 isort = "^5.12.0"
