@@ -3,17 +3,9 @@ from __future__ import annotations
 
 import itertools
 import logging
-import os
-
-import fastapi
-import nibabel as nib
-import numpy as np
-from fastapi import status
-from numpy import linalg
 
 from src import settings
 from src import utils as src_utils
-from src.routers.features import schemas
 from src.routers.features import utils as features_utils
 
 config = settings.get_settings()
