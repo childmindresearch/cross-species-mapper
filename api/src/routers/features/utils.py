@@ -4,6 +4,7 @@ from __future__ import annotations
 import functools
 import itertools
 import logging
+from typing import List
 
 import fastapi
 import nibabel
@@ -129,7 +130,7 @@ def compute_similarity(
     return weighted_average
 
 
-def create_sphere(size: list[int], center: list[int], radius: int) -> np.ndarray:
+def create_sphere(size: List[int], center: List[int], radius: int) -> np.ndarray:
     """Creates a sphere of a given size and radius inside a numpy array.
 
     Args:

@@ -3,6 +3,7 @@ from __future__ import annotations
 
 import itertools
 import logging
+from typing import Dict, List
 
 from src import settings
 from src import utils as src_utils
@@ -15,7 +16,7 @@ logger = logging.getLogger(LOGGER_NAME)
 
 def get_cross_species_features(
     species: str, side: str, seed_vertex: int
-) -> dict[str, list[float]]:
+) -> Dict[str, List[float]]:
     """Fetches the human and macaque feature matrices.
 
     Args:

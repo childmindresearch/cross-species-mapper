@@ -2,6 +2,7 @@
 from __future__ import annotations
 
 import logging
+from typing import Dict, List
 
 import fastapi
 from fastapi import status
@@ -18,7 +19,7 @@ logger = logging.getLogger(LOGGER_NAME)
 
 @router.get(
     "/cross_species",
-    responses={status.HTTP_200_OK: {"model": list[schemas.FeatureSimilarity]}},
+    responses={status.HTTP_200_OK: {"model": List[schemas.FeatureSimilarity]}},
 )
 def get_feature_similarity(
     seed_species: str = fastapi.Query(
@@ -32,7 +33,7 @@ def get_feature_similarity(
         example=1,
         description="The vertex to fetch the feature similarity for, 0-indexed.",
     ),
-) -> dict[str, list[float]]:
+) -> Dict[str, List[float]]:
     """Fetches the human and macaque feature matrices.
 
     Args:
