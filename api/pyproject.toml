@@ -13,8 +13,6 @@ pydantic = "^1.10.9"
 nibabel = "^5.1.0"
 numpy = "^1.24.3"
 scipy = "^1.10.1"
-nimare = "^0.1.1"
-nilearn = "^0.10.1"
 azure-functions = "^1.15.0"
 nest-asyncio = "^1.5.7"
 
