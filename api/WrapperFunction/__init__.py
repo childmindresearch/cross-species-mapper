@@ -1,10 +1,8 @@
 """Wrapper function for Azure Functions."""
+# pylint: disable=invalid-name
 import azure.functions as func
-import nest_asyncio
 
 from src import main as src_main
-
-nest_asyncio.apply()
 
 
 async def main(req: func.HttpRequest, context: func.Context) -> func.HttpResponse:
