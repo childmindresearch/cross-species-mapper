@@ -5,8 +5,6 @@ from src import settings, utils
 from src.routers.surfaces import schemas
 
 config = settings.get_settings()
-SURFACE_DIR = config.DATA_DIR / "surfaces"
-FEATURE_DIR = config.DATA_DIR / "features"
 LOGGER_NAME = config.LOGGER_NAME
 
 logger = logging.getLogger(LOGGER_NAME)
