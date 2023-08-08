@@ -10,7 +10,6 @@ from src.routers.surfaces import views as surface_views
 
 config = settings.get_settings()
 LOGGER_NAME = config.LOGGER_NAME
-REQUEST_TIMEOUT = config.REQUEST_TIMEOUT
 
 settings.initialize_logger()
 logger = logging.getLogger(LOGGER_NAME)

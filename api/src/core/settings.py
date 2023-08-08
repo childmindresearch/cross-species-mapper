@@ -1,11 +1,8 @@
 """Settings for the API."""
 import functools
 import logging
-import pathlib
 
 import pydantic
-
-DATA_DIR = pathlib.Path(__file__).parent.parent.parent / "data"
 
 
 class Settings(pydantic.BaseSettings):  # type: ignore[valid-type, misc]
@@ -14,9 +11,7 @@ class Settings(pydantic.BaseSettings):  # type: ignore[valid-type, misc]
     LOGGER_NAME: str = pydantic.Field("Cross Species Mapper API", env="LOGGER_NAME")
 
     AZURE_STORAGE_BLOB_URL: str = pydantic.Field(..., env="AZURE_STORAGE_BLOB_URL")
-    AZURE_ACCESS_KEY: str = pydantic.Field(..., env="AZURE_ACCESS_KEY")
-
-    REQUEST_TIMEOUT: float = pydantic.Field(10.0, env="REQUEST_TIMEOUT")
+    AZURE_ACCESS_KEY: pydantic.SecretStr = pydantic.Field(..., env="AZURE_ACCESS_KEY")
 
 
 @functools.lru_cache()

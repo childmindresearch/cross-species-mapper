@@ -10,8 +10,8 @@ import fastapi
 import numpy as np
 import numpy.typing as npt
 from fastapi import status
-from nibabel import nifti1
 from sklearn import neighbors
+
 from src.core import data, settings
 from src.core import utils as src_utils
 

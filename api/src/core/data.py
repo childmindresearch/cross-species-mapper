@@ -5,6 +5,7 @@ import tempfile
 import nibabel
 import numpy as np
 from azure.storage import blob
+
 from src.core import settings
 
 config = settings.get_settings()
@@ -23,7 +24,8 @@ def get_blob_container() -> blob.ContainerClient:
     """
     logger.debug("Getting blob container.")
     blob_client = blob.BlobServiceClient(
-        account_url=AZURE_STORAGE_BLOB_URL, credential=AZURE_ACCESS_KEY
+        account_url=AZURE_STORAGE_BLOB_URL,
+        credential=AZURE_ACCESS_KEY.get_secret_value(),
     )
 
     return blob_client.get_container_client("main")
