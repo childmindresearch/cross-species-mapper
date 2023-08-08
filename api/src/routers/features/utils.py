@@ -68,7 +68,7 @@ def load_feature_data(
             request = requests.get(DATA_URLS[f"feature_{species}_{side}"])
             f.write(request.content)
             nifti = nibabel.load(feature_path)
-            nifti_data = nifti.get_fdata()
+            nifti_data = nifti.get_fdata()  # type: ignore[attr-defined]
 
     if not isinstance(nifti, nifti1.Nifti1Image):
         logger.error("Could not load nifti file.")

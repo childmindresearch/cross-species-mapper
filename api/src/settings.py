@@ -22,7 +22,7 @@ def get_settings() -> Settings:
         The settings for the API.
     """
 
-    return Settings()
+    return Settings()  # type: ignore[call-arg]
 
 
 def initialize_logger() -> None:
