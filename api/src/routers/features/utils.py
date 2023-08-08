@@ -65,7 +65,7 @@ def load_feature_data(
     with tempfile.TemporaryDirectory() as tempdir:
         feature_path = pathlib.Path(tempdir) / "feature.label.nii.gz"
         with open(feature_path, "wb") as f:
-            request = requests.get(DATA_URLS[f"feature_{species}_{side}"])
+            request = requests.get(DATA_URLS[f"feature_{species}_{side}"], timeout=10)
             f.write(request.content)
             nifti = nibabel.load(feature_path)
             nifti_data = nifti.get_fdata()  # type: ignore[attr-defined]

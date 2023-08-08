@@ -51,7 +51,9 @@ class Surface:
         with tempfile.TemporaryDirectory() as tempdir:
             surface_path = pathlib.Path(tempdir) / "surface.gii"
             with open(surface_path, "wb") as f:
-                request = requests.get(DATA_URLS[f"surface_{species}_{side}"])
+                request = requests.get(
+                    DATA_URLS[f"surface_{species}_{side}"], timeout=10
+                )
                 f.write(request.content)
                 gii = nibabel.load(surface_path)
 
