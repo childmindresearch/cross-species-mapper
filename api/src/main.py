@@ -1,10 +1,7 @@
 """Main module for the API."""
-import asyncio
 import logging
-import time
 
 import fastapi
-from fastapi import responses, status
 from fastapi.middleware import cors
 
 from src.core import settings
@@ -34,23 +31,3 @@ app.add_middleware(
     allow_methods=["*"],
     allow_headers=["*"],
 )
-
-
-@app.middleware("http")
-async def timeout_middleware(request: fastapi.Request, call_next):
-    """Middleware function that adds a timeout to the request processing time. If
-    the request processing time exceeds the specified timeout, a 504 Gateway
-    Timeout response is returned.
-    """
-    start_time = time.time()
-    try:
-        return await asyncio.wait_for(call_next(request), timeout=REQUEST_TIMEOUT)
-    except asyncio.TimeoutError:
-        process_time = time.time() - start_time
-        return responses.JSONResponse(
-            {
-                "detail": "Request processing time exceeded limit",
-                "processing_time": process_time,
-            },
-            status_code=status.HTTP_504_GATEWAY_TIMEOUT,
-        )
