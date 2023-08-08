@@ -10,20 +10,27 @@ function apiSurface2ViewerSurface (apiSurface: ApiSurface): SurfaceMesh {
 }
 
 export async function getData (): Promise<Record<string, Surface>> {
-  const surfaceMeshes = {
-    human_left: apiSurface2ViewerSurface(await getSurfaces('human', 'left')),
-    human_right: apiSurface2ViewerSurface(
-      await getSurfaces('human', 'right')
-    ),
-    macaque_left: apiSurface2ViewerSurface(
-      await getSurfaces('macaque', 'left')
-    ),
-    macaque_right: apiSurface2ViewerSurface(
-      await getSurfaces('macaque', 'right')
-    )
+  const surfaceMeshPromises = {
+    human_left: getSurfaces('human', 'left'),
+    human_right: getSurfaces('human', 'right'),
+    macaque_left: getSurfaces('macaque', 'left'),
+    macaque_right: getSurfaces('macaque', 'right')
   }
 
-  const meshColors = await getCrossSpeciesSimilarity('human', 'left', 1).then(
+  const similarityPromise = getCrossSpeciesSimilarity('human', 'left', 1)
+
+  const surfaceMeshes = await Promise.all(
+    Object.values(surfaceMeshPromises)
+  ).then((data) => {
+    return {
+      human_left: apiSurface2ViewerSurface(data[0]),
+      human_right: apiSurface2ViewerSurface(data[1]),
+      macaque_left: apiSurface2ViewerSurface(data[2]),
+      macaque_right: apiSurface2ViewerSurface(data[3])
+    }
+  })
+
+  const meshColors = await similarityPromise.then(
     (data) => {
       return {
         human_left: new MeshColors(data.human_left, 'Turbo', [-1, 2]),
