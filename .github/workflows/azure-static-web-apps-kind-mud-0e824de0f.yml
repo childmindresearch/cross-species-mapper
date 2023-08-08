@@ -12,6 +12,9 @@ on:
 env:
   GH_READ_TOKEN: ${{ secrets.GH_READ_TOKEN }}
 
+permissions:
+  pull-requests: write
+
 jobs:
   build_and_deploy_job:
     if: github.event_name == 'push' || (github.event_name == 'pull_request' && github.event.action != 'closed')

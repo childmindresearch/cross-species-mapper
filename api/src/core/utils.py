@@ -7,6 +7,7 @@ import numpy as np
 from fastapi import status
 from nibabel import nifti1
 from nibabel.gifti import gifti
+
 from src.core import data, settings
 
 config = settings.get_settings()
