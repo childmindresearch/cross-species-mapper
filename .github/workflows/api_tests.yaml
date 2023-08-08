@@ -8,6 +8,10 @@ on:
     paths:
       - "api/**"
 
+env:
+  AZURE_STORAGE_BLOB_URL: ${{ secrets.AZURE_STORAGE_BLOB_URL }}
+  AZURE_ACCESS_KEY: ${{ secrets.AZURE_ACCESS_KEY }}
+
 jobs:
   unit:
     permissions:

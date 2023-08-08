@@ -6,8 +6,7 @@ from typing import Dict, List
 
 import fastapi
 from fastapi import status
-
-from src import settings
+from src.core import settings
 from src.routers.features import controller, schemas
 
 router = fastapi.APIRouter(prefix="/features", tags=["features"])

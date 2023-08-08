@@ -5,8 +5,8 @@ import itertools
 import logging
 from typing import Dict, List
 
-from src import settings
-from src import utils as src_utils
+from src.core import settings
+from src.core import utils as src_utils
 from src.routers.features import utils as features_utils
 
 config = settings.get_settings()

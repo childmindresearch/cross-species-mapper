@@ -5,13 +5,16 @@ import pathlib
 
 import pydantic
 
-CURRENT_DIR = pathlib.Path(__file__).parent
+DATA_DIR = pathlib.Path(__file__).parent.parent.parent / "data"
 
 
 class Settings(pydantic.BaseSettings):  # type: ignore[valid-type]
     """Settings for the API."""
 
     LOGGER_NAME: str = pydantic.Field("Cross Species Mapper API", env="LOGGER_NAME")
+
+    AZURE_STORAGE_BLOB_URL: str = pydantic.Field(..., env="AZURE_STORAGE_BLOB_URL")
+    AZURE_ACCESS_KEY: str = pydantic.Field(..., env="AZURE_ACCESS_KEY")
 
 
 @functools.lru_cache()

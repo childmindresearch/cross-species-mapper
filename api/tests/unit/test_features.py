@@ -1,7 +1,6 @@
 # pylint: disable=protected-access
 import numpy as np
 from sklearn.metrics import pairwise
-
 from src.routers.features import utils
 
 

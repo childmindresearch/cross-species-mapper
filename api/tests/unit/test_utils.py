@@ -1,7 +1,6 @@
 """Unit tests for the surfaces controller."""
 import numpy as np
-
-from src import utils as src_utils
+from src.core import utils as src_utils
 from src.routers.features import utils as features_utils
 
 

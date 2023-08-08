@@ -4,21 +4,16 @@ from __future__ import annotations
 import functools
 import itertools
 import logging
-import pathlib
-import tempfile
 from typing import List
 
 import fastapi
-import nibabel
 import numpy as np
 import numpy.typing as npt
-import requests
 from fastapi import status
 from nibabel import nifti1
 from sklearn import neighbors
-
-from src import settings
-from src import utils as src_utils
+from src.core import data, settings
+from src.core import utils as src_utils
 
 config = settings.get_settings()
 LOGGER_NAME = config.LOGGER_NAME
@@ -34,13 +29,6 @@ for local_species, local_side in itertools.product(
     TREE[local_species + "_" + local_side] = neighbors.BallTree(
         src_utils.Surface(local_species, local_side).vertices
     )
-
-DATA_URLS = {
-    "feature_human_left": "https://github.com/cmi-dair/cross-species-mapper/raw/main/api/data/features/human_left_gradient_10k_fs_lr.nii.gz?download=",
-    "feature_human_right": "https://github.com/cmi-dair/cross-species-mapper/raw/main/api/data/features/human_right_gradient_10k_fs_lr.nii.gz?download=",
-    "feature_macaque_left": "https://github.com/cmi-dair/cross-species-mapper/raw/main/api/data/features/macaque_left_gradient_10k_fs_lr.nii.gz?download=",
-    "feature_macaque_right": "https://github.com/cmi-dair/cross-species-mapper/raw/main/api/data/features/macaque_right_gradient_10k_fs_lr.nii.gz?download=",
-}
 
 
 @functools.lru_cache(maxsize=None)
@@ -61,22 +49,7 @@ def load_feature_data(
 
     """
     logger.info("Loading feature data.")
-
-    with tempfile.TemporaryDirectory() as tempdir:
-        feature_path = pathlib.Path(tempdir) / "feature.label.nii.gz"
-        with open(feature_path, "wb") as f:
-            request = requests.get(DATA_URLS[f"feature_{species}_{side}"], timeout=10)
-            f.write(request.content)
-            nifti = nibabel.load(feature_path)
-            nifti_data = nifti.get_fdata()  # type: ignore[attr-defined]
-
-    if not isinstance(nifti, nifti1.Nifti1Image):
-        logger.error("Could not load nifti file.")
-        raise fastapi.HTTPException(
-            status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
-            detail="Could not load nifti file.",
-        )
-
+    nifti_data = data.get_feature_data(species, side)
     if remove_singleton:
         nifti_data = np.squeeze(nifti_data)
 
