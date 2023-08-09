@@ -1,22 +1,17 @@
 <script lang="ts">
   import { onMount } from "svelte";
-  import type { Surface } from "brainviewer/src/brainViewer";
   import { Shadow } from "svelte-loading-spinners";
-  import { getData } from "./fetch";
+  import { getData, type SurfaceData } from "./fetch";
   import { Viewer } from "./client";
   import { onDoubleClick, onUpdate } from "./events";
   import Toggle from "svelte-toggle";
   import Button from "../Button.svelte";
   // @ts-ignore
   import type * as THREE from "three";
+  import toast from "svelte-french-toast";
 
   let cameraLock = true;
-  let surfaces: {
-    human_left: Surface;
-    human_right: Surface;
-    macaque_left: Surface;
-    macaque_right: Surface;
-  };
+  let surfaces: SurfaceData | null;
 
   let div1: HTMLElement;
   let div2: HTMLElement;
@@ -27,7 +22,19 @@
   let lastTouchTime = new Date().getTime();
 
   onMount(async () => {
-    surfaces = await getData();
+    surfaces = await getData()
+      .then((data) => {
+        return data;
+      })
+      .catch(() => {
+        toast.error("Something went wrong. Please try refreshing.");
+        return null;
+      });
+
+    if (!surfaces) {
+      return;
+    }
+
     const viewers = [
       new Viewer(div1, surfaces["human_left"], "human", "left"),
       new Viewer(div2, surfaces["human_right"], "human", "right"),
@@ -58,6 +65,7 @@
       viewer.viewer.addListener(
         "touchstart",
         (event: Event, intersects: THREE.Intersection) => {
+          event.preventDefault();
           if (!(event instanceof MouseEvent || event instanceof TouchEvent)) {
             return;
           }
@@ -71,7 +79,6 @@
               viewer.getSpecies(),
               viewer.getSide()
             );
-            event.preventDefault();
           } else {
             lastTouchTime = currentTime;
           }
@@ -109,11 +116,13 @@
   </div>
   <Button text="Reset Camera" onClick={resetCamera} />
 </div>
+
 {#if !surfaces}
   <div class="loading">
     <Shadow size="30" color="#FF3E00" unit="px" duration="1s" />
   </div>
 {/if}
+
 <div class="viewer-set">
   <div id="div-viewer" bind:this={div1} />
   <div id="div-viewer" bind:this={div2} />
