@@ -11,7 +11,7 @@
   import toast from "svelte-french-toast";
 
   let cameraLock = true;
-  let surfaces: SurfaceData;
+  let surfaces: SurfaceData | null;
 
   let div1: HTMLElement;
   let div2: HTMLElement;
@@ -22,15 +22,18 @@
   let lastTouchTime = new Date().getTime();
 
   onMount(async () => {
-    console.log("lea!");
-    getData()
+    surfaces = await getData()
       .then((data) => {
-        surfaces = data;
+        return data;
       })
-      .catch((error) => {
-        console.log(error);
+      .catch(() => {
         toast.error("Something went wrong. Please try refreshing.");
+        return null;
       });
+
+    if (!surfaces) {
+      return;
+    }
 
     const viewers = [
       new Viewer(div1, surfaces["human_left"], "human", "left"),
