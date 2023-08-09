@@ -1,18 +1,17 @@
 """Wrapper function for Azure Functions."""
 # pylint: disable=invalid-name
+import asyncio
+
 import aiohttp
 import azure.functions as func
 import nest_asyncio
-
-from src.main import app
 
 nest_asyncio.apply()
 
 
 async def main(req: func.HttpRequest, context: func.Context) -> func.HttpResponse:
     """Each request is redirected to the ASGI handler."""
-    # Internal import due to odd circular import error.
-    import asyncio  # pylint: disable=import-outside-toplevel
+    from src.main import app
 
     async with aiohttp.ClientSession():
         loop = asyncio.get_running_loop()
