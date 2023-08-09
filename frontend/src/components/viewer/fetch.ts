@@ -9,7 +9,15 @@ function apiSurface2ViewerSurface (apiSurface: ApiSurface): SurfaceMesh {
   )
 }
 
-export async function getData (): Promise<Record<string, Surface>> {
+export interface SurfaceData {
+  human_left: Surface
+  human_right: Surface
+  macaque_left: Surface
+  macaque_right: Surface
+}
+
+
+export async function getData (): Promise<SurfaceData> {
   const surfaceMeshPromises = {
     human_left: getSurfaces('human', 'left'),
     human_right: getSurfaces('human', 'right'),
