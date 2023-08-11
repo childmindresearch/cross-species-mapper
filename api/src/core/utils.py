@@ -1,19 +1,33 @@
 """Utility functions for the entire app."""
+import enum
 import functools
 import logging
+from typing import TYPE_CHECKING
 
 import fastapi
-import numpy as np
 from fastapi import status
-from nibabel import nifti1
-from nibabel.gifti import gifti
 
 from src.core import data, settings
+
+if TYPE_CHECKING:
+    import nibabel
+    import numpy as np
 
 config = settings.get_settings()
 LOGGER_NAME = config.LOGGER_NAME
 
 logger = logging.getLogger(LOGGER_NAME)
+
+
+class NiftiIntentCodes(enum.Enum):
+    """Nifti intent codes.
+
+    These can also be found in nibabel.nifti1.intent_codes.
+    They are added here to avoid the import.
+    """
+
+    NIFTI_INTENT_POINTSET = 1008
+    NIFTI_INTENT_TRIANGLE = 1009
 
 
 class Surface:
@@ -28,7 +42,7 @@ class Surface:
 
     @staticmethod
     @functools.lru_cache(maxsize=None)
-    def _load_surface(species: str, side: str) -> gifti.GiftiImage:
+    def _load_surface(species: str, side: str) -> "nibabel.GiftiImage":
         """Cached call to surface data.
 
         Returns:
@@ -38,7 +52,7 @@ class Surface:
         logger.info("Loading surface data.")
         gii = data.get_surface_file(species, side)
 
-        if not isinstance(gii, gifti.GiftiImage):
+        if gii.__class__.__name__ != "GiftiImage":
             logger.error("Could not load gifti file.")
             raise fastapi.HTTPException(
                 status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
@@ -47,7 +61,7 @@ class Surface:
 
         return gii
 
-    def _extract_gifti_vertices(self) -> np.ndarray:
+    def _extract_gifti_vertices(self) -> "np.ndarray":
         """Extracts the vertices from a gifti surface.
 
         Args:
@@ -58,7 +72,7 @@ class Surface:
         """
         logger.info("Extracting vertices from surface.")
         for darray in self.gifti.darrays:
-            if darray.intent == nifti1.intent_codes["NIFTI_INTENT_POINTSET"]:
+            if darray.intent == NiftiIntentCodes.NIFTI_INTENT_POINTSET.value:
                 vertices = darray.data
                 break
         else:  # no break
@@ -69,7 +83,7 @@ class Surface:
             )
         return vertices
 
-    def _extract_gifti_faces(self) -> np.ndarray:
+    def _extract_gifti_faces(self) -> "np.ndarray":
         """Extracts the faces from a gifti surface.
 
         Args:
@@ -80,7 +94,7 @@ class Surface:
         """
         logger.info("Extracting faces from surface.")
         for darray in self.gifti.darrays:
-            if darray.intent == nifti1.intent_codes["NIFTI_INTENT_TRIANGLE"]:
+            if darray.intent == NiftiIntentCodes.NIFTI_INTENT_TRIANGLE.value:
                 faces = darray.data
                 break
         else:  # no break

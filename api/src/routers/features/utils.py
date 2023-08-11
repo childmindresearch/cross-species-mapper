@@ -4,16 +4,18 @@ from __future__ import annotations
 import functools
 import itertools
 import logging
-from typing import List
+from typing import TYPE_CHECKING, List
 
 import fastapi
 import numpy as np
-import numpy.typing as npt
 from fastapi import status
-from sklearn import neighbors
 
 from src.core import data, settings
 from src.core import utils as src_utils
+
+if TYPE_CHECKING:
+    import numpy.typing as npt
+    from sklearn import neighbors
 
 config = settings.get_settings()
 LOGGER_NAME = config.LOGGER_NAME
@@ -21,14 +23,25 @@ LOGGER_NAME = config.LOGGER_NAME
 logger = logging.getLogger(LOGGER_NAME)
 
 
-# Precompute surface distance cKDTree and keep in memory
-TREE = {}
-for local_species, local_side in itertools.product(
-    ["human", "macaque"], ["left", "right"]
-):
-    TREE[local_species + "_" + local_side] = neighbors.BallTree(
-        src_utils.Surface(local_species, local_side).vertices
-    )
+def get_trees() -> dict[str, neighbors.BallTree]:
+    """Returns a dictionary of BallTrees for each combination of local species
+    and side.
+
+    Returns:
+        dict[str, neighbors.BallTree]: A dictionary of BallTrees for each
+        combination of local species and side.
+    """
+    # Internal import due to async cyclical import issues on Azure.
+    from sklearn import neighbors  # pylint: disable=import-outside-toplevel
+
+    trees = {}
+    for local_species, local_side in itertools.product(
+        ["human", "macaque"], ["left", "right"]
+    ):
+        trees[local_species + "_" + local_side] = neighbors.BallTree(
+            src_utils.Surface(local_species, local_side).vertices
+        )
+    return trees
 
 
 @functools.lru_cache(maxsize=None)
@@ -88,7 +101,8 @@ def compute_similarity(
         99999 as these are not JSON serializable.
     """
     logger.info("Computing vertices within the ROI.")
-    indices, distances = TREE[
+    trees = get_trees()
+    indices, distances = trees[
         seed_surface.species + "_" + seed_surface.side
     ].query_radius(
         [seed_surface.vertices[seed_vertex, :]], r=roi_size, return_distance=True

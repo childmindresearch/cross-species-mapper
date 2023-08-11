@@ -1,12 +1,16 @@
 """Module for data access."""
 import logging
 import tempfile
+from typing import TYPE_CHECKING
 
 import nibabel
-import numpy as np
 from azure.storage import blob
 
 from src.core import settings
+
+if TYPE_CHECKING:
+    import numpy as np
+
 
 config = settings.get_settings()
 AZURE_STORAGE_BLOB_URL = config.AZURE_STORAGE_BLOB_URL
@@ -50,7 +54,7 @@ def download_file_from_blob(
         f.write(contents)
 
 
-def get_feature_data(species: str, side: str) -> np.ndarray:
+def get_feature_data(species: str, side: str) -> "np.ndarray":
     """Gets the feature file for the given species and side.
 
     Args:
