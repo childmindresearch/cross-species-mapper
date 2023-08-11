@@ -7,13 +7,13 @@ import logging
 from typing import TYPE_CHECKING, List
 
 import fastapi
-import numpy as np
 from fastapi import status
 
 from src.core import data, settings
 from src.core import utils as src_utils
 
 if TYPE_CHECKING:
+    import numpy as np
     import numpy.typing as npt
     from sklearn import neighbors
 
@@ -47,7 +47,7 @@ def get_trees() -> dict[str, neighbors.BallTree]:
 @functools.lru_cache(maxsize=None)
 def load_feature_data(
     species: str, side: str, remove_singleton: bool = True
-) -> np.ndarray:
+) -> "np.ndarray":
     """Cached call to feature data.
 
     Args:
@@ -61,6 +61,8 @@ def load_feature_data(
         The feature data.
 
     """
+    import numpy as np
+
     logger.info("Loading feature data.")
     nifti_data = data.get_feature_data(species, side)
     if remove_singleton:
@@ -76,7 +78,7 @@ def compute_similarity(
     target_features: npt.ArrayLike,
     roi_size: int = 5,
     weighting: str = "uniform",
-) -> np.ndarray:
+) -> "np.ndarray":
     """Computes feature similarity. This uses three steps:
         0. Select the vertices within the ROI of interest.
         1. Compute the cosine similarity.
@@ -100,6 +102,8 @@ def compute_similarity(
         NaN values are replaced with 0 and Inf values are replaced with
         99999 as these are not JSON serializable.
     """
+    import numpy as np
+
     logger.info("Computing vertices within the ROI.")
     trees = get_trees()
     indices, distances = trees[
@@ -131,7 +135,7 @@ def compute_similarity(
     return weighted_average
 
 
-def create_sphere(size: List[int], center: List[int], radius: int) -> np.ndarray:
+def create_sphere(size: List[int], center: List[int], radius: int) -> "np.ndarray":
     """Creates a sphere of a given size and radius inside a numpy array.
 
     Args:
@@ -143,6 +147,8 @@ def create_sphere(size: List[int], center: List[int], radius: int) -> np.ndarray
         A numpy array with the sphere inside.
 
     """
+    import numpy as np
+
     if len(size) != len(center):
         raise ValueError("Size and center must have the same length.")
 
@@ -158,7 +164,7 @@ def create_sphere(size: List[int], center: List[int], radius: int) -> np.ndarray
 
 def _cosine_similarity(
     seed_features: npt.ArrayLike, target_features: npt.ArrayLike
-) -> np.ndarray:
+) -> "np.ndarray":
     """Computes the cosine similarity between two sets of features.
 
     Args:
@@ -169,6 +175,8 @@ def _cosine_similarity(
         A vector of similarities per vertex.
 
     """
+    import numpy as np
+
     cosine_similarity = np.dot(seed_features, np.transpose(target_features)) / (
         np.linalg.norm(seed_features, axis=1)[:, np.newaxis]
         * np.linalg.norm(target_features, axis=1)[np.newaxis, :]

@@ -3,13 +3,12 @@ import logging
 import tempfile
 from typing import TYPE_CHECKING
 
-from azure.storage import blob
-
 from src.core import settings
 
 if TYPE_CHECKING:
     import nibabel
     import numpy as np
+    from azure.storage import blob
 
 
 config = settings.get_settings()
@@ -19,14 +18,17 @@ AZURE_ACCESS_KEY = config.AZURE_ACCESS_KEY
 logger = logging.getLogger(config.LOGGER_NAME)
 
 
-def get_blob_container() -> blob.ContainerClient:
+def get_blob_container() -> "blob.ContainerClient":
     """Gets the blob container for the API.
 
     Returns:
         The blob container.
 
     """
-    logger.debug("Getting blob container.")
+    # Internal import due to async cyclical import issues on Azure.
+    from azure.storage import blob  # pylint: disable=import-outside-toplevel
+
+    logger.info("Getting blob container.")
     blob_client = blob.BlobServiceClient(
         account_url=AZURE_STORAGE_BLOB_URL,
         credential=AZURE_ACCESS_KEY.get_secret_value(),
