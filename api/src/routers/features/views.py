@@ -6,7 +6,8 @@ from typing import Dict, List
 
 import fastapi
 from fastapi import status
-from src.core import settings
+
+from src.core import settings, utils
 from src.routers.features import controller, schemas
 
 router = fastapi.APIRouter(prefix="/features", tags=["features"])
@@ -21,6 +22,7 @@ logger = logging.getLogger(LOGGER_NAME)
     responses={status.HTTP_200_OK: {"model": List[schemas.FeatureSimilarity]}},
 )
 def get_feature_similarity(
+    response: fastapi.Response,
     seed_species: str = fastapi.Query(
         ..., example="human", description="The species to fetch the hemispheres for."
     ),
@@ -47,4 +49,5 @@ def get_feature_similarity(
         the seed vertex.
     """
     logger.info("Calling GET /surfaces/similarity endpoint.")
+    response = utils.add_cache_control(response)
     return controller.get_cross_species_features(seed_species, seed_side, seed_vertex)

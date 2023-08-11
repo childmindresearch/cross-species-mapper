@@ -9,6 +9,8 @@ from azure.storage import blob
 from src.core import settings
 
 config = settings.get_settings()
+ENVIRONMENT = config.ENVIRONMENT
+DATA_DIR = config.DATA_DIR
 AZURE_STORAGE_BLOB_URL = config.AZURE_STORAGE_BLOB_URL
 AZURE_ACCESS_KEY = config.AZURE_ACCESS_KEY
 
@@ -63,6 +65,10 @@ def get_feature_data(species: str, side: str) -> np.ndarray:
     """
     logger.info("Getting feature file.")
     filename = f"{species}_{side}_gradient_10k_fs_lr.nii.gz"
+
+    if ENVIRONMENT == "development":
+        return nibabel.load(DATA_DIR / filename).get_fdata()  # type: ignore[attr-defined]
+
     with tempfile.NamedTemporaryFile(suffix=".nii.gz") as temp_file:
         download_file_from_blob(filename, temp_file.name)
         return nibabel.load(temp_file.name).get_fdata()  # type: ignore[attr-defined]
@@ -81,6 +87,9 @@ def get_surface_file(species: str, side: str) -> nibabel.GiftiImage:
     """
     logger.info("Getting surface file.")
     filename = f"{species}_{side}_inflated_10k_fs_lr.surf.gii"
+    if ENVIRONMENT == "development":
+        return nibabel.load(DATA_DIR / filename)  # type: ignore[return-value]
+
     with tempfile.NamedTemporaryFile(suffix=".surf.gii") as temp_file:
         download_file_from_blob(filename, temp_file.name)
         return nibabel.load(temp_file.name)  # type: ignore[return-value]

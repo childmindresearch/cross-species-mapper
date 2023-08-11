@@ -3,7 +3,8 @@ import logging
 
 import fastapi
 from fastapi import status
-from src.core import settings
+
+from src.core import settings, utils
 from src.routers.surfaces import controller, schemas
 
 config = settings.get_settings()
@@ -16,6 +17,7 @@ router = fastapi.APIRouter(prefix="/surfaces", tags=["surfaces"])
 
 @router.get("/hemispheres", responses={status.HTTP_200_OK: {"model": schemas.Surface}})
 def get_hemispheres(
+    response: fastapi.Response,
     species: str = fastapi.Query(
         ..., example="human", description="The species to fetch the hemispheres for."
     ),
@@ -35,4 +37,5 @@ def get_hemispheres(
         A Pydantic BaseClass containing the surface.
     """
     logger.info("Calling GET /surfaces/hemispheres endpoint.")
+    response = utils.add_cache_control(response)
     return controller.get_hemispheres(species, side)
