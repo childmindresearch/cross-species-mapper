@@ -1,6 +1,7 @@
 """Settings for the API."""
 import functools
 import logging
+import sys
 
 import pydantic
 
@@ -35,6 +36,6 @@ def initialize_logger() -> None:
         "%(asctime)s - %(name)s - %(levelname)s - %(message)s"
     )
 
-    ch = logging.StreamHandler()
-    ch.setFormatter(formatter)
-    logger.addHandler(ch)
+    handler = logging.StreamHandler(stream=sys.stdout)
+    handler.setFormatter(formatter)
+    logger.addHandler(handler)

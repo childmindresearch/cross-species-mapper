@@ -3,12 +3,12 @@ import logging
 import tempfile
 from typing import TYPE_CHECKING
 
-import nibabel
 from azure.storage import blob
 
 from src.core import settings
 
 if TYPE_CHECKING:
+    import nibabel
     import numpy as np
 
 
@@ -65,14 +65,17 @@ def get_feature_data(species: str, side: str) -> "np.ndarray":
         The feature file.
 
     """
+    # Internal import due to async cyclical import issues on Azure.
+    from nibabel import load  # pylint: disable=import-outside-toplevel
+
     logger.info("Getting feature file.")
     filename = f"{species}_{side}_gradient_10k_fs_lr.nii.gz"
     with tempfile.NamedTemporaryFile(suffix=".nii.gz") as temp_file:
         download_file_from_blob(filename, temp_file.name)
-        return nibabel.load(temp_file.name).get_fdata()  # type: ignore[attr-defined]
+        return load(temp_file.name).get_fdata()  # type: ignore[attr-defined]
 
 
-def get_surface_file(species: str, side: str) -> nibabel.GiftiImage:
+def get_surface_file(species: str, side: str) -> "nibabel.GiftiImage":
     """Gets the surface file for the given species and side.
 
     Args:
@@ -83,8 +86,11 @@ def get_surface_file(species: str, side: str) -> nibabel.GiftiImage:
         The surface file.
 
     """
+    # Internal import due to async cyclical import issues on Azure.
+    from nibabel import load  # pylint: disable=import-outside-toplevel
+
     logger.info("Getting surface file.")
     filename = f"{species}_{side}_inflated_10k_fs_lr.surf.gii"
     with tempfile.NamedTemporaryFile(suffix=".surf.gii") as temp_file:
         download_file_from_blob(filename, temp_file.name)
-        return nibabel.load(temp_file.name)  # type: ignore[return-value]
+        return load(temp_file.name)  # type: ignore[return-value]
