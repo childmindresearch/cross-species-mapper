@@ -1,6 +1,7 @@
 """Settings for the API."""
 import functools
 import logging
+import pathlib
 
 import pydantic
 
@@ -9,6 +10,11 @@ class Settings(pydantic.BaseSettings):  # type: ignore[valid-type, misc]
     """Settings for the API."""
 
     LOGGER_NAME: str = pydantic.Field("Cross Species Mapper API", env="LOGGER_NAME")
+
+    ENVIRONMENT: str = pydantic.Field("development", env="ENVIRONMENT")
+    DATA_DIR: pathlib.Path = pydantic.Field(
+        pathlib.Path(__file__).parent.parent.parent / "data", env="DATA_DIR"
+    )
 
     AZURE_STORAGE_BLOB_URL: str = pydantic.Field(..., env="AZURE_STORAGE_BLOB_URL")
     AZURE_ACCESS_KEY: pydantic.SecretStr = pydantic.Field(..., env="AZURE_ACCESS_KEY")
