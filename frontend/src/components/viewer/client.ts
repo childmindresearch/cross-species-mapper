@@ -1,17 +1,20 @@
-import type { Surface } from '@cmi-dair/brainviewer/src/brainViewer'
-import { ViewerClient } from '@cmi-dair/brainviewer/src/viewer'
+import type { Surface } from '@cmi-dair/brainviewer/lib/brainViewer'
+import type { ColorInterpolateName } from '@cmi-dair/brainviewer/lib/colormaps/d3ColorSchemes'
+import { ViewerClient } from '@cmi-dair/brainviewer'
 import * as THREE from 'three'
 import CameraControls from 'camera-controls'
 import { speciesScale } from './constants'
 
 export class Viewer {
   private readonly div: HTMLElement
-  private readonly surface: Surface
   private readonly width: number
   private readonly height: number
-
+   
+  readonly surface: Surface
   readonly species: string
   readonly side: string
+  readonly colorLimits: [number, number] = [-1, 2]
+  readonly colorMap: ColorInterpolateName = 'Turbo'
 
   public viewer: ViewerClient
 
@@ -22,12 +25,11 @@ export class Viewer {
     this.side = side
     this.width = width
     this.height = height
-    this.viewer = new ViewerClient(this.div, this.surface)
+    this.viewer = new ViewerClient(this.div)
+    this.viewer.addModel(surface)
   }
 
   plot (): void {
-    this.viewer.setModel(this.surface.mesh, this.surface.colors)
-
     this.viewer.controls.minDistance = 30
     this.viewer.controls.maxDistance = 300
     this.viewer.setAlpha(0)
@@ -41,6 +43,12 @@ export class Viewer {
       middle: CameraControls.ACTION.NONE,
       right: CameraControls.ACTION.NONE,
       wheel: CameraControls.ACTION.NONE
+    }
+
+    this.viewer.controls.touches = {
+      one: CameraControls.ACTION.TOUCH_ROTATE,
+      two: CameraControls.ACTION.NONE,
+      three: CameraControls.ACTION.NONE
     }
   }
 

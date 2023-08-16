@@ -1,4 +1,4 @@
-import { MeshColors } from '@cmi-dair/brainviewer/src/brainViewer'
+import { MeshColors } from '@cmi-dair/brainviewer/lib/brainViewer'
 import { getCrossSpeciesSimilarity } from '../../api/fetcher'
 import type { Viewer } from './client'
 import * as THREE from 'three'
@@ -35,8 +35,8 @@ export async function onDoubleClick (
 
   for (const viewer of viewers) {
     const similarity = similarities[viewer.species + '_' + viewer.side]
-    const mesh = new MeshColors(similarity, 'Turbo', [-1, 2])
-    viewer.viewer.setModel(undefined, mesh)
+    const colors = new MeshColors(similarity, viewer.colorMap, viewer.colorLimits)
+    viewer.viewer.getModels()[0].geometry.setAttribute('color', new THREE.BufferAttribute(colors.colors, 3))
   }
 }
 

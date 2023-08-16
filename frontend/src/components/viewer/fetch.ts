@@ -1,4 +1,4 @@
-import { MeshColors, Surface, SurfaceMesh } from '@cmi-dair/brainviewer/src/brainViewer'
+import { MeshColors, Surface, SurfaceMesh } from '@cmi-dair/brainviewer/lib/brainViewer'
 import type { ApiSurface } from '../../types/api'
 import { getCrossSpeciesSimilarity, getSurfaces } from '../../api/fetcher'
 
