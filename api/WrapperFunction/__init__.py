@@ -9,11 +9,11 @@ import nest_asyncio
 from src import builder
 
 nest_asyncio.apply()
-app = builder.build_app()
 
 
 async def main(req: func.HttpRequest, context: func.Context) -> func.HttpResponse:
     """Each request is redirected to the ASGI handler."""
+    app = builder.build_app()
     async with aiohttp.ClientSession():
         loop = asyncio.get_running_loop()
         return await loop.run_in_executor(
