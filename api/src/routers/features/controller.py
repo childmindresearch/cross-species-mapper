@@ -5,8 +5,7 @@ import itertools
 import logging
 from typing import Dict, List
 
-from src.core import settings
-from src.core import utils as src_utils
+from src.core import data_fetcher, settings
 from src.routers.features import utils as features_utils
 
 config = settings.get_settings()
@@ -30,7 +29,7 @@ def get_cross_species_features(
         A feature matrix stored as a list of lists.
     """
     seed_features = features_utils.load_feature_data(species, side)
-    surface = src_utils.get_surface(species=species, side=side)
+    surface = data_fetcher.get_surface_data(species=species, side=side)
 
     all_species = ["human", "macaque"]
     all_sides = ["left", "right"]

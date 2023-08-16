@@ -16,8 +16,8 @@ class Settings(pydantic.BaseSettings):  # type: ignore[valid-type, misc]
         pathlib.Path(__file__).parent.parent.parent / "data", env="DATA_DIR"
     )
 
-    AZURE_STORAGE_BLOB_URL: str = pydantic.Field(..., env="AZURE_STORAGE_BLOB_URL")
-    AZURE_ACCESS_KEY: pydantic.SecretStr = pydantic.Field(..., env="AZURE_ACCESS_KEY")
+    AZURE_STORAGE_BLOB_URL: str = pydantic.Field("", env="AZURE_STORAGE_BLOB_URL")
+    AZURE_ACCESS_KEY: pydantic.SecretStr = pydantic.Field("", env="AZURE_ACCESS_KEY")
 
 
 @functools.lru_cache()

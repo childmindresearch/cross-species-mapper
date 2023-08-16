@@ -1,12 +1,13 @@
 """Module for data access."""
+import functools
 import logging
 import tempfile
 
-import nibabel
+import h5py
 import numpy as np
 from azure.storage import blob
 
-from src.core import settings
+from src.core import settings, types
 
 config = settings.get_settings()
 ENVIRONMENT = config.ENVIRONMENT
@@ -64,17 +65,20 @@ def get_feature_data(species: str, side: str) -> np.ndarray:
 
     """
     logger.info("Getting feature file.")
-    filename = f"{species}_{side}_gradient_10k_fs_lr.nii.gz"
+    filename = f"{species}_{side}_gradient_10k_fs_lr.h5"
 
     if ENVIRONMENT == "development":
-        return nibabel.load(DATA_DIR / filename).get_fdata()  # type: ignore[attr-defined]
+        filepath = str(DATA_DIR / filename)
+    else:
+        temp_file = tempfile.NamedTemporaryFile(suffix=".h5")
+        filepath = temp_file.name
+        download_file_from_blob(filename, filepath)
 
-    with tempfile.NamedTemporaryFile(suffix=".nii.gz") as temp_file:
-        download_file_from_blob(filename, temp_file.name)
-        return nibabel.load(temp_file.name).get_fdata()  # type: ignore[attr-defined]
+    with h5py.File(filepath, "r") as h5file:
+        return np.array(h5file["data"])
 
 
-def get_surface_file(species: str, side: str) -> nibabel.GiftiImage:
+def get_surface_data(species: str, side: str) -> types.Surface:
     """Gets the surface file for the given species and side.
 
     Args:
@@ -86,10 +90,32 @@ def get_surface_file(species: str, side: str) -> nibabel.GiftiImage:
 
     """
     logger.info("Getting surface file.")
-    filename = f"{species}_{side}_inflated_10k_fs_lr.surf.gii"
+    filename = f"{species}_{side}_inflated_10k_fs_lr.h5"
     if ENVIRONMENT == "development":
-        return nibabel.load(DATA_DIR / filename)  # type: ignore[return-value]
+        filepath = str(DATA_DIR / filename)
+    else:
+        temp_file = tempfile.NamedTemporaryFile(suffix=".h5")
+        filepath = temp_file.name
+        download_file_from_blob(filename, filepath)
 
-    with tempfile.NamedTemporaryFile(suffix=".surf.gii") as temp_file:
-        download_file_from_blob(filename, temp_file.name)
-        return nibabel.load(temp_file.name)  # type: ignore[return-value]
+    with h5py.File(filepath, "r") as h5file:
+        name = h5file["name"][()].decode("utf-8")
+        vertices = h5file["vertices"][()]
+        faces = h5file["faces"][()]
+
+    return types.Surface(name=name, vertices=vertices, faces=faces)
+
+
+@functools.lru_cache(maxsize=None)
+def get_surface(species: str, side: str) -> types.Surface:
+    """Cached call to surface data.
+
+    Args:
+        species: The species.
+        side: The side.
+
+    Returns:
+        The surface data.
+
+    """
+    return get_surface_data(species=species, side=side)

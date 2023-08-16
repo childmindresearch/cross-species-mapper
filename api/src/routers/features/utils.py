@@ -12,7 +12,7 @@ import numpy.typing as npt
 from fastapi import status
 from sklearn import neighbors
 
-from src.core import data, settings
+from src.core import data_fetcher, settings, types
 from src.core import utils as src_utils
 
 config = settings.get_settings()
@@ -22,13 +22,16 @@ logger = logging.getLogger(LOGGER_NAME)
 
 
 # Precompute surface distance cKDTree and keep in memory
+SURFACES = {
+    f"{species}_{side}": data_fetcher.get_surface_data(species, side)
+    for species, side in itertools.product(["human", "macaque"], ["left", "right"])
+}
 TREE = {}
 for local_species, local_side in itertools.product(
     ["human", "macaque"], ["left", "right"]
 ):
-    TREE[local_species + "_" + local_side] = neighbors.BallTree(
-        src_utils.Surface(local_species, local_side).vertices
-    )
+    label = f"{local_species}_{local_side}"
+    TREE[label] = neighbors.BallTree(SURFACES[label].vertices)
 
 
 @functools.lru_cache(maxsize=None)
@@ -49,7 +52,7 @@ def load_feature_data(
 
     """
     logger.info("Loading feature data.")
-    nifti_data = data.get_feature_data(species, side)
+    nifti_data = data_fetcher.get_feature_data(species, side)
     if remove_singleton:
         nifti_data = np.squeeze(nifti_data)
 
@@ -58,7 +61,7 @@ def load_feature_data(
 
 def compute_similarity(
     seed_vertex: int,
-    seed_surface: src_utils.Surface,
+    seed_surface: types.Surface,
     seed_features: npt.ArrayLike,
     target_features: npt.ArrayLike,
     roi_size: int = 5,

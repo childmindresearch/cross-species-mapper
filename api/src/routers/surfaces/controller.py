@@ -1,7 +1,7 @@
 """Controller for the surface endpoints."""
 import logging
 
-from src.core import settings, utils
+from src.core import data_fetcher, settings, utils
 from src.routers.surfaces import schemas
 
 config = settings.get_settings()
@@ -23,7 +23,7 @@ def get_hemispheres(species: str, side: str) -> schemas.Surface:
         A hemispheric surface for humans or macaques.
     """
     logger.info("Fetching %s_%s surface.", species, side)
-    surface = utils.get_surface(species=species, side=side)
+    surface = data_fetcher.get_surface_data(species=species, side=side)
 
     return schemas.Surface(
         name=f"{species}_{side}",
