@@ -1,29 +1,30 @@
 """Unit tests for the surfaces controller."""
 import numpy as np
-from src.core import utils as src_utils
+
+from src.core import data_fetcher
 from src.routers.features import utils as features_utils
 
 
 def test_surface_vertices() -> None:
     """Test that the vertices are extracted from a surface."""
-    surface = src_utils.Surface("human", "left")
+    surface = data_fetcher.get_surface_data("human", "left")
 
     assert surface.vertices.shape == (10242, 3)
-    assert surface.vertices.dtype == np.dtype("float32")
+    assert surface.vertices.dtype == np.dtype("float64")
 
 
 def test_extract_faces() -> None:
     """Test that the faces are extracted from a surface."""
-    surface = src_utils.Surface("human", "left")
+    surface = data_fetcher.get_surface_data("human", "left")
 
     assert surface.faces.shape == (20480, 3)
-    assert surface.faces.dtype == np.dtype("int32")
+    assert surface.faces.dtype == np.dtype("int64")
 
 
 def test_compute_similarity() -> None:
     """Test that the similarity between two feature vectors is computed correctly."""
     seed = 1
-    seed_surface = src_utils.Surface("human", "left")
+    seed_surface = data_fetcher.get_surface_data("human", "left")
     seed_features = np.ones((10242, 10))
     target_features = np.ones((10242, 10))
     roi_size = 10

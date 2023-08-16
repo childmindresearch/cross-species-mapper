@@ -22,6 +22,13 @@
   let lastTouchTime = new Date().getTime();
 
   onMount(async () => {
+    if (!navigator.userAgent.includes("Chrome")) {
+      toast.error(
+        "This app is only supported on Google Chrome. Things may not work as expected."
+      );
+      return;
+    }
+
     surfaces = await getData()
       .then((data) => {
         return data;

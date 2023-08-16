@@ -2,7 +2,6 @@
 from __future__ import annotations
 
 import functools
-import itertools
 import logging
 from typing import List
 
@@ -10,25 +9,14 @@ import fastapi
 import numpy as np
 import numpy.typing as npt
 from fastapi import status
-from sklearn import neighbors
 
-from src.core import data, settings
+from src.core import data_fetcher, settings, types
 from src.core import utils as src_utils
 
 config = settings.get_settings()
 LOGGER_NAME = config.LOGGER_NAME
 
 logger = logging.getLogger(LOGGER_NAME)
-
-
-# Precompute surface distance cKDTree and keep in memory
-TREE = {}
-for local_species, local_side in itertools.product(
-    ["human", "macaque"], ["left", "right"]
-):
-    TREE[local_species + "_" + local_side] = neighbors.BallTree(
-        src_utils.Surface(local_species, local_side).vertices
-    )
 
 
 @functools.lru_cache(maxsize=None)
@@ -49,7 +37,7 @@ def load_feature_data(
 
     """
     logger.info("Loading feature data.")
-    nifti_data = data.get_feature_data(species, side)
+    nifti_data = data_fetcher.get_feature_data(species, side)
     if remove_singleton:
         nifti_data = np.squeeze(nifti_data)
 
@@ -58,7 +46,7 @@ def load_feature_data(
 
 def compute_similarity(
     seed_vertex: int,
-    seed_surface: src_utils.Surface,
+    seed_surface: types.Surface,
     seed_features: npt.ArrayLike,
     target_features: npt.ArrayLike,
     roi_size: int = 5,
@@ -88,22 +76,20 @@ def compute_similarity(
         99999 as these are not JSON serializable.
     """
     logger.info("Computing vertices within the ROI.")
-    indices, distances = TREE[
-        seed_surface.species + "_" + seed_surface.side
-    ].query_radius(
-        [seed_surface.vertices[seed_vertex, :]], r=roi_size, return_distance=True
-    )
+    vertices = seed_surface.vertices
+    distances = np.sqrt(np.sum((vertices - vertices[seed_vertex, :]) ** 2, axis=1))
+    indices = np.where(distances <= roi_size)[0]
 
     logger.info("Computing similarity.")
     cosine_similarity = _cosine_similarity(
-        np.array(seed_features)[indices[0], :], target_features
+        np.array(seed_features)[indices, :], target_features
     )
     fisher_z = np.arctanh(cosine_similarity)
 
     if weighting == "uniform":
         weights = None
     elif weighting == "gaussian":
-        weights = np.exp(-(distances[0] ** 2) / 2)
+        weights = np.exp(-(distances[indices] ** 2) / 2)
     else:
         logger.error("Invalid weighting scheme: %s", weighting)
         raise fastapi.HTTPException(
