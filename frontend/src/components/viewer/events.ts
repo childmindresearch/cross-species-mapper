@@ -1,9 +1,62 @@
 import { MeshColors } from '@cmi-dair/brainviewer'
 import { getCrossSpeciesSimilarity } from '../../api/fetcher'
 import type { Viewer } from './client'
+import type { CameraSettings } from './types'
 import * as THREE from 'three'
 import { speciesScale } from './constants'
 import toast from 'svelte-french-toast'
+
+let lastTouchTime = new Date().getTime();
+
+export async function addEventListeners (
+  viewers: Viewer[],
+  cameraSettings: CameraSettings,
+): Promise<void> {
+  viewers.map((viewer) => {
+  viewer.viewer.addListener(
+        "dblclick",
+        (event: Event, intersects: THREE.Intersection) => {
+          if (!(event instanceof MouseEvent || event instanceof TouchEvent)) {
+            return;
+          }
+          onDoubleClick(
+            event,
+            intersects,
+            viewers,
+            viewer.getSpecies(),
+            viewer.getSide()
+          );
+        }
+      );
+    viewer.viewer.addListener(
+        "touchstart",
+        (event: Event, intersects: THREE.Intersection) => {
+          event.preventDefault();
+          if (!(event instanceof MouseEvent || event instanceof TouchEvent)) {
+            return;
+          }
+          const currentTime = new Date().getTime();
+          const tapLength = currentTime - lastTouchTime;
+          if (tapLength < 500 && tapLength > 0) {
+            onDoubleClick(
+              event,
+              intersects,
+              viewers,
+              viewer.getSpecies(),
+              viewer.getSide()
+            );
+          } else {
+            lastTouchTime = currentTime;
+          }
+        }
+      );
+    viewer.viewer.controls.addEventListener("control", (event: any) => {
+        if (cameraSettings.cameraLock) {
+          onUpdate(event, viewer, viewers);
+        }
+      });
+  });
+}
 
 export async function onDoubleClick (
   event: MouseEvent | TouchEvent,

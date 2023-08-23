@@ -21,6 +21,7 @@
         "svelte-check": "^3.4.3",
         "svelte-french-toast": "^1.2.0",
         "svelte-loading-spinners": "^0.3.4",
+        "svelte-range-slider-pips": "^2.2.2",
         "svelte-toggle": "^4.0.0",
         "tslib": "^2.4.1",
         "typescript": "^5.0.0",
