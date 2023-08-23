@@ -1,11 +1,12 @@
 <script lang="ts">
   import { onMount } from "svelte";
-  import { getData, type SurfaceData } from "./fetch";
+  import { getData } from "./fetch";
   import { Viewer } from "./client";
   import { addEventListeners } from "./events";
   import toast from "svelte-french-toast";
   import Controls from "./Controls.svelte";
   import Loadingbar from "./Loadingbar.svelte";
+  import type { CameraSettings, SurfaceData } from "./types";
 
   let surfaces: SurfaceData | null;
 
