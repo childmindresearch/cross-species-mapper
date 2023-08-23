@@ -1,9 +1,9 @@
 ---
 name: Feature request
 about: Suggest a change in the package's features.
-title: ''
-labels: ''
-assignees: ''
+title: ""
+labels: ""
+assignees: ""
 ---
 
 - **What is the current behavior?**
