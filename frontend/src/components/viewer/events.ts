@@ -1,4 +1,4 @@
-import { MeshColors } from '@cmi-dair/brainviewer/lib/brainViewer'
+import { MeshColors } from '@cmi-dair/brainviewer'
 import { getCrossSpeciesSimilarity } from '../../api/fetcher'
 import type { Viewer } from './client'
 import * as THREE from 'three'

@@ -9,6 +9,7 @@
   // @ts-ignore
   import type * as THREE from "three";
   import toast from "svelte-french-toast";
+  import { Legend, colorInterpolates } from "@cmi-dair/brainviewer";
 
   let cameraLock = true;
   let surfaces: SurfaceData | null;
@@ -17,6 +18,7 @@
   let div2: HTMLElement;
   let div3: HTMLElement;
   let div4: HTMLElement;
+  let divLegend: HTMLElement;
 
   let resetCamera: () => void;
   let lastTouchTime = new Date().getTime();
@@ -41,6 +43,9 @@
     if (!surfaces) {
       return;
     }
+
+    const legend = new Legend(divLegend);
+    legend.update(-1, 2, colorInterpolates["Turbo"]);
 
     const viewers = [
       new Viewer(div1, surfaces["human_left"], "human", "left"),
@@ -107,21 +112,24 @@
   });
 </script>
 
-<div class="camera-controls">
-  <div class="toggle-div">
-    <Toggle
-      bind:cameraLock
-      on="Locked  "
-      off="Unlocked"
-      label="Camera Lock"
-      on:toggle={() => {
-        cameraLock = !cameraLock;
-      }}
-      switchColor="var(--color-theme-2)"
-      toggledColor="var(--color-theme-1)"
-    />
+<div class="viewer-utils">
+  <div class="camera-controls">
+    <div class="toggle-div">
+      <Toggle
+        bind:cameraLock
+        on="Locked  "
+        off="Unlocked"
+        label="Camera Lock"
+        on:toggle={() => {
+          cameraLock = !cameraLock;
+        }}
+        switchColor="var(--color-theme-2)"
+        toggledColor="var(--color-theme-1)"
+      />
+    </div>
+    <Button text="Reset Camera" onClick={resetCamera} />
   </div>
-  <Button text="Reset Camera" onClick={resetCamera} />
+  <div id="div-legend" bind:this={divLegend} />
 </div>
 
 {#if !surfaces}
@@ -139,13 +147,30 @@
 </div>
 
 <style>
+  .viewer-utils {
+    display: flex;
+    flex-direction: row;
+    gap: 10px;
+    justify-content: space-between;
+  }
+
+  @media (max-width: 768px) {
+    .viewer-utils {
+      flex-direction: column;
+    }
+  }
+
   .camera-controls {
     display: flex;
     flex-direction: row;
     align-items: center;
-    justify-content: left;
+    justify-content: space-between;
     margin-bottom: 10px;
-    gap: 20px;
+    gap: 10px;
+  }
+
+  #div-legend {
+    padding-right: 20px;
   }
 
   .toggle-div {
