@@ -1,18 +1,17 @@
-import type { ApiSurface, CrossSpeciesSimilarityResponse } from '../types/api'
+import type { ApiSurface, CrossSpeciesSimilarityResponse } from "../types/api";
 
-
-let API_URL: string
-if (process.env.NODE_ENV === 'production') {
-  API_URL = '/api'
+let API_URL: string;
+if (process.env.NODE_ENV === "production") {
+  API_URL = "/api";
 } else {
-  API_URL = 'http://localhost:8000/api'
+  API_URL = "http://localhost:8000/api";
 }
 
 const Endpoints = {
   getHemispheres: `${API_URL}/surfaces/hemispheres`,
   getCrossSpeciesSimilarity: `${API_URL}/features/cross_species`,
-  getNimareTerms: `${API_URL}/features/nimare`
-}
+  getNimareTerms: `${API_URL}/features/nimare`,
+};
 
 /**
  * Fetches the surface data for all surfaces.
@@ -20,9 +19,14 @@ const Endpoints = {
  * @param side The side to fetch surfaces for.
  * @returns A Promise that resolves to an ApiSurfaceResponse object.
  */
-export async function getSurfaces (species: string, side: string): Promise<ApiSurface> {
-  const response = await fetch(`${Endpoints.getHemispheres}?species=${species}&side=${side}`)
-  return await response.json()
+export async function getSurfaces(
+  species: string,
+  side: string,
+): Promise<ApiSurface> {
+  const response = await fetch(
+    `${Endpoints.getHemispheres}?species=${species}&side=${side}`,
+  );
+  return await response.json();
 }
 
 /**
@@ -33,13 +37,13 @@ export async function getSurfaces (species: string, side: string): Promise<ApiSu
  * @param vertex - The vertex index on the surface.
  * @returns A Promise that resolves to a SimilarityResponse object.
  */
-export async function getCrossSpeciesSimilarity (
+export async function getCrossSpeciesSimilarity(
   species: string,
   side: string,
-  vertex: number
+  vertex: number,
 ): Promise<CrossSpeciesSimilarityResponse> {
   const response = await fetch(
-    `${Endpoints.getCrossSpeciesSimilarity}?seed_species=${species}&seed_side=${side}&seed_vertex=${vertex}`
-  )
-  return await response.json()
+    `${Endpoints.getCrossSpeciesSimilarity}?seed_species=${species}&seed_side=${side}&seed_vertex=${vertex}`,
+  );
+  return await response.json();
 }

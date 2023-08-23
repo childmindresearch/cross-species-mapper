@@ -1,6 +1,6 @@
-type SpeciesScale = Record<string, number>
+import type { SpeciesScale } from "./types";
 
 export const speciesScale: SpeciesScale = {
   human: 1,
-  macaque: 0.4
-}
+  macaque: 0.4,
+};
