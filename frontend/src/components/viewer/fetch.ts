@@ -30,14 +30,15 @@ export async function getData(): Promise<SurfaceData> {
     };
   });
 
-  const meshColors = await similarityPromise.then((data) => {
-    return {
-      human_left: new MeshColors(data.human_left, "Turbo", [-1, 2]),
-      human_right: new MeshColors(data.human_right, "Turbo", [-1, 2]),
-      macaque_left: new MeshColors(data.macaque_left, "Turbo", [-1, 2]),
-      macaque_right: new MeshColors(data.macaque_right, "Turbo", [-1, 2]),
-    };
+  const intensity = await similarityPromise.then((data) => {
+    return data;
   });
+  const meshColors = {
+    human_left: new MeshColors(intensity.human_left, "Turbo", [-1, 2]),
+    human_right: new MeshColors(intensity.human_right, "Turbo", [-1, 2]),
+    macaque_left: new MeshColors(intensity.macaque_left, "Turbo", [-1, 2]),
+    macaque_right: new MeshColors(intensity.macaque_right, "Turbo", [-1, 2]),
+  };
 
   const surfaces = {
     human_left: new Surface(surfaceMeshes.human_left, meshColors.human_left),
@@ -52,5 +53,24 @@ export async function getData(): Promise<SurfaceData> {
     ),
   };
 
-  return surfaces;
+  const surfaceOverloads = {
+    human_left: {
+      surface: surfaces.human_left,
+      intensity: intensity.human_left,
+    },
+    human_right: {
+      surface: surfaces.human_right,
+      intensity: intensity.human_right,
+    },
+    macaque_left: {
+      surface: surfaces.macaque_left,
+      intensity: intensity.macaque_left,
+    },
+    macaque_right: {
+      surface: surfaces.macaque_right,
+      intensity: intensity.macaque_right,
+    },
+  };
+
+  return surfaceOverloads;
 }

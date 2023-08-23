@@ -1,7 +1,9 @@
-import type { Surface } from "@cmi-dair/brainviewer";
+import type { Surface, colorInterpolates } from "@cmi-dair/brainviewer";
 
-export interface CameraSettings {
+export interface ViewerSettings {
   cameraLock: boolean;
+  colorLimits: [number, number];
+  colorMap: keyof typeof colorInterpolates;
 }
 export interface SpeciesScale {
   [key: string]: number;
@@ -9,11 +11,18 @@ export interface SpeciesScale {
   macaque: number;
 }
 
+export interface SurfaceOverload {
+  // A temporary solution to the problem of the Surface class not having a way of
+  // accessing intensity.
+  surface: Surface;
+  intensity: number[];
+}
+
 export interface SurfaceData {
-  human_left: Surface;
-  human_right: Surface;
-  macaque_left: Surface;
-  macaque_right: Surface;
+  human_left: SurfaceOverload;
+  human_right: SurfaceOverload;
+  macaque_left: SurfaceOverload;
+  macaque_right: SurfaceOverload;
 }
 
 export interface ApiSurface {

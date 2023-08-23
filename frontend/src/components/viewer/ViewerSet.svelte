@@ -6,7 +6,7 @@
   import toast from "svelte-french-toast";
   import Controls from "./Controls.svelte";
   import Loadingbar from "./Loadingbar.svelte";
-  import type { CameraSettings, SurfaceData } from "./types";
+  import type { ViewerSettings, SurfaceData } from "./types";
 
   let surfaces: SurfaceData | null;
 
@@ -16,9 +16,12 @@
   let div4: HTMLElement;
 
   let resetCamera: () => void;
-  let cameraSettings: CameraSettings = {
+  let viewerSettings: ViewerSettings = {
     cameraLock: true,
+    colorLimits: [-1, 2],
+    colorMap: "Turbo",
   };
+  let viewers: Viewer[] = []
 
   onMount(async () => {
     if (!navigator.userAgent.includes("Chrome")) {
@@ -37,14 +40,14 @@
       return;
     }
 
-    const viewers = [
+    viewers.push(
       new Viewer(div1, surfaces["human_left"], "human", "left"),
       new Viewer(div2, surfaces["human_right"], "human", "right"),
       new Viewer(div3, surfaces["macaque_left"], "macaque", "left"),
       new Viewer(div4, surfaces["macaque_right"], "macaque", "right"),
-    ];
+    );
     viewers.forEach((viewer) => viewer.plot());
-    addEventListeners(viewers, cameraSettings);
+    addEventListeners(viewers, viewerSettings);
 
     resetCamera = () => viewers.forEach((viewer) => viewer.resetCamera());
   });
@@ -52,10 +55,9 @@
 
 {#if !surfaces}
   <Loadingbar />
+{:else}
+  <Controls {resetCamera} {viewers} {viewerSettings} />
 {/if}
-
-<Controls {resetCamera} {cameraSettings} />
-
 <div class="viewer-set">
   <div id="div-viewer" bind:this={div1} />
   <div id="div-viewer" bind:this={div2} />

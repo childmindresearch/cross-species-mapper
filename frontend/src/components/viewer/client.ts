@@ -1,28 +1,25 @@
-import {
-  Surface,
-  ViewerClient,
-  colorInterpolates,
-} from "@cmi-dair/brainviewer";
+import { ViewerClient, colorInterpolates } from "@cmi-dair/brainviewer";
 import * as THREE from "three";
 import CameraControls from "camera-controls";
 import { speciesScale } from "./constants";
+import type { SurfaceOverload } from "./types";
 
 export class Viewer {
   private readonly div: HTMLElement;
   private readonly width: number;
   private readonly height: number;
 
-  readonly surface: Surface;
+  readonly surface: SurfaceOverload;
   readonly species: string;
   readonly side: string;
-  readonly colorLimits: [number, number] = [-1, 2];
-  readonly colorMap: keyof typeof colorInterpolates = "Turbo";
+  colorLimits: [number, number] = [-1, 2];
+  colorMap: keyof typeof colorInterpolates = "Turbo";
 
   public viewer: ViewerClient;
 
   constructor(
     div: HTMLElement,
-    surface: Surface,
+    surface: SurfaceOverload,
     species: string,
     side: string,
     width: number = 450,
@@ -35,7 +32,7 @@ export class Viewer {
     this.width = width;
     this.height = height;
     this.viewer = new ViewerClient(this.div);
-    this.viewer.addModel(surface);
+    this.viewer.addModel(surface.surface);
   }
 
   plot(): void {
