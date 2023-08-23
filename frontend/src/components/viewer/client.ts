@@ -1,6 +1,4 @@
-import type { Surface } from '@cmi-dair/brainviewer/lib/brainViewer'
-import type { ColorInterpolateName } from '@cmi-dair/brainviewer/lib/colormaps/d3ColorSchemes'
-import { ViewerClient } from '@cmi-dair/brainviewer'
+import { Surface, ViewerClient } from '@cmi-dair/brainviewer'
 import * as THREE from 'three'
 import CameraControls from 'camera-controls'
 import { speciesScale } from './constants'
@@ -14,7 +12,7 @@ export class Viewer {
   readonly species: string
   readonly side: string
   readonly colorLimits: [number, number] = [-1, 2]
-  readonly colorMap: ColorInterpolateName = 'Turbo'
+  readonly colorMap: string = 'Turbo'
 
   public viewer: ViewerClient
 
