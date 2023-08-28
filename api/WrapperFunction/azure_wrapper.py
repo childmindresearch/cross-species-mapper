@@ -1,5 +1,7 @@
 import azure.functions as func
 
-from src.main import app as fastapi_app
+from src.main import app
 
-app = func.AsgiFunctionApp(app=fastapi_app, http_auth_level=func.AuthLevel.ANONYMOUS)
+
+def main(req: func.HttpRequest, context: func.Context) -> func.HttpResponse:
+    return func.AsgiMiddleware(app).handle(req, context)
