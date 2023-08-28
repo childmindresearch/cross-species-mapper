@@ -3,16 +3,25 @@
   import Button from "../Button.svelte";
   import { Legend, colorInterpolates } from "@cmi-dair/brainviewer";
   import { onMount } from "svelte";
-  import type { CameraSettings } from "./types";
-
+  import type {Viewer} from "./client";
+  import type { ViewerSettings } from "./types";
+  import RangeSlider from "svelte-range-slider-pips";
+  import { onSliderChange } from "./events";
+  
   let divLegend: HTMLElement;
-  export let resetCamera: () => void;
+  let legend: Legend[] = []; // array so we can pass by reference
 
-  export let cameraSettings: CameraSettings;
+  export let resetCamera: () => void;
+  export let viewers: Viewer[];
+  export let viewerSettings: ViewerSettings;
 
   onMount(async () => {
-    const legend = new Legend(divLegend);
-    legend.update(-1, 2, colorInterpolates["Turbo"]);
+    legend.push(new Legend(divLegend));
+    legend[0].update(
+      viewerSettings.colorLimits[0],
+      viewerSettings.colorLimits[1],
+      colorInterpolates[viewerSettings.colorMap]
+    );
   });
 </script>
 
@@ -20,18 +29,32 @@
   <div class="camera-controls">
     <div class="toggle-div">
       <Toggle
-        bind:cameraLock={cameraSettings.cameraLock}
+        bind:cameraLock={viewerSettings.cameraLock}
         on="Locked  "
         off="Unlocked"
         label="Camera Lock"
         on:toggle={() => {
-          cameraSettings.cameraLock = !cameraSettings.cameraLock;
+          viewerSettings.cameraLock = !viewerSettings.cameraLock;
         }}
         switchColor="var(--color-theme-2)"
         toggledColor="var(--color-theme-1)"
       />
     </div>
     <Button text="Reset Camera" onClick={resetCamera} />
+  </div>
+  <div id="div-slider">
+    <RangeSlider
+      bind:values={viewerSettings.colorLimits}
+      min={-2}
+      max={3}
+      step={0.5}
+      range={true}
+      first={"label"}
+      last={"label"}
+      pips
+      float={true}
+      on:change={(event) => {onSliderChange(event, legend, viewers, viewerSettings)}}
+    />
   </div>
   <div id="div-legend" bind:this={divLegend} />
 </div>
@@ -57,6 +80,10 @@
     justify-content: space-between;
     margin-bottom: 10px;
     gap: 10px;
+  }
+
+  #div-slider {
+    width: 40%;
   }
 
   #div-legend {

@@ -1,7 +1,7 @@
-import { MeshColors } from "@cmi-dair/brainviewer";
+import { MeshColors, Legend, colorInterpolates } from "@cmi-dair/brainviewer";
 import { getCrossSpeciesSimilarity } from "../../api/fetcher";
 import type { Viewer } from "./client";
-import type { CameraSettings } from "./types";
+import type { ViewerSettings } from "./types";
 import * as THREE from "three";
 import { speciesScale } from "./constants";
 import toast from "svelte-french-toast";
@@ -10,7 +10,7 @@ let lastTouchTime = new Date().getTime();
 
 export async function addEventListeners(
   viewers: Viewer[],
-  cameraSettings: CameraSettings,
+  cameraSettings: ViewerSettings,
 ): Promise<void> {
   viewers.map((viewer) => {
     viewer.viewer.addListener(
@@ -64,7 +64,7 @@ export async function addEventListeners(
   });
 }
 
-export async function onDoubleClick(
+async function onDoubleClick(
   event: MouseEvent | TouchEvent,
   intersects: THREE.Intersection[],
   viewers: Viewer[],
@@ -96,6 +96,7 @@ export async function onDoubleClick(
 
   for (const viewer of viewers) {
     const similarity = similarities[viewer.species + "_" + viewer.side];
+    viewer.surface.intensity = similarity;
     const colors = new MeshColors(
       similarity,
       viewer.colorMap,
@@ -110,7 +111,7 @@ export async function onDoubleClick(
   }
 }
 
-export async function onUpdate(
+async function onUpdate(
   event: any,
   triggeringClient: Viewer,
   clients: Viewer[],
@@ -130,4 +131,33 @@ export async function onUpdate(
       newPosition.z * scale,
     );
   }
+}
+
+export async function onSliderChange(
+  _event: Event,
+  legend: Legend[],
+  viewers: Viewer[],
+  viewerSettings: ViewerSettings,
+): Promise<void> {
+  for (const viewer of viewers) {
+    viewer.colorLimits = viewerSettings.colorLimits;
+    const colors = new MeshColors(
+      viewer.surface.intensity,
+      viewer.colorMap,
+      viewer.colorLimits,
+    );
+
+    viewer.viewer
+      .getModels()[0]
+      .geometry.setAttribute(
+        "color",
+        new THREE.BufferAttribute(colors.colors, 3),
+      );
+  }
+
+  legend[0].update(
+    viewerSettings.colorLimits[0],
+    viewerSettings.colorLimits[1],
+    colorInterpolates[viewerSettings.colorMap],
+  );
 }
