@@ -1,10 +1,10 @@
-import { MeshColors, Legend, colorInterpolates } from "@cmi-dair/brainviewer";
+import { Legend, MeshColors, colorInterpolates } from "@cmi-dair/brainviewer";
+import toast from "svelte-french-toast";
+import * as THREE from "three";
 import { getCrossSpeciesSimilarity } from "../../api/fetcher";
 import type { Viewer } from "./client";
-import type { ViewerSettings } from "./types";
-import * as THREE from "three";
 import { speciesScale } from "./constants";
-import toast from "svelte-french-toast";
+import type { ViewerSettings } from "./types";
 
 let lastTouchTime = new Date().getTime();
 
@@ -155,9 +155,11 @@ export async function onSliderChange(
       );
   }
 
-  legend[0].update(
-    viewerSettings.colorLimits[0],
-    viewerSettings.colorLimits[1],
-    colorInterpolates[viewerSettings.colorMap],
-  );
+  legend[0].update({
+    colorBar: {
+      minVal: viewerSettings.colorLimits[0],
+      maxVal: viewerSettings.colorLimits[1],
+      colorFun: colorInterpolates[viewerSettings.colorMap],
+    },
+  });
 }

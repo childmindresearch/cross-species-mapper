@@ -1,13 +1,13 @@
 <script lang="ts">
-  import Toggle from "svelte-toggle";
-  import Button from "../Button.svelte";
   import { Legend, colorInterpolates } from "@cmi-dair/brainviewer";
   import { onMount } from "svelte";
-  import type {Viewer} from "./client";
-  import type { ViewerSettings } from "./types";
   import RangeSlider from "svelte-range-slider-pips";
+  import Toggle from "svelte-toggle";
+  import Button from "../Button.svelte";
+  import type { Viewer } from "./client";
   import { onSliderChange } from "./events";
-  
+  import type { ViewerSettings } from "./types";
+
   let divLegend: HTMLElement;
   let legend: Legend[] = []; // array so we can pass by reference
 
@@ -17,11 +17,15 @@
 
   onMount(async () => {
     legend.push(new Legend(divLegend));
-    legend[0].update(
-      viewerSettings.colorLimits[0],
-      viewerSettings.colorLimits[1],
-      colorInterpolates[viewerSettings.colorMap]
-    );
+    legend[0].update({
+      colorBar: {
+        minVal: viewerSettings.colorLimits[0],
+        maxVal: viewerSettings.colorLimits[1],
+        colorFun: colorInterpolates["Turbo"],
+      },
+      title: "Feature Similarity",
+      backgroundColor: "#00000000",
+    });
   });
 </script>
 
@@ -53,7 +57,9 @@
       last={"label"}
       pips
       float={true}
-      on:change={(event) => {onSliderChange(event, legend, viewers, viewerSettings)}}
+      on:change={(event) => {
+        onSliderChange(event, legend, viewers, viewerSettings);
+      }}
     />
   </div>
   <div id="div-legend" bind:this={divLegend} />
