@@ -12,7 +12,7 @@ def test_cross_species_similarity() -> None:
 
     response = client.get(
         "/api/v1/features/cross_species",
-        params={"seed_species": "human", "seed_side": "left", "seed_vertex": 1},
+        params={"species": "human", "side": "left", "vertex": 1},
     )
 
     assert response.status_code == status.HTTP_200_OK
@@ -24,7 +24,7 @@ def test_get_neuroquery() -> None:
     """Test that all expected feature vectors are returned."""
     response = client.get(
         "/api/v1/features/neuroquery",
-        params={"seed_vertex": 10241, "seed_species": "human", "seed_side": "left"},
+        params={"vertex": 10241, "species": "human", "side": "left"},
     )
 
     assert response.status_code == status.HTTP_200_OK
@@ -35,7 +35,7 @@ def test_get_neuroquery_too_high_vertex() -> None:
     """Test that an error is returned upon requesting a too high vertex."""
     response = client.get(
         "/api/v1/features/neuroquery",
-        params={"seed_vertex": 10242, "seed_species": "human", "seed_side": "left"},
+        params={"vertex": 10242, "species": "human", "side": "left"},
     )
 
     assert response.status_code == status.HTTP_400_BAD_REQUEST
