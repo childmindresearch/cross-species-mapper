@@ -1,7 +1,10 @@
 """Module for data access."""
 import functools
+import gzip
+import json
 import logging
 import tempfile
+from typing import List
 
 import h5py
 import numpy as np
@@ -76,6 +79,27 @@ def get_feature_data(species: str, side: str) -> np.ndarray:
 
     with h5py.File(filepath, "r") as h5file:
         return np.array(h5file["data"])
+
+
+def get_neuroquery_data() -> List[List[str]]:
+    """Gets the neuroquery data.
+
+    Returns:
+        The neuroquery data.
+
+    """
+    logger.info("Getting neuroquery data.")
+    filename = "neuroquery_features_10k.json.gz"
+
+    if ENVIRONMENT == "development":
+        filepath = str(DATA_DIR / filename)
+    else:
+        temp_file = tempfile.NamedTemporaryFile(suffix=".json.gz")
+        filepath = temp_file.name
+        download_file_from_blob(filename, filepath)
+
+    with gzip.open(filepath, "rb") as file_buffer:
+        return json.load(file_buffer)
 
 
 def get_surface_data(species: str, side: str) -> types.Surface:

@@ -24,17 +24,3 @@ export interface SurfaceData {
   macaque_left: SurfaceOverload;
   macaque_right: SurfaceOverload;
 }
-
-export interface ApiSurface {
-  name: string;
-  vertices: number[][];
-  faces: number[][];
-}
-
-export interface ApiSurfaceResponse {
-  [key: string]: ApiSurface;
-  human_left: ApiSurface;
-  human_right: ApiSurface;
-  macaque_left: ApiSurface;
-  macaque_right: ApiSurface;
-}

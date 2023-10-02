@@ -1,17 +1,22 @@
-import type { ApiSurface, CrossSpeciesSimilarityResponse } from "../types/api";
+import type { ApiSurface, CrossSpeciesSimilarityResponse } from "./types";
 
 let API_URL: string;
 if (process.env.NODE_ENV === "production") {
-  API_URL = "/api";
+  API_URL = "/api/v1";
 } else {
-  API_URL = "http://localhost:8000/api";
+  API_URL = "http://localhost:8000/api/v1";
 }
 
 const Endpoints = {
   getHemispheres: `${API_URL}/surfaces/hemispheres`,
   getCrossSpeciesSimilarity: `${API_URL}/features/cross_species`,
-  getNimareTerms: `${API_URL}/features/nimare`,
+  getNeuroQuery: `${API_URL}/features/neuroquery`,
 };
+
+export function getNeuroQuery(species: string, side: string, vertex: number) {
+  const url = `${Endpoints.getNeuroQuery}?species=${species}&side=${side}&vertex=${vertex}`;
+  return fetch(url).then((response) => response.json());
+}
 
 /**
  * Fetches the surface data for all surfaces.
@@ -23,10 +28,8 @@ export async function getSurfaces(
   species: string,
   side: string,
 ): Promise<ApiSurface> {
-  const response = await fetch(
-    `${Endpoints.getHemispheres}?species=${species}&side=${side}`,
-  );
-  return await response.json();
+  const url = `${Endpoints.getHemispheres}?species=${species}&side=${side}`;
+  return fetch(url).then((response) => response.json());
 }
 
 /**
@@ -42,8 +45,6 @@ export async function getCrossSpeciesSimilarity(
   side: string,
   vertex: number,
 ): Promise<CrossSpeciesSimilarityResponse> {
-  const response = await fetch(
-    `${Endpoints.getCrossSpeciesSimilarity}?seed_species=${species}&seed_side=${side}&seed_vertex=${vertex}`,
-  );
-  return await response.json();
+  const url = `${Endpoints.getCrossSpeciesSimilarity}?species=${species}&side=${side}&vertex=${vertex}`;
+  return fetch(url).then((response) => response.json());
 }

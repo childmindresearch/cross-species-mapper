@@ -47,10 +47,13 @@
     <Button text="Reset Camera" onClick={resetCamera} />
   </div>
   <div id="div-slider">
+    <div id="div-title">
+      <b>Feature Similarity</b>
+    </div>
     <RangeSlider
       bind:values={viewerSettings.colorLimits}
       min={-2}
-      max={3}
+      max={4}
       step={0.5}
       range={true}
       first={"label"}
@@ -90,6 +93,11 @@
 
   #div-slider {
     width: 40%;
+  }
+
+  #div-title {
+    width: 100%;
+    text-align: center;
   }
 
   #div-legend {
