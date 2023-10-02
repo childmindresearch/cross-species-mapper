@@ -1,18 +1,16 @@
 import { getCrossSpeciesSimilarity, getNeuroQuery } from "$lib/api";
-import { seedSide, seedSpecies, seedVertex } from "$lib/store";
+import { seedSide, seedSpecies, seedVertex, terms } from "$lib/store";
 import { Legend, MeshColors, colorInterpolates } from "@cmi-dair/brainviewer";
 import toast from "svelte-french-toast";
 import * as THREE from "three";
 import type { Viewer } from "./client";
 import { speciesScale } from "./constants";
 import type { ViewerSettings } from "./types";
-
 let lastTouchTime = new Date().getTime();
 
 export async function addEventListeners(
   viewers: Viewer[],
   cameraSettings: ViewerSettings,
-  terms: string[],
 ): Promise<void> {
   viewers.map((viewer) => {
     viewer.viewer.addListener(
@@ -30,7 +28,6 @@ export async function addEventListeners(
           viewers,
           viewer.getSpecies(),
           viewer.getSide(),
-          terms,
         );
       },
     );
@@ -53,7 +50,6 @@ export async function addEventListeners(
             viewers,
             viewer.getSpecies(),
             viewer.getSide(),
-            terms,
           );
         } else {
           lastTouchTime = currentTime;
@@ -74,7 +70,6 @@ async function onDoubleClick(
   viewers: Viewer[],
   clickedSpecies: string,
   clickedSide: string,
-  terms: string[],
 ): Promise<void> {
   const vertex = intersects[0].face?.a;
   if (vertex === undefined) {
@@ -118,10 +113,12 @@ async function onDoubleClick(
       );
   }
 
-  terms = await getNeuroQuery(clickedSpecies, clickedSide, vertex).then(
-    (data: string[]) => {
-      return data;
-    },
+  terms.set(
+    await getNeuroQuery(clickedSpecies, clickedSide, vertex).then(
+      (data: string[]) => {
+        return data;
+      },
+    ),
   );
 }
 

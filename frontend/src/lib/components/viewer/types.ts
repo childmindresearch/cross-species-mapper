@@ -24,3 +24,7 @@ export interface SurfaceData {
   macaque_left: SurfaceOverload;
   macaque_right: SurfaceOverload;
 }
+
+export interface NeuroQueryTerms {
+  terms: string[];
+}

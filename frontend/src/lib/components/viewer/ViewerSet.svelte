@@ -1,5 +1,4 @@
 <script lang="ts">
-  import { getNeuroQuery } from "$lib/api";
   import Loadingbar from "$lib/components/Loadingbar.svelte";
   import NeuroQuery from "$lib/components/NeuroQuery.svelte";
   import { onMount } from "svelte";
@@ -11,7 +10,6 @@
   import type { SurfaceData, ViewerSettings } from "./types";
 
   let surfaces: SurfaceData | null;
-  let terms: string[] = [];
 
   let div1: HTMLElement;
   let div2: HTMLElement;
@@ -38,9 +36,6 @@
       toast.error("Something went wrong. Please try refreshing.");
       return null;
     });
-    terms = await getNeuroQuery("human", "left", 0).then((res) => {
-      return res;
-    });
 
     if (!surfaces) {
       return;
@@ -53,7 +48,7 @@
       new Viewer(div4, surfaces["macaque_right"], "macaque", "right")
     );
     viewers.forEach((viewer) => viewer.plot());
-    addEventListeners(viewers, viewerSettings, terms);
+    addEventListeners(viewers, viewerSettings);
 
     resetCamera = () => viewers.forEach((viewer) => viewer.resetCamera());
   });
@@ -63,7 +58,7 @@
   <Loadingbar />
 {:else}
   <Controls {resetCamera} {viewers} {viewerSettings} />
-  <NeuroQuery {terms} />
+  <NeuroQuery />
 {/if}
 <div class="viewer-set">
   <div id="div-viewer" bind:this={div1} />
