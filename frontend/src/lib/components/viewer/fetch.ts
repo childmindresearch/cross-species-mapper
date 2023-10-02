@@ -1,5 +1,5 @@
 import { MeshColors, Surface, SurfaceMesh } from "@cmi-dair/brainviewer";
-import { getCrossSpeciesSimilarity, getSurfaces } from "../../api/fetcher";
+import { getCrossSpeciesSimilarity, getSurfaces } from "../../api";
 import type { ApiSurface, SurfaceData } from "./types";
 
 function apiSurface2ViewerSurface(apiSurface: ApiSurface): SurfaceMesh {
