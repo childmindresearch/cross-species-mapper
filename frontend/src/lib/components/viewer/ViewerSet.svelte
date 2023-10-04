@@ -76,6 +76,7 @@
   @media (max-width: 768px) {
     .viewer-set {
       grid-template-columns: repeat(1, 1fr);
+      justify-items: center;
     }
   }
 
@@ -91,5 +92,11 @@
     position: relative;
     overflow: hidden;
     z-index: 3;
+  }
+
+  @media (max-width: 768px) {
+    #div-viewer {
+      max-width: 70%;
+    }
   }
 </style>
