@@ -5,9 +5,6 @@ import itertools
 import logging
 from typing import Dict, List
 
-import fastapi
-from fastapi import status
-
 from src.core import data_fetcher, settings
 from src.routers.features import utils as features_utils
 
@@ -57,7 +54,7 @@ def get_cross_species_features(
     return similarities
 
 
-def get_neuroquery(species: str, side: str, vertex: int) -> List[str]:
+def get_neuroquery(species: str, side: str, vertex: int) -> List[List[str]]:
     """Fetches the neuroquery features for the given vertex.
 
     Args:
@@ -70,27 +67,11 @@ def get_neuroquery(species: str, side: str, vertex: int) -> List[str]:
     Returns:
         A list of neuroquery features.
     """
-    if species != "human":
-        raise fastapi.HTTPException(
-            status_code=status.HTTP_400_BAD_REQUEST,
-            detail="Only human has been implemented, not {seed_species}.",
-        )
-
-    neuroquery_data = data_fetcher.get_neuroquery_data()
+    n_vertices = 40968
 
     if side == "right":
-        vertex += len(neuroquery_data) // 2
-    if side == "left" and vertex >= len(neuroquery_data) // 2:
-        raise fastapi.HTTPException(
-            status_code=status.HTTP_400_BAD_REQUEST,
-            detail=f"Invalid vertex: {vertex}, valid range is 0-{len(neuroquery_data) // 2 - 1}.",
-        )
+        vertex += n_vertices // 4
+    if species == "macaque":
+        vertex += n_vertices // 2
 
-    try:
-        return neuroquery_data[vertex]
-    except IndexError as exc_info:
-        logger.error("IndexError: %s", exc_info)
-        raise fastapi.HTTPException(
-            status_code=status.HTTP_400_BAD_REQUEST,
-            detail=f"Invalid vertex: {vertex}, valid range is 0-{len(neuroquery_data) // 2 - 1}.",
-        )
+    return data_fetcher.get_neuroquery_data(vertex)

@@ -55,7 +55,7 @@ def get_feature_similarity(
 
 @router.get(
     "/neuroquery",
-    responses={status.HTTP_200_OK: {"model": List[str]}},
+    responses={status.HTTP_200_OK: {"model": List[List[str]]}},
 )
 def get_neuroquery(
     response: fastapi.Response,
@@ -70,7 +70,7 @@ def get_neuroquery(
         example=1,
         description="The vertex to fetch the neuroquery for, 0-indexed.",
     ),
-) -> List[str]:
+) -> List[List[str]]:
     """Fetches the neuroquery for the given vertex.
 
     Args:

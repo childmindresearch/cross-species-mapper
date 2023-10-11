@@ -1,6 +1,6 @@
 import { ViewerClient, colorInterpolates } from "@cmi-dair/brainviewer";
-import * as THREE from "three";
 import CameraControls from "camera-controls";
+import * as THREE from "three";
 import { speciesScale } from "./constants";
 import type { SurfaceOverload } from "./types";
 

@@ -81,22 +81,22 @@ def get_feature_data(species: str, side: str) -> np.ndarray:
         return np.array(h5file["data"])
 
 
-def get_neuroquery_data() -> List[List[str]]:
+def get_neuroquery_data(vertex: int) -> List[List[str]]:
     """Gets the neuroquery data.
 
     Returns:
         The neuroquery data.
 
+    Notes:
+        Always fetched from Azure as this is too large for Git.
+
     """
     logger.info("Getting neuroquery data.")
-    filename = "neuroquery_features_10k.json.gz"
+    filename = f"neuroquery_features_10k_{str(vertex).zfill(6)}.json.gz"
 
-    if ENVIRONMENT == "development":
-        filepath = str(DATA_DIR / filename)
-    else:
-        temp_file = tempfile.NamedTemporaryFile(suffix=".json.gz")
-        filepath = temp_file.name
-        download_file_from_blob(filename, filepath)
+    temp_file = tempfile.NamedTemporaryFile(suffix=".json.gz")
+    filepath = temp_file.name
+    download_file_from_blob(filename, filepath)
 
     with gzip.open(filepath, "rb") as file_buffer:
         return json.load(file_buffer)

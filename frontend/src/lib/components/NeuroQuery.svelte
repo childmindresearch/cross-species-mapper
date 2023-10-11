@@ -2,7 +2,17 @@
   import { terms } from "$lib/store";
   import Button from "./Button.svelte";
 
-  let displayTerms = $terms.slice(0, 10).join(", ");
+  let displayTerms: string;
+
+  function getDisplayTerms(terms: string[][]) {
+    if (!$terms) {
+      return "";
+    }
+    const first_ten = $terms.slice(0, 10);
+    const labels = first_ten.map((term) => term[0]);
+    return labels.join(", ");
+  }
+  $: displayTerms = getDisplayTerms($terms);
 </script>
 
 <div class="neuroquery">

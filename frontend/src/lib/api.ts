@@ -1,5 +1,5 @@
+import { similarity } from "./store";
 import type { ApiSurface, CrossSpeciesSimilarityResponse } from "./types";
-
 let API_URL: string;
 if (process.env.NODE_ENV === "production") {
   API_URL = "/api/v1";
@@ -46,5 +46,7 @@ export async function getCrossSpeciesSimilarity(
   vertex: number,
 ): Promise<CrossSpeciesSimilarityResponse> {
   const url = `${Endpoints.getCrossSpeciesSimilarity}?species=${species}&side=${side}&vertex=${vertex}`;
-  return fetch(url).then((response) => response.json());
+  const response = await fetch(url).then((response) => response.json());
+  similarity.set(response);
+  return response;
 }
