@@ -12,14 +12,14 @@ logger = logging.getLogger(LOGGER_NAME)
 
 
 def add_cache_control(
-    response: fastapi.Response, expiry_in_minutes: int = 525600
+    response: fastapi.Response, expiry_in_minutes: int = 60 * 24
 ) -> fastapi.Response:
     """Adds cache control headers to a response.
 
     Args:
         response: The response to add the headers to.
         expiry_in_minutes: The number of minutes to set the expiry to.
-            Defaults to 525600 (1 year).
+            Defaults to 24 hours.
 
     Returns:
         The response with the headers added.
