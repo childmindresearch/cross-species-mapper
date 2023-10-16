@@ -11,7 +11,6 @@ import numpy.typing as npt
 from fastapi import status
 
 from src.core import data_fetcher, settings, types
-from src.core import utils as src_utils
 
 config = settings.get_settings()
 LOGGER_NAME = config.LOGGER_NAME

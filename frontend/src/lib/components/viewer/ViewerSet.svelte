@@ -1,12 +1,13 @@
 <script lang="ts">
+  import Loadingbar from "$lib/components/Loadingbar.svelte";
+  import NeuroQuery from "$lib/components/NeuroQuery.svelte";
   import { onMount } from "svelte";
-  import { getData } from "./fetch";
-  import { Viewer } from "./client";
-  import { addEventListeners } from "./events";
   import toast from "svelte-french-toast";
   import Controls from "./Controls.svelte";
-  import Loadingbar from "./Loadingbar.svelte";
-  import type { ViewerSettings, SurfaceData } from "./types";
+  import { Viewer } from "./client";
+  import { addEventListeners } from "./events";
+  import { getData } from "./fetch";
+  import type { SurfaceData, ViewerSettings } from "./types";
 
   let surfaces: SurfaceData | null;
 
@@ -21,7 +22,7 @@
     colorLimits: [-1, 2],
     colorMap: "Turbo",
   };
-  let viewers: Viewer[] = []
+  let viewers: Viewer[] = [];
 
   onMount(async () => {
     if (!navigator.userAgent.includes("Chrome")) {
@@ -44,7 +45,7 @@
       new Viewer(div1, surfaces["human_left"], "human", "left"),
       new Viewer(div2, surfaces["human_right"], "human", "right"),
       new Viewer(div3, surfaces["macaque_left"], "macaque", "left"),
-      new Viewer(div4, surfaces["macaque_right"], "macaque", "right"),
+      new Viewer(div4, surfaces["macaque_right"], "macaque", "right")
     );
     viewers.forEach((viewer) => viewer.plot());
     addEventListeners(viewers, viewerSettings);
@@ -57,6 +58,7 @@
   <Loadingbar />
 {:else}
   <Controls {resetCamera} {viewers} {viewerSettings} />
+  <NeuroQuery />
 {/if}
 <div class="viewer-set">
   <div id="div-viewer" bind:this={div1} />
@@ -74,6 +76,7 @@
   @media (max-width: 768px) {
     .viewer-set {
       grid-template-columns: repeat(1, 1fr);
+      justify-items: center;
     }
   }
 
@@ -89,5 +92,11 @@
     position: relative;
     overflow: hidden;
     z-index: 3;
+  }
+
+  @media (max-width: 768px) {
+    #div-viewer {
+      max-width: 70%;
+    }
   }
 </style>

@@ -13,7 +13,7 @@ config = settings.get_settings()
 settings.initialize_logger()
 logger = logging.getLogger(config.LOGGER_NAME)
 
-api = fastapi.APIRouter(prefix="/api")
+api = fastapi.APIRouter(prefix="/api/v1")
 api.include_router(feature_views.router)
 api.include_router(surface_views.router)
 

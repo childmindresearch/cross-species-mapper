@@ -1,4 +1,5 @@
 <script lang="ts">
+  import { seedVertex, similarity } from "$lib/store";
   import { Legend, colorInterpolates } from "@cmi-dair/brainviewer";
   import { onMount } from "svelte";
   import RangeSlider from "svelte-range-slider-pips";
@@ -27,6 +28,21 @@
       backgroundColor: "#00000000",
     });
   });
+
+  function downloadSimilarity() {
+    if (!$similarity) {
+      alert("No similarity data to download");
+    }
+    const json = JSON.stringify($similarity);
+    const blob = new Blob([json], { type: "application/json" });
+    const href = URL.createObjectURL(blob);
+    const link = document.createElement("a");
+    link.href = href;
+    link.download = `similarity-${$seedVertex}.json`;
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+  }
 </script>
 
 <div class="viewer-utils">
@@ -45,12 +61,16 @@
       />
     </div>
     <Button text="Reset Camera" onClick={resetCamera} />
+    <Button text="Download Similarity" onClick={downloadSimilarity} />
   </div>
   <div id="div-slider">
+    <div id="div-title">
+      <b>Feature Similarity</b>
+    </div>
     <RangeSlider
       bind:values={viewerSettings.colorLimits}
       min={-2}
-      max={3}
+      max={4}
       step={0.5}
       range={true}
       first={"label"}
@@ -90,6 +110,11 @@
 
   #div-slider {
     width: 40%;
+  }
+
+  #div-title {
+    width: 100%;
+    text-align: center;
   }
 
   #div-legend {

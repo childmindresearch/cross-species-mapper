@@ -52,3 +52,26 @@ def get_cross_species_features(
         similarities[f"{target_species}_{target_side}"] = similarity.tolist()
 
     return similarities
+
+
+def get_neuroquery(species: str, side: str, vertex: int) -> List[List[str]]:
+    """Fetches the neuroquery features for the given vertex.
+
+    Args:
+        species: The species to fetch the hemispheres for, valid values are
+            'human' and 'macaque'.
+        side: The hemisphere to fetch the surfaces for, valid values are 'left' and
+            'right'.
+        vertex: The vertex to compute the similarity from.
+
+    Returns:
+        A list of neuroquery features.
+    """
+    n_vertices = 40968
+
+    if side == "right":
+        vertex += n_vertices // 4
+    if species == "macaque":
+        vertex += n_vertices // 2
+
+    return data_fetcher.get_neuroquery_data(vertex)

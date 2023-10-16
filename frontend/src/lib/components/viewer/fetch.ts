@@ -1,6 +1,12 @@
+import { terms } from "$lib/store";
+import type { ApiSurface } from "$lib/types";
 import { MeshColors, Surface, SurfaceMesh } from "@cmi-dair/brainviewer";
-import { getCrossSpeciesSimilarity, getSurfaces } from "../../api/fetcher";
-import type { ApiSurface, SurfaceData } from "./types";
+import {
+  getCrossSpeciesSimilarity,
+  getNeuroQuery,
+  getSurfaces,
+} from "../../api";
+import type { SurfaceData } from "./types";
 
 function apiSurface2ViewerSurface(apiSurface: ApiSurface): SurfaceMesh {
   return new SurfaceMesh(
@@ -18,6 +24,7 @@ export async function getData(): Promise<SurfaceData> {
   };
 
   const similarityPromise = getCrossSpeciesSimilarity("human", "left", 1);
+  const termsPromise = getNeuroQuery("human", "left", 1);
 
   const surfaceMeshes = await Promise.all(
     Object.values(surfaceMeshPromises),
@@ -72,5 +79,6 @@ export async function getData(): Promise<SurfaceData> {
     },
   };
 
+  terms.set(await termsPromise.then((data) => data));
   return surfaceOverloads;
 }

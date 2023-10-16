@@ -23,13 +23,13 @@ logger = logging.getLogger(LOGGER_NAME)
 )
 def get_feature_similarity(
     response: fastapi.Response,
-    seed_species: str = fastapi.Query(
+    species: str = fastapi.Query(
         ..., example="human", description="The species to fetch the hemispheres for."
     ),
-    seed_side: str = fastapi.Query(
+    side: str = fastapi.Query(
         ..., example="left", description="The hemisphere to fetch the surfaces for."
     ),
-    seed_vertex: int = fastapi.Query(
+    vertex: int = fastapi.Query(
         ...,
         example=1,
         description="The vertex to fetch the feature similarity for, 0-indexed.",
@@ -50,4 +50,39 @@ def get_feature_similarity(
     """
     logger.info("Calling GET /surfaces/similarity endpoint.")
     response = utils.add_cache_control(response)
-    return controller.get_cross_species_features(seed_species, seed_side, seed_vertex)
+    return controller.get_cross_species_features(species, side, vertex)
+
+
+@router.get(
+    "/neuroquery",
+    responses={status.HTTP_200_OK: {"model": List[List[str]]}},
+)
+def get_neuroquery(
+    response: fastapi.Response,
+    species: str = fastapi.Query(
+        ..., example="human", description="The species to fetch the hemispheres for."
+    ),
+    side: str = fastapi.Query(
+        ..., example="left", description="The hemisphere to fetch the surfaces for."
+    ),
+    vertex: int = fastapi.Query(
+        ...,
+        example=1,
+        description="The vertex to fetch the neuroquery for, 0-indexed.",
+    ),
+) -> List[List[str]]:
+    """Fetches the neuroquery for the given vertex.
+
+    Args:
+        species: The species to fetch the hemispheres for, valid values are
+            'human' and 'macaque'.
+        side: The hemisphere to fetch the surfaces for, valid values are 'left' and
+            'right'.
+        vertex: The vertex to fetch the neuroquery for, 0-indexed.
+
+    Returns:
+        A Pydantic BaseClass containing the neuroquery for the given vertex.
+    """
+    logger.info("Calling GET /surfaces/neuroquery endpoint.")
+    response = utils.add_cache_control(response)
+    return controller.get_neuroquery(species, side, vertex)
