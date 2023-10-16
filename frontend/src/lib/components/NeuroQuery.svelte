@@ -13,6 +13,7 @@
     return labels.join(", ");
   }
   $: displayTerms = getDisplayTerms($terms);
+
 </script>
 
 <div class="neuroquery">
