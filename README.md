@@ -26,12 +26,12 @@ The intended usage of this repository is through its Docker Compose.
 
 ## Code Architecture
 
-The architecture of this project is fairly small. It uses a React frontend for displaying the webpage. This frontend communicates with an API based on Python's FastAPI.
+The architecture of this project is fairly small. It uses a Svelte frontend for displaying the webpage. This frontend communicates with an API based on Python's FastAPI.
 
 ```mermaid
 flowchart TD
-    React --> FastAPI
-    FastAPI --> React
+    Svelte --> FastAPI
+    FastAPI --> Svelte
 ```
 
 ## Contributing
