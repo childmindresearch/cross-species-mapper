@@ -19,10 +19,15 @@
 
 <div class="neuroquery">
   <i><b>Top 10 Neuroquery Terms:</b> {displayTerms}</i>
-  <DownloadButton text="Top 100 Terms" data={$terms} />
+  <div class="download-button">
+    <DownloadButton text="Top 100 Terms" data={$terms} />
+  </div>
 </div>
 
 <style>
+  .download-button {
+    max-height: 2rem;
+  }
   .neuroquery {
     display: flex;
     gap: 20px;

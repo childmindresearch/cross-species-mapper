@@ -72,7 +72,7 @@
     />
   </div>
   <div id="div-legend" bind:this={divLegend} />
-  <DownloadButton text="Download Similarity" data={$similarity} {filename} />
+  <DownloadButton text="Similarity" data={$similarity} {filename} />
 </div>
 
 <style>
@@ -84,7 +84,7 @@
     align-items: center;
   }
 
-  @media (max-width: 768px) {
+  @media (max-width: 950px) {
     .viewer-utils {
       flex-direction: column;
     }
