@@ -97,7 +97,7 @@
   }
 
   a:hover {
-    color: var(--color-theme-1);
+    color: rgb(var(--color-theme-1));
   }
 
   vertical-spacing {

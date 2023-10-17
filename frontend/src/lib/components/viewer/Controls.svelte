@@ -1,10 +1,11 @@
 <script lang="ts">
-  import { seedVertex, similarity } from "$lib/store";
+  import { seedSide, seedSpecies, seedVertex, similarity } from "$lib/store";
   import { Legend, colorInterpolates } from "@cmi-dair/brainviewer";
   import { onMount } from "svelte";
   import RangeSlider from "svelte-range-slider-pips";
   import Toggle from "svelte-toggle";
   import Button from "../Button.svelte";
+  import DownloadButton from "../DownloadButton.svelte";
   import type { Viewer } from "./client";
   import { onSliderChange } from "./events";
   import type { ViewerSettings } from "./types";
@@ -15,6 +16,8 @@
   export let resetCamera: () => void;
   export let viewers: Viewer[];
   export let viewerSettings: ViewerSettings;
+
+  let filename: string;
 
   onMount(async () => {
     legend.push(new Legend(divLegend));
@@ -29,20 +32,7 @@
     });
   });
 
-  function downloadSimilarity() {
-    if (!$similarity) {
-      alert("No similarity data to download");
-    }
-    const json = JSON.stringify($similarity);
-    const blob = new Blob([json], { type: "application/json" });
-    const href = URL.createObjectURL(blob);
-    const link = document.createElement("a");
-    link.href = href;
-    link.download = `similarity-${$seedVertex}.json`;
-    document.body.appendChild(link);
-    link.click();
-    document.body.removeChild(link);
-  }
+  $: filename = `similarity_${$seedSpecies}_${$seedSide}_${$seedVertex}.json`;
 </script>
 
 <div class="viewer-utils">
@@ -56,12 +46,11 @@
         on:toggle={() => {
           viewerSettings.cameraLock = !viewerSettings.cameraLock;
         }}
-        switchColor="var(--color-theme-2)"
-        toggledColor="var(--color-theme-1)"
+        switchColor="rgb(var(--color-theme-2))"
+        toggledColor="rgb(var(--color-theme-1))"
       />
     </div>
     <Button text="Reset Camera" onClick={resetCamera} />
-    <Button text="Download Similarity" onClick={downloadSimilarity} />
   </div>
   <div id="div-slider">
     <div id="div-title">
@@ -83,6 +72,7 @@
     />
   </div>
   <div id="div-legend" bind:this={divLegend} />
+  <DownloadButton text="Download Similarity" data={$similarity} {filename} />
 </div>
 
 <style>
@@ -91,6 +81,7 @@
     flex-direction: row;
     gap: 10px;
     justify-content: space-between;
+    align-items: center;
   }
 
   @media (max-width: 768px) {
