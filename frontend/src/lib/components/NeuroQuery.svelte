@@ -1,8 +1,9 @@
 <script lang="ts">
-  import { terms } from "$lib/store";
-  import Button from "./Button.svelte";
+  import { seedSide, seedSpecies, seedVertex, terms } from "$lib/store";
+  import DownloadButton from "./DownloadButton.svelte";
 
   let displayTerms: string;
+  let filename: string;
 
   function getDisplayTerms(terms: string[][]) {
     if (!$terms) {
@@ -13,26 +14,18 @@
     return labels.join(", ");
   }
   $: displayTerms = getDisplayTerms($terms);
-
+  $: filename = `neuroquery_${$seedSpecies}_${$seedSide}_${$seedVertex}.json`;
 </script>
 
 <div class="neuroquery">
   <i><b>Top 10 Neuroquery Terms:</b> {displayTerms}</i>
-  <Button
-    text="Download Terms"
-    onClick={() => {
-      const element = document.createElement("a");
-      const file = new Blob([$terms.join("\n")], { type: "text/plain" });
-      element.href = URL.createObjectURL(file);
-      element.download = "neuroquery_terms.txt";
-      document.body.appendChild(element);
-      element.click();
-    }}
-  />
+  <DownloadButton text="Top 100 Terms" data={$terms} />
 </div>
 
 <style>
   .neuroquery {
-    margin: 1em;
+    display: flex;
+    gap: 20px;
+    width: 100%;
   }
 </style>
