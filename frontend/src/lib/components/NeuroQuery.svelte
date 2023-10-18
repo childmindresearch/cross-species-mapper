@@ -20,7 +20,7 @@
 <div class="neuroquery">
   <i><b>Top 10 Neuroquery Terms:</b> {displayTerms}</i>
   <div class="download-button">
-    <DownloadButton text="Top 100 Terms" data={$terms} />
+    <DownloadButton text="Top 100 Terms" data={$terms} {filename} />
   </div>
 </div>
 
