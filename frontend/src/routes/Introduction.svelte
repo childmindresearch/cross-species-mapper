@@ -10,6 +10,6 @@
 <p>
   To rotate the brain, click and drag on the brain. To see data for a particular
   region, double click on the region. The list of <a
-    href="https:/neuroquery.org">Neuroquery</a
+    href="https://neuroquery.org">NeuroQuery</a
   > terms shows the top 10 hits for the current map.
 </p>
