@@ -13,7 +13,7 @@
   "devDependencies": {
     "@fontsource/fira-mono": "^4.5.10",
     "@neoconfetti/svelte": "^1.0.0",
-    "@sveltejs/kit": "^1.24.0",
+    "@sveltejs/kit": "^1.27.0",
     "@types/cookie": "^0.5.1",
     "@types/lodash": "^4.14.197",
     "@types/svelte-range-slider-pips": "^2.0.0",
