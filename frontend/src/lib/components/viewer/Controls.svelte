@@ -79,15 +79,10 @@
   .viewer-utils {
     display: flex;
     flex-direction: row;
-    gap: 10px;
+    gap: 1rem;
     justify-content: space-between;
     align-items: center;
-  }
-
-  @media (max-width: 950px) {
-    .viewer-utils {
-      flex-direction: column;
-    }
+    margin-bottom: 2rem;
   }
 
   .camera-controls {
@@ -114,5 +109,16 @@
 
   .toggle-div {
     width: 120px;
+  }
+
+  @media (max-width: 950px) {
+    .viewer-utils {
+      flex-direction: column;
+    }
+  }
+  @media (max-width: 950px) {
+    #div-slider {
+      width: 100%;
+    }
   }
 </style>

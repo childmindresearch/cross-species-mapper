@@ -40,10 +40,5 @@ p {
 }
 
 a {
-  color: var(--color-theme-1);
-  text-decoration: none;
-}
-
-a:hover {
-  text-decoration: underline;
+  color: rgb(var(--color-theme-2));
 }

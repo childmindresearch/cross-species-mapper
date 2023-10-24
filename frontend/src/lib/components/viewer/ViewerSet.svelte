@@ -1,6 +1,5 @@
 <script lang="ts">
   import Loadingbar from "$lib/components/Loadingbar.svelte";
-  import NeuroQuery from "$lib/components/NeuroQuery.svelte";
   import { onMount } from "svelte";
   import toast from "svelte-french-toast";
   import Controls from "./Controls.svelte";
@@ -29,7 +28,6 @@
       toast.error(
         "This app is only supported on Google Chrome. Things may not work as expected."
       );
-      return;
     }
 
     surfaces = await getData().catch(() => {
@@ -58,7 +56,6 @@
   <Loadingbar />
 {:else}
   <Controls {resetCamera} {viewers} {viewerSettings} />
-  <NeuroQuery />
 {/if}
 <div class="viewer-set">
   <div id="div-viewer" bind:this={div1} />
@@ -77,6 +74,7 @@
     .viewer-set {
       grid-template-columns: repeat(1, 1fr);
       justify-items: center;
+      gap: 1rem;
     }
   }
 
@@ -96,7 +94,8 @@
 
   @media (max-width: 768px) {
     #div-viewer {
-      max-width: 70%;
+      max-width: 75%;
+      background-color: rgba(0, 0, 0, 0.03);
     }
   }
 </style>
