@@ -1,113 +1,44 @@
+<script lang="ts">
+  import {
+    NavBrand,
+    NavHamburger,
+    NavLi,
+    NavUl,
+    Navbar,
+  } from "flowbite-svelte";
+
+  let divClass = "w-full ml-auto md:block md:w-auto order-1 md:order-none";
+  let ulClass =
+    "flex flex-col my-4 md:flex-row md:my-0 text-md font-bold text-gray-900 gap-8";
+</script>
+
 <header>
-  <nav>
-    <svg viewBox="0 0 2 3" aria-hidden="true">
-      <path d="M0,0 L1,2 C1.5,3 1.5,3 2,3 L2,0 Z" />
-    </svg>
-    <ul>
-      <li>
-        <a
-          href="https://www.sciencedirect.com/science/article/pii/S1053811920308326"
-          >Publication</a
-        >
-      </li>
-      <li>•</li>
-      <li>
-        <div style="display: flex; align-items: center;">
-          <a href="https://github.com/TingsterX/alignment_macaque-human"
-            >Data Repository</a
-          >
-        </div>
-      </li>
-      <li>•</li>
-      <li>
-        <div style="display: flex; align-items: center;">
-          <a href="https://github.com/cmi-dair/cross-species-mapper"
-            >Code Repository</a
-          >
-        </div>
-      </li>
-    </ul>
-    <svg viewBox="0 0 2 3" aria-hidden="true">
-      <path d="M0,0 L0,3 C0.5,3 0.5,3 1,2 L2,0 Z" />
-    </svg>
-  </nav>
-  <vertical-spacing />
+  <Navbar color="none" fluid>
+    <NavBrand href="/">
+      <span
+        class="self-center whitespace-nowrap text-2xl font-semibold text-gray-900"
+      >
+        Inter-Species Map
+      </span>
+    </NavBrand>
+    <NavHamburger />
+    <NavUl
+      {divClass}
+      {ulClass}
+      nonActiveClass="md:!pl-3 md:!py-2 md:!pl-0 text-gray-700 hover:bg-gray-100 md:hover:bg-transparent md:border-0 md:hover:text-primary-700"
+      activeClass="md:!pl-3 md:!py-2 md:!pl-0 text-white bg-primary-700 md:bg-transparent md:text-primary-700  cursor-default"
+    >
+      <NavLi
+        href="https://www.sciencedirect.com/science/article/pii/S1053811920308326"
+      >
+        Publication
+      </NavLi>
+      <NavLi href="https://github.com/TingsterX/alignment_macaque-human">
+        Data Repository
+      </NavLi>
+      <NavLi href="https://github.com/cmi-dair/cross-species-mapper">
+        Source Code
+      </NavLi>
+    </NavUl>
+  </Navbar>
 </header>
-
-<style>
-  header {
-    display: flex;
-    justify-content: center;
-  }
-
-  nav {
-    display: flex;
-    justify-content: center;
-    position: relative;
-    top: 0;
-    left: 0;
-    right: 0;
-    z-index: 1;
-    --background: rgba(255, 255, 255, 0.7);
-  }
-
-  svg {
-    width: 2em;
-    height: 3em;
-    display: block;
-  }
-
-  path {
-    fill: var(--background);
-  }
-
-  ul {
-    position: relative;
-    padding: 0;
-    margin: 0;
-    height: 3em;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    list-style: none;
-    background: var(--background);
-    background-size: contain;
-    gap: 0.5rem;
-  }
-
-  li {
-    position: relative;
-    height: 100%;
-    display: flex;
-    align-items: center;
-  }
-
-  nav a {
-    display: flex;
-    height: 100%;
-    align-items: center;
-    padding: 0 0.5rem;
-    color: var(--color-text);
-    font-weight: 700;
-    font-size: 0.8rem;
-    text-transform: uppercase;
-    letter-spacing: 0.1em;
-    text-decoration: none;
-    transition: color 0.2s linear;
-  }
-
-  a:hover {
-    color: rgb(var(--color-theme-1));
-  }
-
-  vertical-spacing {
-    height: 30px;
-  }
-
-  /* Media queries */
-  @media only screen and (max-width: 600px) {
-    nav a {
-      font-size: 0.5em;
-    }
-  }
-</style>

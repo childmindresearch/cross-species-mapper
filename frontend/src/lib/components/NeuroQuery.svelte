@@ -17,20 +17,9 @@
   $: filename = `neuroquery_${$seedSpecies}_${$seedSide}_${$seedVertex}.json`;
 </script>
 
-<div class="neuroquery">
-  <i><b>Top 10 Neuroquery Terms:</b> {displayTerms}</i>
-  <div class="download-button">
+<div>
+  <div class="float-right ml-1">
     <DownloadButton text="Top 100 Terms" data={$terms} {filename} />
   </div>
+  <i><b>Top 10 Neuroquery Terms:</b> {displayTerms}</i>
 </div>
-
-<style>
-  .download-button {
-    max-height: 2rem;
-  }
-  .neuroquery {
-    display: flex;
-    gap: 20px;
-    width: 100%;
-  }
-</style>
