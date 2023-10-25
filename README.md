@@ -1,4 +1,4 @@
-# Cross Species Mappper
+# Cross Species Mapper
 
 This is the README file for the Cross Species Mappper project. It provides a webapp for an interactive mapper which transforms the cognitive ontology between humans and macaques to provide translational exploration.
 
