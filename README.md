@@ -30,8 +30,8 @@ The architecture of this project is fairly small. It uses a Svelte frontend for 
 
 ```mermaid
 flowchart TD
-    Svelte --> FastAPI
-    FastAPI --> Svelte
+    Svelte <--> FastAPI
+    FastAPI <--> Azure[Azure Blob]
 ```
 
 ## Contributing
