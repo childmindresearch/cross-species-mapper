@@ -1,4 +1,7 @@
-import type { Surface, colorInterpolates } from "@childmindresearch/brainviewer";
+import type {
+  Surface,
+  colorInterpolates,
+} from "@childmindresearch/brainviewer";
 
 export interface ViewerSettings {
   cameraLock: boolean;

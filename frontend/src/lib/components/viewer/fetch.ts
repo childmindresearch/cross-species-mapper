@@ -1,6 +1,10 @@
 import { terms } from "$lib/store";
 import type { ApiSurface } from "$lib/types";
-import { MeshColors, Surface, SurfaceMesh } from "@childmindresearch/brainviewer";
+import {
+  MeshColors,
+  Surface,
+  SurfaceMesh,
+} from "@childmindresearch/brainviewer";
 import {
   getCrossSpeciesSimilarity,
   getNeuroQuery,
