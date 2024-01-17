@@ -1,4 +1,4 @@
-import { ViewerClient, colorInterpolates } from "@cmi-dair/brainviewer";
+import { ViewerClient, colorInterpolates } from "@childmindresearch/brainviewer";
 import CameraControls from "camera-controls";
 import * as THREE from "three";
 import { speciesScale } from "./constants";

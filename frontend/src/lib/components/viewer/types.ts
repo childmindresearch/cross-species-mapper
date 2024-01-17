@@ -1,4 +1,4 @@
-import type { Surface, colorInterpolates } from "@cmi-dair/brainviewer";
+import type { Surface, colorInterpolates } from "@childmindresearch/brainviewer";
 
 export interface ViewerSettings {
   cameraLock: boolean;
