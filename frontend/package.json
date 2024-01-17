@@ -38,7 +38,7 @@
     "vite": "^4.4.9"
   },
   "dependencies": {
-    "@cmi-dair/brainviewer": "^0.1.4",
+    "@childmindresearch/brainviewer": "^0.1.4",
     "@sveltejs/adapter-static": "^2.0.3",
     "three": "^0.150.1"
   }

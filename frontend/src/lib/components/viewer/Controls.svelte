@@ -1,6 +1,6 @@
 <script lang="ts">
   import { seedSide, seedSpecies, seedVertex, similarity } from "$lib/store";
-  import { Legend, colorInterpolates } from "@cmi-dair/brainviewer";
+  import { Legend, colorInterpolates } from "@childmindresearch/brainviewer";
   import { onMount } from "svelte";
   import RangeSlider from "svelte-range-slider-pips";
   import Toggle from "svelte-toggle";

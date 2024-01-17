@@ -36,7 +36,7 @@
       <NavLi href="https://github.com/TingsterX/alignment_macaque-human">
         Data Repository
       </NavLi>
-      <NavLi href="https://github.com/cmi-dair/cross-species-mapper">
+      <NavLi href="https://github.com/childmindresearch/cross-species-mapper">
         Source Code
       </NavLi>
     </NavUl>
