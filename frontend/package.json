@@ -13,7 +13,7 @@
   "devDependencies": {
     "@fontsource/fira-mono": "^4.5.10",
     "@neoconfetti/svelte": "^1.0.0",
-    "@sveltejs/kit": "^1.27.0",
+    "@sveltejs/kit": "^2.5.0",
     "@types/cookie": "^0.5.1",
     "@types/lodash": "^4.14.197",
     "@types/svelte-range-slider-pips": "^2.0.0",
@@ -39,7 +39,7 @@
   },
   "dependencies": {
     "@cmi-dair/brainviewer": "^0.1.4",
-    "@sveltejs/adapter-static": "^2.0.3",
+    "@sveltejs/adapter-static": "^3.0.1",
     "three": "^0.150.1"
   }
 }
