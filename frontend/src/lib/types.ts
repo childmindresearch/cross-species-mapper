@@ -19,3 +19,12 @@ export interface ApiSurfaceResponse {
   macaque_left: ApiSurface;
   macaque_right: ApiSurface;
 }
+
+export type ChartSettings = {
+  title?: string;
+  xLabel?: string;
+  yLabel?: string;
+  download?: boolean;
+  xLogarithmic?: boolean;
+  yLogarithmic?: boolean;
+};

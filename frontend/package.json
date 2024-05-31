@@ -20,6 +20,7 @@
     "@types/three": "^0.155.1",
     "autoprefixer": "^10.4.14",
     "camera-controls": "^2.7.2",
+    "chart.js": "^4.4.3",
     "eslint": "^8.48.0",
     "eslint-config-standard-with-typescript": "^37.0.0",
     "flowbite": "^1.8.1",
