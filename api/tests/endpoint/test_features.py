@@ -1,4 +1,5 @@
 """Endpoint tests for the surfaces router."""
+
 from fastapi import status, testclient
 
 from src import main
@@ -28,14 +29,14 @@ def test_get_neuroquery() -> None:
     )
 
     assert response.status_code == status.HTTP_200_OK
-    assert len(response.json()) == 10
+    assert len(response.json()) == 100
 
 
 def test_get_neuroquery_too_high_vertex() -> None:
     """Test that an error is returned upon requesting a too high vertex."""
     response = client.get(
         "/api/v1/features/neuroquery",
-        params={"vertex": 10242, "species": "human", "side": "left"},
+        params={"vertex": 10244, "species": "human", "side": "left"},
     )
 
     assert response.status_code == status.HTTP_400_BAD_REQUEST

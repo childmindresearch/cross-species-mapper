@@ -1,5 +1,6 @@
-import { similarity } from "./store";
-import type { ApiSurface, CrossSpeciesSimilarityResponse } from "./types";
+import { similarity } from "$lib/store";
+import type { ApiSurface, CrossSpeciesSimilarityResponse } from "$lib/types";
+
 let API_URL: string;
 if (process.env.NODE_ENV === "production") {
   API_URL = "/api/v1";
@@ -11,7 +12,18 @@ const Endpoints = {
   getHemispheres: `${API_URL}/surfaces/hemispheres`,
   getCrossSpeciesSimilarity: `${API_URL}/features/cross_species`,
   getNeuroQuery: `${API_URL}/features/neuroquery`,
+  getGraph: `${API_URL}/graphs/vertex`,
 };
+
+export async function getGraph(
+  vertex: Number,
+  source_species: string,
+  target_species: string,
+  modality: string,
+) {
+  const url = `${Endpoints.getGraph}?vertex=${vertex}&source_species=${source_species}&target_species=${target_species}&modality=${modality}`;
+  return fetch(url).then((response) => response.text());
+}
 
 export function getNeuroQuery(species: string, side: string, vertex: number) {
   const url = `${Endpoints.getNeuroQuery}?species=${species}&side=${side}&vertex=${vertex}`;

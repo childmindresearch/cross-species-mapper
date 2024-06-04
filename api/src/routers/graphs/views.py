@@ -13,15 +13,21 @@ LOGGER_NAME = config.LOGGER_NAME
 
 logger = logging.getLogger(LOGGER_NAME)
 
-router = fastapi.APIRouter(prefix="/graph", tags=["graph"])
+router = fastapi.APIRouter(prefix="/graphs", tags=["graphs"])
 
 
-@router.get("/graphs-by-vertex")
+@router.get("/vertex")
 def get_graph(
-    vertex: int,
-    modality: str,
-    source_species: Literal["human", "macaque"],
-    target_species: Literal["human", "macaque"],
+    vertex: int = fastapi.Query(..., description="The vertex to fetch the graphs for."),
+    modality: str = fastapi.Query(
+        ..., description="The modality of the graph.", example="thickness"
+    ),
+    source_species: Literal["human", "macaque"] = fastapi.Query(
+        ..., description="The species of the source vertex."
+    ),
+    target_species: Literal["human", "macaque"] = fastapi.Query(
+        ..., description="The species to return the graph for."
+    ),
 ) -> fastapi.Response:
     """Fetches the graphs that contain the given vertex.
 

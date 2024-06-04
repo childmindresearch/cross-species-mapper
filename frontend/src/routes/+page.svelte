@@ -4,6 +4,7 @@
   import { Toaster } from "svelte-french-toast";
   import ViewerSet from "../lib/components/viewer/ViewerSet.svelte";
   import Introduction from "./Introduction.svelte";
+  import GraphSet from "$lib/components/GraphSet.svelte";
 </script>
 
 <svelte:head>
@@ -21,4 +22,5 @@
   <NeuroQuery />
   <Hr />
   <ViewerSet />
+  <GraphSet />
 </main>
