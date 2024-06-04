@@ -1,4 +1,5 @@
 """Entrypoint for Uvicorn."""
+
 import logging
 
 import fastapi
@@ -6,6 +7,7 @@ from fastapi.middleware import cors
 
 from src.core import settings
 from src.routers.features import views as feature_views
+from src.routers.graphs import views as graph_views
 from src.routers.surfaces import views as surface_views
 
 config = settings.get_settings()
@@ -15,6 +17,7 @@ logger = logging.getLogger(config.LOGGER_NAME)
 
 api = fastapi.APIRouter(prefix="/api/v1")
 api.include_router(feature_views.router)
+api.include_router(graph_views.router)
 api.include_router(surface_views.router)
 
 logger.info("Starting API.")
