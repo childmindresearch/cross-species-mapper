@@ -1,7 +1,8 @@
 """Controller for the surface endpoints."""
+
 import logging
 
-from src.core import data_fetcher, settings, utils
+from src.core import data_fetcher, settings
 from src.routers.surfaces import schemas
 
 config = settings.get_settings()

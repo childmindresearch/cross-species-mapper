@@ -5,6 +5,8 @@ description = ""
 authors = ["Reinder Vos de Wael <reinder.vosdewael@childmind.org>"]
 readme = "README.md"
 license = "L-GPL-2.1"
+packages = [{include = "src", from = "api"}]
+
 
 [tool.poetry.dependencies]
 python = ">=3.8, <3.9"

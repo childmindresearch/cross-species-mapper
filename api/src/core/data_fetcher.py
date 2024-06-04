@@ -1,4 +1,5 @@
 """Module for data access."""
+
 import functools
 import gzip
 import json
@@ -6,6 +7,7 @@ import logging
 import tempfile
 from typing import List
 
+import fastapi
 import h5py
 import numpy as np
 from azure.storage import blob
@@ -37,6 +39,22 @@ def get_blob_container() -> blob.ContainerClient:
     return blob_client.get_container_client("main")
 
 
+def download_blob_to_bytes(blob_filename: str) -> bytes:
+    """Downloads a blob file to bytes.
+
+    Args:
+        blob_filename: The filename of the file in blob storage.
+
+    Returns:
+        The file contents as bytes.
+
+    """
+    logger.debug("Downloading file from blob.")
+    blob_client = get_blob_container()
+    file_blob = blob_client.get_blob_client(blob_filename)
+    return file_blob.download_blob().readall()
+
+
 def download_file_from_blob(
     blob_filename: str,
     local_filename: str,
@@ -49,9 +67,7 @@ def download_file_from_blob(
 
     """
     logger.debug("Reading file from blob.")
-    blob_client = get_blob_container()
-    file_blob = blob_client.get_blob_client(blob_filename)
-    contents = file_blob.download_blob().readall()
+    contents = download_blob_to_bytes(blob_filename)
     with open(local_filename, "wb") as f:
         f.write(contents)
 
@@ -143,3 +159,29 @@ def get_surface(species: str, side: str) -> types.Surface:
 
     """
     return get_surface_data(species=species, side=side)
+
+
+def get_vertex_to_parcel_mapping(species: str) -> List[dict]:
+    """Gets the vertex to parcel mapping.
+
+    Args:
+        species: The source species.
+
+    Returns:
+        The vertex to parcel mapping.
+
+    """
+    logger.info("Getting vertex to parcel mapping.")
+    if species == "human":
+        filename = "svgs/human_to_monkey_mapping.json"
+    elif species == "macaque":
+        filename = "svgs/monkey_to_human_mapping.json"
+    else:
+        raise fastapi.HTTPException(
+            status_code=400,
+            detail="Invalid species.",
+        )
+    with tempfile.NamedTemporaryFile(suffix=".json") as json_file:
+        download_file_from_blob(filename, json_file.name)
+        with open(json_file.name, "r") as f:
+            return json.load(f)
