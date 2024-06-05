@@ -1,10 +1,9 @@
 <script>
   import NeuroQuery from "$lib/components/NeuroQuery.svelte";
-  import { Hr } from "flowbite-svelte";
   import { Toaster } from "svelte-french-toast";
   import ViewerSet from "../lib/components/viewer/ViewerSet.svelte";
   import Introduction from "./Introduction.svelte";
-  import GraphSet from "$lib/components/GraphSet.svelte";
+  import GraphSet from "$lib/components/plots/GraphSet.svelte";
 </script>
 
 <svelte:head>
@@ -15,12 +14,12 @@
   />
 </svelte:head>
 
-<main>
+<main class="mx-10">
   <Toaster position="bottom-right" />
   <Introduction />
-  <Hr />
+  <hr class="m-2" />
   <NeuroQuery />
-  <Hr />
+  <hr class="m-2" />
   <ViewerSet />
   <GraphSet />
 </main>

@@ -1,7 +1,7 @@
 <script lang="ts">
   import { getGraph } from "$lib/api";
   import { onMount } from "svelte";
-  import Loadingbar from "./Loadingbar.svelte";
+  import Loadingbar from "$lib/components/Loadingbar.svelte";
 
   export let vertex: Number;
   export let sourceSpecies: string;
@@ -22,8 +22,8 @@
 {#if !svg}
   <Loadingbar />
 {:else}
-  <div>
-    <h3 class="text-center font-bold pr-28">
+  <div class="max-w-md min-w-fit mx-auto">
+    <h3 class="text-center font-bold">
       {capitalizeFirstLetter(targetSpecies)} - {capitalizeFirstLetter(modality)}
     </h3>
     {@html svg}

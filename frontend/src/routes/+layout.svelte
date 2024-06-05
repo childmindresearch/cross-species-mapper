@@ -1,50 +1,22 @@
 <script>
   import "../app.postcss";
-  import Header from "./Header.svelte";
-  import "./styles.css";
+  import "@cmi-dair/skeleton-themes/cmi.postcss";
+  import NavBar from "$lib/components/NavBar.svelte";
+
+  import { initializeStores } from "@skeletonlabs/skeleton";
+  initializeStores();
 </script>
 
-<div class="app">
-  <Header />
+<svelte:head>
+  <title>Cross Species Mapper</title>
+  <meta
+    name="description"
+    content="The Cross Species Mapper developed by Child Mind Institute"
+  />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <link rel="icon" type="image/ico" href="/favicon.ico" />
+</svelte:head>
 
-  <main>
-    <slot />
-  </main>
-
-  <footer>
-    <p>© {new Date().getFullYear()} Child Mind Institute</p>
-  </footer>
-</div>
-
-<style>
-  .app {
-    display: flex;
-    flex-direction: column;
-    min-height: 100vh;
-  }
-
-  main {
-    flex: 1;
-    display: flex;
-    flex-direction: column;
-    padding: 1rem;
-    width: 100%;
-    max-width: 1400px;
-    margin: 0 auto;
-    box-sizing: border-box;
-  }
-
-  footer {
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
-    padding: 12px;
-  }
-
-  @media (min-width: 480px) {
-    footer {
-      padding: 12px 0;
-    }
-  }
-</style>
+<NavBar />
+<slot />
+<p class="text-center">© {new Date().getFullYear()} Child Mind Institute</p>

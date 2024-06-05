@@ -18,8 +18,6 @@
 </script>
 
 <div>
-  <div class="float-right ml-1">
-    <DownloadButton text="Top 100 Terms" data={$terms} {filename} />
-  </div>
+  <DownloadButton text="Top 100 Terms" data={$terms} {filename} />
   <i><b>Top 10 Neuroquery Terms:</b> {displayTerms}</i>
 </div>
