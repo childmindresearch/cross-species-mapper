@@ -115,7 +115,7 @@ async function onDoubleClick(
 
   terms.set(
     await getNeuroQuery(clickedSpecies, clickedSide, vertex).then(
-      (data: string[]) => {
+      (data: string[][]) => {
         return data;
       },
     ),

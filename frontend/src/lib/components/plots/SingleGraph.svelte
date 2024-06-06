@@ -3,15 +3,14 @@
   import { onMount } from "svelte";
   import Loadingbar from "$lib/components/Loadingbar.svelte";
 
-  export let vertex: Number;
-  export let sourceSpecies: string;
+  export let region: string;
   export let targetSpecies: string;
   export let modality: string;
 
-  let svg: string;
+  let svg: Promise<string>;
 
   onMount(async () => {
-    svg = await getGraph(vertex, sourceSpecies, targetSpecies, modality);
+    svg = getGraph(region, targetSpecies, modality);
   });
 
   function capitalizeFirstLetter(str: string) {
@@ -19,13 +18,16 @@
   }
 </script>
 
-{#if !svg}
+{#await svg}
   <Loadingbar />
-{:else}
+{:then resolvedSvg}
   <div class="max-w-md min-w-fit mx-auto">
     <h3 class="text-center font-bold">
       {capitalizeFirstLetter(targetSpecies)} - {capitalizeFirstLetter(modality)}
+      - {region}
     </h3>
-    {@html svg}
+    {@html resolvedSvg}
   </div>
-{/if}
+{:catch}
+  <p class="text-center">Failed to load graph for "{region}".</p>
+{/await}

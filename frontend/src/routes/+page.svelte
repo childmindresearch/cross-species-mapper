@@ -3,7 +3,8 @@
   import { Toaster } from "svelte-french-toast";
   import ViewerSet from "../lib/components/viewer/ViewerSet.svelte";
   import Introduction from "./Introduction.svelte";
-  import GraphSet from "$lib/components/plots/GraphSet.svelte";
+  import GraphSetVertexWrapper from "$lib/components/plots/GraphSetVertexWrapper.svelte";
+  import { seedSpecies, seedVertex } from "$lib/store";
 </script>
 
 <svelte:head>
@@ -21,5 +22,7 @@
   <NeuroQuery />
   <hr class="m-2" />
   <ViewerSet />
-  <GraphSet />
+  {#key [$seedVertex, $seedSpecies]}
+    <GraphSetVertexWrapper />
+  {/key}
 </main>

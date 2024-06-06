@@ -12,16 +12,37 @@ const Endpoints = {
   getHemispheres: `${API_URL}/surfaces/hemispheres`,
   getCrossSpeciesSimilarity: `${API_URL}/features/cross_species`,
   getNeuroQuery: `${API_URL}/features/neuroquery`,
-  getGraph: `${API_URL}/graphs/vertex`,
+  getGraph: `${API_URL}/graphs/region`,
+  getRegionNames: `${API_URL}/graphs/region-names`,
+  getVertexToParcel: `${API_URL}/graphs/vertex-to-parcel`,
 };
 
+type VertexToParcelResponse = {
+  AparcLabel: number;
+  AparcName: string;
+  MarkovLabel: number;
+  MarkovName: string;
+};
+
+export async function getVertexToParcel(
+  vertex: number,
+  species: string,
+): Promise<VertexToParcelResponse> {
+  const url = `${Endpoints.getVertexToParcel}?vertex_id=${vertex}&species=${species}`;
+  return fetch(url).then((response) => response.json());
+}
+
+export async function getRegionNames(species: string): Promise<string[]> {
+  const url = `${Endpoints.getRegionNames}?species=${species}`;
+  return fetch(url).then((response) => response.json());
+}
+
 export async function getGraph(
-  vertex: Number,
-  source_species: string,
+  region: string,
   target_species: string,
   modality: string,
 ) {
-  const url = `${Endpoints.getGraph}?vertex=${vertex}&source_species=${source_species}&target_species=${target_species}&modality=${modality}`;
+  const url = `${Endpoints.getGraph}?region=${region}&target_species=${target_species}&modality=${modality}`;
   return fetch(url).then((response) => response.text());
 }
 

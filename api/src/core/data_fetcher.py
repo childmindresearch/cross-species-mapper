@@ -1,5 +1,6 @@
 """Module for data access."""
 
+import dataclasses
 import functools
 import gzip
 import json
@@ -161,7 +162,17 @@ def get_surface(species: str, side: str) -> types.Surface:
     return get_surface_data(species=species, side=side)
 
 
-def get_vertex_to_parcel_mapping(species: str) -> List[dict]:
+@dataclasses.dataclass
+class VertexToParcelMapping:
+    """Vertex to parcel mapping."""
+
+    AparcLabel: int
+    AparcName: str
+    MarkovLabel: int
+    MarkovName: str
+
+
+def get_vertex_to_parcel_mapping(species: str) -> List[VertexToParcelMapping]:
     """Gets the vertex to parcel mapping.
 
     Args:
@@ -184,4 +195,5 @@ def get_vertex_to_parcel_mapping(species: str) -> List[dict]:
     with tempfile.NamedTemporaryFile(suffix=".json") as json_file:
         download_file_from_blob(filename, json_file.name)
         with open(json_file.name, "r") as f:
-            return json.load(f)
+            data_as_dicts = json.load(f)
+        return [VertexToParcelMapping(**data) for data in data_as_dicts]
