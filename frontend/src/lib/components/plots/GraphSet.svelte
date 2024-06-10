@@ -3,11 +3,8 @@
   import Loadingbar from "$lib/components/Loadingbar.svelte";
   import { onMount } from "svelte";
   import { getRegionNames } from "$lib/api";
+  import { modality, targetHumanRegion, targetMacaqueRegion } from "$lib/store";
 
-  export let targetHumanRegion: string;
-  export let targetMacaqueRegion: string;
-
-  let modality = "thickness";
   let humanRegionNames: string[] = [];
   let macaqueRegionNames: string[] = [];
 
@@ -19,53 +16,61 @@
   });
 </script>
 
-<label for="modality">Modality:</label>
-<select class="select max-w-52" bind:value={modality} id="modality">
-  <option value="thickness">Cortical Thickness</option>
-  <option value="area">Area</option>
-  <option value="volume">Volume</option>
-</select>
+<div class="flex space-x-8 justify-center pb-2">
+  <div>
+    <label for="modality">Modality:</label>
+    <select class="select max-w-64" bind:value={$modality} id="modality">
+      <option value="thickness">Cortical Thickness</option>
+      <option value="area">Area</option>
+      <option value="volume">Volume</option>
+    </select>
+  </div>
 
-{#if humanRegionNames.length === 0 || macaqueRegionNames.length === 0}
-  <Loadingbar label="Loading region names..." />
-{:else}
-  <label for="humanRegion">Human Region:</label>
-  <select
-    class="select max-w-52"
-    bind:value={targetHumanRegion}
-    id="humanRegion"
-  >
-    {#each humanRegionNames as region}
-      <option value={region}>{region}</option>
-    {/each}
-  </select>
+  {#if humanRegionNames.length === 0 || macaqueRegionNames.length === 0}
+    <Loadingbar label="Loading region names..." />
+  {:else}
+    <div>
+      <label for="humanRegion">Human Region:</label>
+      <select
+        class="select max-w-64"
+        bind:value={$targetHumanRegion}
+        id="humanRegion"
+      >
+        {#each humanRegionNames as region}
+          <option value={region}>{region}</option>
+        {/each}
+      </select>
+    </div>
 
-  <label for="macaqueRegion">Macaque Region:</label>
-  <select
-    class="select max-w-52"
-    bind:value={targetMacaqueRegion}
-    id="macaqueRegion"
-  >
-    {#each macaqueRegionNames as region}
-      <option value={region}>{region}</option>
-    {/each}
-  </select>
-{/if}
+    <div>
+      <label for="macaqueRegion">Macaque Region:</label>
+      <select
+        class="select max-w-64"
+        bind:value={$targetMacaqueRegion}
+        id="macaqueRegion"
+      >
+        {#each macaqueRegionNames as region}
+          <option value={region}>{region}</option>
+        {/each}
+      </select>
+    </div>
+  {/if}
+</div>
 
 <div class="grid grid-cols-1 xl:grid-cols-2 min-h-[350px]">
-  {#key modality}
-    {#key targetHumanRegion}
+  {#key $modality}
+    {#key $targetHumanRegion}
       <SingleGraph
-        region={targetHumanRegion}
+        region={$targetHumanRegion}
         targetSpecies="human"
-        {modality}
+        modality={$modality}
       />
     {/key}
-    {#key targetMacaqueRegion}
+    {#key $targetMacaqueRegion}
       <SingleGraph
-        region={targetMacaqueRegion}
+        region={$targetMacaqueRegion}
         targetSpecies="macaque"
-        {modality}
+        modality={$modality}
       />
     {/key}
   {/key}

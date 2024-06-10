@@ -10,6 +10,9 @@
   let svg: Promise<string>;
 
   onMount(async () => {
+    if (!region || !targetSpecies || !modality) {
+      throw new Error("Missing required props.");
+    }
     svg = getGraph(region, targetSpecies, modality);
   });
 

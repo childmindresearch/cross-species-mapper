@@ -23,7 +23,5 @@
 
 <button on:click={downloadData} class="btn variant-soft-primary">
   <DownloadIcon class="mr-1" />
-  <div class="button_text">
-    {text}
-  </div>
+  {text}
 </button>

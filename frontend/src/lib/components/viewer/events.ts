@@ -1,6 +1,10 @@
 import { getCrossSpeciesSimilarity, getNeuroQuery } from "$lib/api";
 import { seedSide, seedSpecies, seedVertex, terms } from "$lib/store";
-import { Legend, MeshColors, colorInterpolates } from "@cmi-dair/brainviewer";
+import {
+  type Legend,
+  MeshColors,
+  colorInterpolates,
+} from "@cmi-dair/brainviewer";
 import toast from "svelte-french-toast";
 import * as THREE from "three";
 import type { Viewer } from "./client";

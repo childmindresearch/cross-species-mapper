@@ -8,5 +8,6 @@ export const seedSpecies = writable("human");
 export const similarity: Writable<CrossSpeciesSimilarityResponse> = writable();
 export const terms: Writable<string[][]> = writable();
 
-export const clickedHumanRegion = writable("");
-export const clickedMacaqueRegion = writable("");
+export const modality = writable("volume");
+export const targetHumanRegion = writable("isthmuscingulate");
+export const targetMacaqueRegion = writable("area.23");

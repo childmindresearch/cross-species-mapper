@@ -17,24 +17,24 @@ const Endpoints = {
   getVertexToParcel: `${API_URL}/graphs/vertex-to-parcel`,
 };
 
-type VertexToParcelResponse = {
+interface VertexToParcelResponse {
   AparcLabel: number;
   AparcName: string;
   MarkovLabel: number;
   MarkovName: string;
-};
+}
 
 export async function getVertexToParcel(
   vertex: number,
   species: string,
 ): Promise<VertexToParcelResponse> {
   const url = `${Endpoints.getVertexToParcel}?vertex_id=${vertex}&species=${species}`;
-  return fetch(url).then((response) => response.json());
+  return await fetch(url).then(async (response) => await response.json());
 }
 
 export async function getRegionNames(species: string): Promise<string[]> {
   const url = `${Endpoints.getRegionNames}?species=${species}`;
-  return fetch(url).then((response) => response.json());
+  return await fetch(url).then(async (response) => await response.json());
 }
 
 export async function getGraph(
@@ -43,12 +43,16 @@ export async function getGraph(
   modality: string,
 ) {
   const url = `${Endpoints.getGraph}?region=${region}&target_species=${target_species}&modality=${modality}`;
-  return fetch(url).then((response) => response.text());
+  return await fetch(url).then(async (response) => await response.text());
 }
 
-export function getNeuroQuery(species: string, side: string, vertex: number) {
+export async function getNeuroQuery(
+  species: string,
+  side: string,
+  vertex: number,
+) {
   const url = `${Endpoints.getNeuroQuery}?species=${species}&side=${side}&vertex=${vertex}`;
-  return fetch(url).then((response) => response.json());
+  return await fetch(url).then(async (response) => await response.json());
 }
 
 /**
@@ -62,7 +66,7 @@ export async function getSurfaces(
   side: string,
 ): Promise<ApiSurface> {
   const url = `${Endpoints.getHemispheres}?species=${species}&side=${side}`;
-  return fetch(url).then((response) => response.json());
+  return await fetch(url).then(async (response) => await response.json());
 }
 
 /**
@@ -79,7 +83,9 @@ export async function getCrossSpeciesSimilarity(
   vertex: number,
 ): Promise<CrossSpeciesSimilarityResponse> {
   const url = `${Endpoints.getCrossSpeciesSimilarity}?species=${species}&side=${side}&vertex=${vertex}`;
-  const response = await fetch(url).then((response) => response.json());
+  const response = await fetch(url).then(
+    async (response) => await response.json(),
+  );
   similarity.set(response);
   return response;
 }
