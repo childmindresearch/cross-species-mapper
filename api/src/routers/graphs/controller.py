@@ -9,7 +9,7 @@ MACAQUE_TO_HUMAN = data_fetcher.get_vertex_to_parcel_mapping("macaque")
 
 MODALITY_ABBREVIATIONS = {
     "human": {"area": "SA", "thickness": "CT", "volume": ""},
-    "macaque": {"area": "Area", "thickness": "Thickness", "volume": "CortVolume"},
+    "macaque": {"area": "Area", "thickness": "Thickness", "volume": "Volume"},
 }
 
 
