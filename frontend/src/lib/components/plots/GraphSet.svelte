@@ -30,7 +30,9 @@
     <Loadingbar label="Loading region names..." />
   {:else}
     <div>
-      <label for="humanRegion">Human Region:</label>
+      <label for="humanRegion"
+        >Human Region <span class="text-red-500">(DKT Atlas)</span>:</label
+      >
       <select
         class="select max-w-64"
         bind:value={$targetHumanRegion}
@@ -43,7 +45,9 @@
     </div>
 
     <div>
-      <label for="macaqueRegion">Macaque Region:</label>
+      <label for="macaqueRegion"
+        >Macaque Region <span class="text-red-500">(Markov Atlas)</span>:</label
+      >
       <select
         class="select max-w-64"
         bind:value={$targetMacaqueRegion}
