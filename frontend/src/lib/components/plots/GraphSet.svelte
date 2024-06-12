@@ -18,7 +18,11 @@
 
 <div class="flex space-x-8 justify-center pb-2">
   <div>
-    <label for="modality">Modality:</label>
+    <label for="modality"
+      >Modality (<span class="text-red-500">Female</span>/<span
+        class="text-blue-500">Male</span
+      >) :</label
+    >
     <select class="select max-w-64" bind:value={$modality} id="modality">
       <option value="thickness">Cortical Thickness</option>
       <option value="area">Area</option>
@@ -30,9 +34,7 @@
     <Loadingbar label="Loading region names..." />
   {:else}
     <div>
-      <label for="humanRegion"
-        >Human Region <span class="text-red-500">(DKT Atlas)</span>:</label
-      >
+      <label for="humanRegion">Human Region (DKT Atlas):</label>
       <select
         class="select max-w-64"
         bind:value={$targetHumanRegion}
@@ -45,9 +47,7 @@
     </div>
 
     <div>
-      <label for="macaqueRegion"
-        >Macaque Region <span class="text-red-500">(Markov Atlas)</span>:</label
-      >
+      <label for="macaqueRegion">Macaque Region (Markov Atlas): </label>
       <select
         class="select max-w-64"
         bind:value={$targetMacaqueRegion}
