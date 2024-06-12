@@ -51,12 +51,12 @@ def get_graph_by_region(
             f"svgs/{target_species}/FIT",
             MODALITY_ABBREVIATIONS[target_species][modality],
             region,
-            "centile_log_highres.svg",
+            "final.svg",
         ]
         filename = "_".join(component for component in file_components if component)
 
     elif target_species == "macaque":
-        filename = f"svgs/{target_species}/{MODALITY_ABBREVIATIONS[target_species][modality]}/{region}/{region}_centile_log_highres.svg"
+        filename = f"svgs/{target_species}/{MODALITY_ABBREVIATIONS[target_species][modality]}/{region}/{region}_final.svg"
 
     bytes = data_fetcher.download_blob_to_bytes(filename)
     return fastapi.Response(content=bytes, media_type="image/svg+xml")
