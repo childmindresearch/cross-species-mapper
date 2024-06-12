@@ -57,7 +57,7 @@
   {/if}
 </div>
 
-<div class="grid grid-cols-1 xl:grid-cols-2 min-h-[350px]">
+<div class="grid grid-cols-1 min-h-[350px]">
   {#key $modality}
     {#key $targetHumanRegion}
       <SingleGraph
