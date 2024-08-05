@@ -19,7 +19,7 @@
         <span>Publication</span>
       </button>
     </form>
-    <form action="https://github.com/cross-species-mapper">
+    <form action="https://github.com/childmindresearch/cross-species-mapper">
       <button class="btn hover:variant-soft-primary">
         <GithubIcon class="text-lg" />
         <span>Source Code</span>
