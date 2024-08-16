@@ -9,7 +9,8 @@ MACAQUE_TO_HUMAN = data_fetcher.get_vertex_to_parcel_mapping("macaque")
 
 MODALITY_ABBREVIATIONS = {
     "human": {"area": "SA_", "thickness": "CT_", "volume": ""},
-    "macaque": {"area": "Area", "thickness": "Thickness", "volume": "Volume"},
+    "human_dirnames": {"area": "Area", "thickness": "Thickness", "volume": "Volume"},
+    "macaque": {"area": "Area", "thickness": "thickness", "volume": "CortVolume"},
 }
 
 
@@ -47,11 +48,12 @@ def get_graph_by_region(
         A fastapi response containing the bytes of the graph.
     """
     if target_species == "human":
-        filename = f"svgs/{target_species}/{MODALITY_ABBREVIATIONS['macaque'][modality]}/FIT_{MODALITY_ABBREVIATIONS['human'][modality]}{region}/FIT_{MODALITY_ABBREVIATIONS['human'][modality]}{region}_final.svg"
+        filename = f"svgs/{target_species}/{MODALITY_ABBREVIATIONS['human_dirnames'][modality]}/FIT_{MODALITY_ABBREVIATIONS['human'][modality]}{region}/FIT_{MODALITY_ABBREVIATIONS['human'][modality]}{region}_final.svg"
 
     elif target_species == "macaque":
         filename = f"svgs/{target_species}/{MODALITY_ABBREVIATIONS[target_species][modality]}/{region}/{region}_centile_log_highres_V2.0.svg"
 
+    print(filename)
     bytes = data_fetcher.download_blob_to_bytes(filename)
     return fastapi.Response(content=bytes, media_type="image/svg+xml")
 
