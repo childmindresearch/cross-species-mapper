@@ -53,7 +53,6 @@ def get_graph_by_region(
     elif target_species == "macaque":
         filename = f"svgs/{target_species}/{MODALITY_ABBREVIATIONS[target_species][modality]}/{region}/{region}_centile_log_highres_V2.0.svg"
 
-    print(filename)
     bytes = data_fetcher.download_blob_to_bytes(filename)
     return fastapi.Response(content=bytes, media_type="image/svg+xml")
 
