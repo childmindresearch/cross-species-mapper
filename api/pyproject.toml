@@ -10,7 +10,7 @@ packages = [{include = "src", from = "api"}]
 
 [tool.poetry.dependencies]
 python = ">=3.8, <3.9"
-fastapi = "^0.97.0"
+fastapi = "^0.109.1"
 uvicorn = "^0.22.0"
 pydantic = "^1.10.9"
 numpy = "^1.24.3"
