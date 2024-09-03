@@ -1,7 +1,7 @@
 import { writable, type Writable } from "svelte/store";
 import type { CrossSpeciesSimilarityResponse } from "./types";
 
-export const seedVertex = writable(0);
+export const seedVertex = writable(5797);
 export const seedSide = writable("left");
 export const seedSpecies = writable("human");
 
