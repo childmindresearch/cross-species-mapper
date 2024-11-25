@@ -15,7 +15,7 @@
     "@neoconfetti/svelte": "^1.0.0",
     "@skeletonlabs/skeleton": "^2.10.0",
     "@skeletonlabs/tw-plugin": "^0.4.0",
-    "@sveltejs/kit": "^1.27.0",
+    "@sveltejs/kit": "^2.8.3",
     "@tailwindcss/forms": "^0.5.7",
     "@tailwindcss/typography": "^0.5.13",
     "@types/cookie": "^0.5.1",
@@ -42,7 +42,7 @@
   "dependencies": {
     "@cmi-dair/brainviewer": "^0.1.4",
     "@cmi-dair/skeleton-themes": "^0.0.5",
-    "@sveltejs/adapter-static": "^2.0.3",
+    "@sveltejs/adapter-static": "^3.0.6",
     "three": "^0.150.1"
   }
 }
