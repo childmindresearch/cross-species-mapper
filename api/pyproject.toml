@@ -28,9 +28,6 @@ pytest-dotenv = "^0.5.2"
 httpx = "^0.24.1"
 scikit-learn = "^1.3.0"
 
-[tool.poetry.group.notebook.dependencies]
-ipykernel = "^6.23.3"
-
 [build-system]
 requires = ["poetry-core"]
 build-backend = "poetry.core.masonry.api"
