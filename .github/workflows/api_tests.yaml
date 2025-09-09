@@ -33,7 +33,7 @@ jobs:
         working-directory: ./api
       - name: Pytest coverage comment
         if: github.event_name == 'pull_request'
-        uses: MishaKav/pytest-coverage-comment@main
+        uses: MishaKav/pytest-coverage-comment@1bdbba85fb74a2fdc1ec66383acec1091610f82b
         with:
           pytest-coverage-path: .api/pytest-coverage.txt
           junitxml-path: .api/pytest.xml
@@ -42,7 +42,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3
-      - uses: psf/black@23.12.1
+      - uses: psf/black@ec91a2be3c44d88e1a3960a4937ad6ed3b63464e
 
   mypy:
     runs-on: ubuntu-latest
@@ -63,7 +63,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3
-      - uses: isort/isort-action@v1
+      - uses: isort/isort-action@24d8a7a51d33ca7f36c3f23598dafa33f7071326
         with:
           configuration: --profile black
           sort-paths: api
