@@ -1,6 +1,4 @@
 name: API
-permissions:
-  contents: read
 
 on:
   push:
@@ -42,12 +40,16 @@ jobs:
 
   black:
     runs-on: ubuntu-latest
+    permissions:
+      contents: read
     steps:
       - uses: actions/checkout@v3
       - uses: psf/black@ec91a2be3c44d88e1a3960a4937ad6ed3b63464e
 
   mypy:
     runs-on: ubuntu-latest
+    permissions:
+      contents: read
     steps:
       - uses: actions/checkout@v3
       - uses: actions/setup-python@v4
@@ -63,6 +65,8 @@ jobs:
 
   isort:
     runs-on: ubuntu-latest
+    permissions:
+      contents: read
     steps:
       - uses: actions/checkout@v3
       - uses: isort/isort-action@24d8a7a51d33ca7f36c3f23598dafa33f7071326
